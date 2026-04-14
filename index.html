@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mijn klimaat-voetafdruk (CO2, water en land)</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fira+Mono:wght@400;500&display=swap');
+:root {
+  --bg:#0c0f1a; --card:#141828; --card2:#1a2035; --border:#252d45;
+  --text:#eef0f8; --muted:#a8b0cc; --dim:#6b7394;
+  --green:#34d399; --amber:#fbbf24; --red:#f87171;
+  --blue:#60a5fa; --purple:#a78bfa; --accent:#6366f1;
+  --b15:#f43f5e; --b20:#fb923c;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;padding-bottom:120px}
+
+.app-header{background:linear-gradient(135deg,#1a1f35 0%,#0f1320 100%);border-bottom:1px solid var(--border);padding:18px 16px 14px;position:sticky;top:0;z-index:100}
+.app-header h1{font-size:1.2rem;font-weight:900;letter-spacing:-.02em;line-height:1.1}
+.app-header h1 span{color:var(--accent)}
+.app-header p{font-size:.75rem;color:var(--muted);margin-top:3px}
+
+.budget-bar{display:flex;gap:10px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.budget-bar::-webkit-scrollbar{display:none}
+.bpill{flex-shrink:0;padding:5px 11px;border-radius:20px;font-size:.74rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:1px;border:1px solid var(--border);background:var(--card2)}
+.bpill .val{font-size:.95rem;font-weight:900;font-variant-numeric:tabular-nums}
+.bpill .lbl{font-size:.62rem;color:var(--muted);font-weight:600}
+
+.result-top{padding:18px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:12px;background:var(--card);border-bottom:1px solid var(--border)}
+.ring-wrap{position:relative;width:140px;height:140px}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-total{font-size:1.5rem;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.ring-unit{font-size:.68rem;color:var(--muted);font-weight:600}
+.ring-vs{font-size:.65rem;color:var(--muted);margin-top:2px}
+
+.scenario-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.scard{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 11px;display:flex;flex-direction:column;gap:2px}
+.scard .slbl{font-size:.67rem;color:var(--muted);font-weight:700;line-height:1.3}
+.scard .sval{font-size:1rem;font-weight:900;font-variant-numeric:tabular-nums}
+.scard .sdiff{font-size:.66rem;color:var(--green);font-weight:700}
+.scard .sdiff.worse{color:var(--red)}
+
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);background:var(--card);position:sticky;top:71px;z-index:90}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:11px 15px;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;border:none;border-bottom:3px solid transparent;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(99,102,241,.06)}
+
+
+.section{padding:14px;display:none}
+.section.active{display:block}
+
+.sec-head{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.sec-head:first-child{margin-top:0;border-top:none;padding-top:0}
+
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:9px;transition:border-color .15s}
+.prod-card.active{border-color:var(--accent);background:rgba(99,102,241,.06)}
+.prod-top{display:flex;align-items:center;gap:10px}
+.prod-icon{font-size:1.3rem;flex-shrink:0;width:34px;text-align:center}
+.prod-info{flex:1;min-width:0}
+.prod-name{font-size:.87rem;font-weight:800;line-height:1.2}
+.prod-sub{font-size:.7rem;color:var(--muted);margin-top:2px}
+.prod-co2{font-size:.78rem;font-weight:700;color:var(--amber);white-space:nowrap;font-variant-numeric:tabular-nums}
+.prod-toggle{width:46px;height:27px;border-radius:14px;border:2px solid var(--border);background:var(--card2);position:relative;cursor:pointer;transition:all .2s;flex-shrink:0}
+.prod-toggle.on{background:var(--accent);border-color:var(--accent)}
+.prod-toggle::after{content:'';position:absolute;width:19px;height:19px;border-radius:50%;background:white;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.prod-toggle.on::after{transform:translateX(19px)}
+.prod-controls{display:none;margin-top:11px;padding-top:11px;border-top:1px solid var(--border);gap:9px;flex-direction:column}
+.prod-card.active .prod-controls{display:flex}
+.ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ctrl-lbl{font-size:.76rem;color:var(--muted);font-weight:600;flex:1}
+
+.stepper{display:flex;align-items:center;gap:2px;background:var(--card2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.step-btn{width:36px;height:36px;border:none;background:transparent;color:var(--text);font-size:1.1rem;font-weight:700;cursor:pointer;transition:background .1s;display:flex;align-items:center;justify-content:center}
+.step-btn:active{background:var(--accent)}
+.step-val{min-width:30px;text-align:center;font-size:.86rem;font-weight:800;color:var(--text);font-family:'Fira Mono',monospace}
+
+.num-input{background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Fira Mono',monospace;font-size:.93rem;font-weight:700;padding:8px 11px;width:120px;text-align:right}
+.num-input:focus{outline:none;border-color:var(--accent)}
+
+.transport-row{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:9px}
+.tr-head{display:flex;align-items:center;gap:9px;margin-bottom:9px;flex-wrap:wrap}
+.tr-icon{font-size:1.2rem}
+.tr-name{font-size:.86rem;font-weight:800;flex:1}
+.tr-rate{font-size:.7rem;color:var(--muted)}
+.tr-co2{font-size:.8rem;font-weight:700;color:var(--amber);font-variant-numeric:tabular-nums}
+.tr-input-row{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.tr-input-row label{font-size:.76rem;color:var(--muted);font-weight:600;flex:1}
+
+.energy-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:9px}
+.energy-head{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.energy-icon{font-size:1.2rem}
+.energy-name{font-size:.88rem;font-weight:800;flex:1}
+.energy-co2{font-size:.8rem;font-weight:700;color:var(--amber);font-variant-numeric:tabular-nums}
+.energy-inputs{display:flex;flex-direction:column;gap:9px}
+.energy-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.energy-lbl{font-size:.78rem;color:var(--muted);font-weight:600;flex:1}
+
+.food-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.food-card{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:13px 11px;cursor:pointer;transition:all .15s;text-align:center}
+.food-card.active{border-color:var(--accent);background:rgba(99,102,241,.08)}
+.food-card .ficon{font-size:1.5rem;margin-bottom:4px}
+.food-card .fname{font-size:.78rem;font-weight:800;line-height:1.2;margin-bottom:4px}
+.food-card .fco2{font-size:.86rem;font-weight:900;font-variant-numeric:tabular-nums}
+.food-card .fsub{font-size:.66rem;color:var(--muted);margin-top:2px;line-height:1.3}
+
+.breakdown{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.bk-row{display:flex;align-items:center;padding:11px 13px;border-bottom:1px solid var(--border);gap:9px}
+.bk-row:last-child{border-bottom:none}
+.bk-icon{font-size:1rem;flex-shrink:0}
+.bk-name{font-size:.82rem;font-weight:700;flex:1}
+.bk-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;max-width:70px}
+.bk-bar{height:100%;border-radius:3px;transition:width .4s}
+.bk-val{font-size:.82rem;font-weight:800;font-variant-numeric:tabular-nums;min-width:65px;text-align:right;white-space:nowrap}
+
+.scen-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:8px}
+.scen-head{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.scen-num{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.76rem;font-weight:900;flex-shrink:0}
+.scen-title{font-size:.86rem;font-weight:800;flex:1;line-height:1.2}
+.scen-val{font-size:1.15rem;font-weight:900;font-variant-numeric:tabular-nums}
+.scen-saving{font-size:.74rem;color:var(--green);font-weight:700}
+.scen-desc{font-size:.72rem;color:var(--muted);margin:5px 0 7px;line-height:1.5}
+.scen-meta{display:flex;gap:12px;font-size:.72rem;color:var(--muted);margin-top:5px}
+.scen-bar{height:7px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;margin-top:8px}
+.scen-fill{height:100%;border-radius:4px;transition:width .5s}
+.top-items{margin-top:7px}
+.top-item{font-size:.72rem;color:var(--muted);display:flex;gap:5px;padding:2px 0}
+.top-item strong{color:var(--red)}
+
+.water-result{background:var(--card);border:1px solid rgba(96,165,250,.3);border-radius:12px;padding:13px;margin-bottom:9px;display:flex;align-items:center;gap:11px}
+.water-icon{font-size:1.4rem}
+.water-val{font-size:1.15rem;font-weight:900;color:var(--blue);font-variant-numeric:tabular-nums}
+.water-lbl{font-size:.72rem;color:var(--muted)}
+
+.sticky-result{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:11px;z-index:200}
+.sticky-total{display:flex;flex-direction:column}
+.sticky-num{font-size:1.25rem;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.sticky-lbl{font-size:.66rem;color:var(--muted);font-weight:600}
+.sticky-budget{flex:1}
+.budget-prog{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin-top:4px}
+.budget-fill{height:100%;border-radius:3px;transition:width .35s}
+.sticky-btn{padding:10px 16px;background:var(--accent);border:none;border-radius:10px;color:white;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;white-space:nowrap}
+
+.info-box{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-radius:8px;padding:9px 12px;font-size:.74rem;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.info-box strong{color:var(--text)}
+.link-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;background:var(--card2);border:1px solid var(--border);border-radius:7px;color:var(--blue);font-size:.75rem;font-weight:700;text-decoration:none;margin-top:7px}
+.open-info{display:block !important}
+
+/* source popup */
+.src-btn{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);color:var(--accent);font-size:.65rem;font-weight:800;cursor:pointer;flex-shrink:0;line-height:1}
+.src-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:flex-end;justify-content:center}
+.src-overlay.open{display:flex}
+.src-sheet{background:var(--card);border-radius:16px 16px 0 0;padding:20px 18px 32px;width:100%;max-width:500px;max-height:70vh;overflow-y:auto}
+.src-sheet h3{font-size:.95rem;font-weight:900;margin-bottom:4px}
+.src-sheet .src-formula{font-family:'Fira Mono',monospace;font-size:.74rem;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin:10px 0;line-height:1.7;color:var(--text)}
+.src-sheet .src-ref{font-size:.74rem;color:var(--muted);line-height:1.65}
+.src-sheet .src-ref a{color:var(--blue)}
+.src-close{float:right;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>Mijn klimaat-<span>voetafdruk</span></h1>
+  <p style="font-size:.68rem;color:var(--dim);font-weight:600">CO&#8322; &middot; water &middot; landgebruik</p>
+  <p>Vul in wat op jou van toepassing is — de rest laat je op 0.</p>
+</div>
+
+<div style="background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px">
+  <div style="font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Persoonlijk CO&#8322;-budget per jaar (60% kans)</div>
+  <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px">
+    <div class="bpill"><span class="val" style="color:var(--b15)">2,1 t</span>
+      <span class="lbl">Onder 1,5&#176;C</span>
+      <span class="src-btn" style="margin-top:2px" onclick="showSrc('_budget15')">i</span>
+    </div>
+    <div class="bpill"><span class="val" style="color:var(--b20)">2,9 t</span>
+      <span class="lbl">Onder 2&#176;C</span>
+      <span class="src-btn" style="margin-top:2px" onclick="showSrc('_budget20')">i</span>
+    </div>
+    <div class="bpill" title="EDGAR Community GHG Database v8.0 — JRC/IEA (2023). Territoriale emissies: wat fysiek in Belgie uitgestoten wordt, inclusief industrie en overheid."><span class="val" style="color:var(--muted)">9,1 t</span>
+      <span class="lbl">Gem. Belg</span>
+      <span class="src-btn" style="margin-top:2px" onclick="showSrc('_belg91')">i</span></div>
+    <div class="bpill"><span class="val" style="color:var(--purple)">~14 t</span>
+      <span class="lbl">Incl. import+overheid</span>
+      <span class="src-btn" style="margin-top:2px" onclick="showSrc('_belg14')">i</span>
+    </div>
+  </div>
+  <div style="font-size:.72rem;color:var(--dim);line-height:1.65">
+    Het <strong style="color:var(--b15)">1,5&#176;C-budget</strong> is de max. jaarlijkse uitstoot per persoon om 60% kans te hebben de opwarming te beperken tot 1,5&#176;C (IPCC SR1.5, 2018).
+    De gemiddelde Belg stoot <strong style="color:var(--text)">4&times; meer</strong> uit dan dit budget.
+    De <strong style="color:var(--purple)">~14 t</strong> is de consumptie-gebaseerde voetafdruk: inclusief goederen gemaakt in het buitenland en de Belgische overheid (~1&#8211;1,5 t/pers.).
+  </div>
+</div>
+
+
+
+<div class="tabs">
+  <button class="tab active" data-tab="producten">&#128230; Producten</button>
+  <button class="tab" data-tab="dagelijks">&#128663; Dagelijks</button>
+  <button class="tab" data-tab="reizen">&#9992;&#65039; Reizen</button>
+  <button class="tab" data-tab="energie">&#128293; Energie</button>
+  <button class="tab" data-tab="voeding">&#129385; Voeding</button>
+  <button class="tab" data-tab="resultaat">&#128202; Resultaat</button>
+</div>
+
+<div class="section active" id="tab-producten">
+  <div class="info-box"><strong>Zet producten aan die je bezit.</strong> Stel in hoeveel je er hebt en met hoeveel mensen je ze deelt. De CO&#8322;-impact is de jaarlijkse bijdrage (levenscyclus &#247; levensduur).</div>
+  <div id="products-list"></div>
+</div>
+
+<div class="section" id="tab-dagelijks">
+  <div class="info-box"><strong>Dagelijkse verplaatsingen</strong> (woon-werk, boodschappen, school, sociale activiteiten...). Vul het totaal aantal kilometer per jaar in. Wat op 0 blijft telt niet mee. Voor solo auto/EV kan je het aantal mederijders instellen.<br><strong style="color:var(--amber)">&#9888; Vakantie- en reiskilometers tellen hier NIET mee</strong> &mdash; die vul je in bij het tabblad <em>Reizen</em>.</div>
+  <div id="daily-transport-list"></div>
+</div>
+
+<div class="section" id="tab-reizen">
+  <div class="info-box">
+    <strong>Vakanties en uitstappen.</strong> Geef de <strong>totale afstand in inclusief retour</strong> in. Bv. Brussel&#8211;Praag retour = ~2.000 km. Kilometers op 0 = niet van toepassing.
+    <br><br>
+    <strong>&#9992;&#65039; Vliegafstand berekenen?</strong>
+    Hoe de Treecological calculator gebruiken
+    <span class="src-btn" onclick="document.getElementById('treecological-info').classList.toggle('open-info')" style="vertical-align:middle;cursor:pointer">i</span>
+    <div id="treecological-info" style="display:none;margin-top:10px;background:rgba(0,0,0,.2);border-radius:8px;padding:10px 12px;font-size:.76rem;color:var(--muted);line-height:1.7">
+      <strong style="color:var(--text)">Hoe gebruik je de Treecological calculator?</strong><br>
+      1. Klik op de tegel hieronder om naar <strong style="color:var(--text)">www.treecological.be</strong> te gaan<br>
+      2. Klik bovenaan op <strong style="color:var(--text)">&#8220;Calculator&#8221;</strong><br>
+      3. Klik op de tegel <strong style="color:var(--text)">&#8220;Bereken jouw vliegverkeer&#8221;</strong><br>
+      4. Vul je vertrek- en bestemmingsluchthaven in en reken uit<br>
+      5. Op de pagina met de uitslag vind je de <strong style="color:var(--text)">afstand in km onderaan</strong><br>
+      6. Gebruik die <strong style="color:var(--text)">km-waarde</strong> en vul die hier in &mdash; de afstand die Treecological toont is al de retourafstand als je retour hebt aangeduid. Deze calculator rekent zelf de CO&#8322;-impact (350 g/pkm kort, 195 g/pkm lang)
+      <br><br>
+      <span style="color:var(--dim);font-size:.7rem">Opmerking: de CO&#8322;-waarde van Treecological kan afwijken van wat deze calculator berekent, omdat elke tool andere factoren en methodes hanteert (bv. wel of geen Radiative Forcing Index (RFI), wel of geen productie-emissies vliegtuig). De km-afstand is wel objectief.</span>
+    </div>
+    <br>
+    <a class="link-btn" href="https://www.treecological.be" target="_blank">&#9992;&#65039; Treecological &mdash; bereken vliegafstand</a>
+    <div style="margin-top:10px;font-size:.74rem;color:var(--dim);line-height:1.65;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:7px;padding:9px 11px">
+      <strong style="color:var(--amber)">Waarom verschilt onze berekening van Treecological?</strong><br>
+      Treecological gebruikt een <strong style="color:var(--text)">RFI-factor van 3</strong> (Radiative Forcing Index (RFI): warmte-effect op grote hoogte). Wij gebruiken <strong style="color:var(--text)">RFI 1,9</strong> (ICAO/EEA/Our World in Data). Treecological volgt oudere studies (Kollmuss 2009); wij volgen de recentere wetenschappelijke consensus (Lee et al., <em>Atmospheric Environment</em>, 2021: RFI 1,7&ndash;2,0). Treecological telt ook infrastructuur en raffinage mee (+20%). Hierdoor is hun uitstoot voor lange vluchten <strong style="color:var(--text)">~1,5&times; hoger</strong> dan onze berekening. Beide zijn verdedigbaar &mdash; de werkelijkheid ligt er ergens tussenin.
+    </div>
+  </div>
+  <div id="travel-list"></div>
+</div>
+
+<div class="section" id="tab-energie">
+  <div class="info-box"><strong>Verwarming en elektriciteit thuis.</strong> Vul het <em>totale verbruik van het huishouden</em> in zoals op de factuur. Geef het aantal bewoners in om jouw persoonlijk aandeel te berekenen.</div>
+  <div id="energy-list"></div>
+</div>
+
+<div class="section" id="tab-voeding">
+  <div class="info-box">
+    <strong>Hoe eet jij?</strong> Vul in hoeveel maaltijden per week je de volgende producten eet. Op basis daarvan bepalen we je di&#235;etprofiel en de bijhorende CO&#8322;- en landimpact.
+    De referentie is het <strong>EAT-Lancet planetary health diet</strong> &#8212; wetenschappelijk onderbouwd als gezond &#233;n binnen de planetaire grenzen.
+    <span class="src-btn" onclick="showSrc('_eatlancet')" style="vertical-align:middle">i</span>
+  </div>
+
+  <div class="sec-head" style="margin-top:0;border-top:none;padding-top:0">&#127830; Rood vlees (rund, varken, lam, wild)</div>
+  <div style="font-size:.72rem;color:var(--dim);margin-bottom:8px">Gem. portie ~150 g &mdash; EAT-Lancet max: <strong style="color:var(--text)">&#189; maaltijd/week</strong> (98 g/week)</div>
+  <div class="ctrl-row" style="margin-bottom:14px">
+    <span class="ctrl-lbl">Maaltijden per week</span>
+    <div class="stepper">
+      <button class="step-btn" onclick="stepDiet('redmeat',-0.5)">&#8722;</button>
+      <span class="step-val" id="dv-redmeat" style="min-width:40px">0</span>
+      <button class="step-btn" onclick="stepDiet('redmeat',0.5)">+</button>
+    </div>
+  </div>
+
+  <div class="sec-head">&#129413; Gevogelte (kip, kalkoen, eend...)</div>
+  <div style="font-size:.72rem;color:var(--dim);margin-bottom:8px">Gem. portie ~150 g &mdash; EAT-Lancet max: <strong style="color:var(--text)">1,5 maaltijden/week</strong> (203 g/week)</div>
+  <div class="ctrl-row" style="margin-bottom:14px">
+    <span class="ctrl-lbl">Maaltijden per week</span>
+    <div class="stepper">
+      <button class="step-btn" onclick="stepDiet('poultry',-0.5)">&#8722;</button>
+      <span class="step-val" id="dv-poultry" style="min-width:40px">0</span>
+      <button class="step-btn" onclick="stepDiet('poultry',0.5)">+</button>
+    </div>
+  </div>
+
+  <div class="sec-head">&#128031; Vis en zeevruchten</div>
+  <div style="font-size:.72rem;color:var(--dim);margin-bottom:8px">Gem. portie ~150 g &mdash; EAT-Lancet max: <strong style="color:var(--text)">1,5 maaltijden/week</strong> (196 g/week)</div>
+  <div class="ctrl-row" style="margin-bottom:14px">
+    <span class="ctrl-lbl">Maaltijden per week</span>
+    <div class="stepper">
+      <button class="step-btn" onclick="stepDiet('fish',-0.5)">&#8722;</button>
+      <span class="step-val" id="dv-fish" style="min-width:40px">0</span>
+      <button class="step-btn" onclick="stepDiet('fish',0.5)">+</button>
+    </div>
+  </div>
+
+  <div class="sec-head">&#127848; Zuivel (melk, kaas, yoghurt...)</div>
+  <div style="font-size:.72rem;color:var(--dim);margin-bottom:8px">1 portie = glas melk (200 ml) of stuk kaas (40 g) of yoghurt (150 g) &mdash; EAT-Lancet max: <strong style="color:var(--text)">~10 porties/week</strong> (1,5 portie/dag &#215; 7)</div>
+  <div class="ctrl-row" style="margin-bottom:14px">
+    <span class="ctrl-lbl">Porties per week</span>
+    <div class="stepper">
+      <button class="step-btn" onclick="stepDiet('dairy',-0.5)">&#8722;</button>
+      <span class="step-val" id="dv-dairy" style="min-width:40px">0</span>
+      <button class="step-btn" onclick="stepDiet('dairy',0.5)">+</button>
+    </div>
+  </div>
+
+  <div class="sec-head">&#129370; Eieren</div>
+  <div style="font-size:.72rem;color:var(--dim);margin-bottom:8px">EAT-Lancet max: <strong style="color:var(--text)">1,5 eieren/week</strong></div>
+  <div class="ctrl-row" style="margin-bottom:14px">
+    <span class="ctrl-lbl">Eieren per week</span>
+    <div class="stepper">
+      <button class="step-btn" onclick="stepDiet('eggs',-1)">&#8722;</button>
+      <span class="step-val" id="dv-eggs" style="min-width:40px">0</span>
+      <button class="step-btn" onclick="stepDiet('eggs',1)">+</button>
+    </div>
+  </div>
+
+  <!-- DIET RESULT CARD -->
+  <div id="diet-result-card" style="background:var(--card);border:2px solid var(--border);border-radius:12px;padding:14px;margin:4px 0 16px">
+    <div style="font-size:.76rem;color:var(--muted);text-align:center">Vul je consumptie in om je di&#235;etprofiel te bepalen.</div>
+  </div>
+
+  <!-- FOOD GRID reference -->
+  <p class="sec-head">Vergelijking van alle di&#235;etprofielen</p>
+  <div class="food-grid" id="food-grid"></div>
+  <div style="font-size:.7rem;color:var(--dim);margin-top:8px;line-height:1.6">Bron: Poore &amp; Nemecek (Science, 2018) &middot; EAT-Lancet Commission (The Lancet, 2019; update 2025)</div>
+</div>
+
+<div class="section" id="tab-resultaat">
+  <!-- Incomplete disclaimer -->
+  <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);border-radius:10px;padding:12px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start">
+    <span style="font-size:1.2rem;flex-shrink:0">&#9888;&#65039;</span>
+    <div>
+      <div style="font-size:.82rem;font-weight:800;color:var(--amber);margin-bottom:4px">Deze calculator is niet volledig</div>
+      <div style="font-size:.76rem;color:var(--muted);line-height:1.7">
+        Veel zaken ontbreken: de bouw en renovatie van je <strong style="color:var(--text)">woning</strong>, <strong style="color:var(--text)">meubels, tapijten en textiel</strong> thuis, de <strong style="color:var(--text)">overproductie</strong> van goederen en voeding die vernietigd worden voor ze de consument bereiken, <strong style="color:var(--text)">gezondheidszorg en medicijnen</strong>, <strong style="color:var(--text)">evenementen en publieke ruimtes</strong>, en de emissies van je <strong style="color:var(--text)">bank- en pensioenbeleggingen</strong> (kan 1–5 t/jaar zijn). De werkelijke persoonlijke voetafdruk is daardoor aanzienlijk hoger dan wat hier berekend wordt. Gebruik dit als oriëntatie, niet als exacte meting.
+      </div>
+    </div>
+  </div>
+
+  <!-- Ring + scenario summary -->
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:8px 0 16px;border-bottom:1px solid var(--border);margin-bottom:16px">
+    <div class="ring-wrap">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="56" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="11"/>
+        <circle id="ring-circle" cx="70" cy="70" r="56" fill="none" stroke="var(--accent)" stroke-width="11"
+                stroke-dasharray="352" stroke-dashoffset="352" stroke-linecap="round"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-total" id="ring-total">0,0</div>
+        <div class="ring-unit">t CO&#8322;e/jaar</div>
+        <div class="ring-vs" id="ring-vs">&#8212;</div>
+      </div>
+    </div>
+    <!-- scenario values kept as hidden for JS, displayed in scenario cards below -->
+    <div style="display:none">
+      <span id="sc-e"></span><span id="sc-e-d"></span>
+      <span id="sc-v"></span><span id="sc-v-d"></span>
+      <span id="sc-g"></span><span id="sc-g-d"></span>
+      <span id="sc-a"></span><span id="sc-a-d"></span>
+    </div>
+  </div>
+  <p class="sec-head">&#128167; Waterverbruik productieketen</p>
+  <div class="water-result">
+    <div class="water-icon">&#128167;</div>
+    <div><div class="water-val" id="water-total">0 m&#179;</div><div class="water-lbl">Jaarlijkse watervoetstap (productie van jouw spullen + voeding)</div></div>
+  </div>
+  <!-- DIET LAND CARD -->
+  <div id="diet-land-card" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <span style="font-size:1.3rem">&#127807;</span>
+      <div style="flex:1">
+        <div style="font-size:.86rem;font-weight:800">Landgebruik van jouw dieet</div>
+        <div style="font-size:.72rem;color:var(--muted)">t.o.v. EAT-Lancet planetary health diet als referentie (= 1&times;)</div>
+      </div>
+      <span class="src-btn" onclick="showSrc('_eatlancet')">i</span>
+    </div>
+    <div id="diet-land-result" style="font-size:.82rem;color:var(--muted);line-height:1.7">
+      Vul je dieet in bij het tabblad Voeding.
+    </div>
+  </div>
+
+  <p class="sec-head">&#128202; Uitstoot per categorie</p>
+  <div class="breakdown" id="breakdown"><div style="padding:14px;color:var(--muted);font-size:.82rem">Vul de andere tabbladen in om je uitstoot te zien.</div></div>
+  <p class="sec-head">&#128301; Scenario vergelijking</p>
+  <div id="scen-grid"></div>
+  <!-- GLOBAL IMPACT SECTION -->
+  <p class="sec-head">&#127758; Onze gezamenlijke afdruk</p>
+
+  <div style="background:linear-gradient(135deg,rgba(99,102,241,.12) 0%,rgba(52,211,153,.08) 100%);border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:16px;margin-bottom:10px">
+    <p style="font-size:.88rem;font-weight:800;color:var(--text);margin-bottom:10px;line-height:1.4">
+      We zijn met meer dan 8 miljard mensen, en ieder van ons verlangt naar een waardig leven.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.75;margin-bottom:12px">
+      Als we de wens koesteren om op een leefbare planeet te leven &mdash; met een stabiel klimaat, zuiver water, vruchtbare grond en een rijke natuur &mdash; dan zijn we verplicht aan onszelf en aan alle volgende generaties om onze gezamenlijke afdruk te brengen naar het niveau dat daarvoor nodig is. Niet als opgave van buitenaf, maar als bewuste keuze voor het leven dat we willen.
+    </p>
+    <div id="global-impact-box" style="background:rgba(0,0,0,.2);border-radius:8px;padding:12px;font-size:.8rem;color:var(--muted);line-height:1.75">
+      Vul je gegevens in om te zien wat jouw afdruk betekent op wereldschaal.
+    </div>
+  </div>
+
+  <!-- WHY CO2 SECTION -->
+  <p class="sec-head">&#127811; Waarom de klemtoon op CO&#8322;?</p>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px">
+    <p style="font-size:.78rem;color:var(--dim);background:rgba(0,0,0,.15);border-radius:6px;padding:8px 10px;margin-bottom:10px;line-height:1.6">
+      <strong style="color:var(--muted)">CO&#8322; vs. CO&#8322;e:</strong> in deze tool gebruiken we CO&#8322;-equivalent (CO&#8322;e) — dat omvat alle broeikasgassen omgerekend naar hun opwarmingseffect: CO&#8322; (73%), methaan CH&#8324; (19%), lachgas N&#8322;O (5%) en F-gassen (3%). Methaan is over 20 jaar gezien ~80× krachtiger dan CO&#8322;, maar verdwijnt ook sneller. CO&#8322; zelf blijft eeuwenlang in de atmosfeer.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-bottom:10px">
+      <strong style="color:var(--text)">CO&#8322; is een broeikasgas dat tientallen tot honderden jaren in de atmosfeer blijft.</strong> Het zorgt ervoor dat warmte minder gemakkelijk van de aarde naar de ruimte kan ontsnappen, wat leidt tot een geleidelijke maar aanhoudende opwarming van de planeet.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-bottom:10px">
+      Die opwarming is een van de grootste drijvers van <strong style="color:var(--text)">biodiversiteitsverlies</strong>: ecosystemen die zich over millennia hebben gevormd, kunnen het tempo van de verandering niet bijhouden. Hogere CO&#8322;-concentraties veroorzaken ook de <strong style="color:var(--text)">verzuring van de oceanen</strong>, die samen met de opwarming een catastrofaal effect heeft op het zeeleven: van koraalriffen tot vispopulaties.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-bottom:10px">
+      Naast CO&#8322; speelt <strong style="color:var(--text)">landgebruik</strong> een cruciale rol. Het omzetten van natuurlijke landschappen &mdash; ontbossen, droogleggen van moerassen &mdash; voor menselijke activiteiten is eveneens een van de grootste oorzaken van biodiversiteitsverlies. Verreweg het grootste deel van dat landgebruik dient voor de productie van <strong style="color:var(--text)">vlees en zuivel</strong>. Daarom is een verschuiving naar een meer plantaardig dieet een van de meest impactvolle individuele keuzes die je kunt maken, zowel voor het klimaat als voor de biodiversiteit.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-bottom:10px">
+      Dit staat naast de vele andere effecten van onze consumptie: watervervuiling, plastic, stikstof, geluidsoverlast, verlies van halfnatuurlijke habitats&hellip;
+    </p>
+    <div style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);border-radius:8px;padding:12px;margin-top:4px">
+      <p style="font-size:.84rem;color:var(--green);font-weight:800;margin-bottom:4px">Het kan anders.</p>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.75">
+        Het is perfect mogelijk om een <strong style="color:var(--text)">goed en comfortabel leven</strong> te hebben zonder dat daarvoor te veel land vernietigd moet worden of te veel broeikasgassen vrijkomen. De technologie en kennis bestaan. Wat nog ontbreekt, is de collectieve wil om het ook te doen. <strong style="color:var(--text)">Samen</strong>.
+      </p>
+    </div>
+  </div>
+
+  <p class="sec-head">&#128233; Bewaar je resultaten</p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px">
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:12px;line-height:1.6">
+      Download een overzicht van jouw CO&#8322;-voetafdruk als tekstbestand, of stuur jezelf een e-mail via je eigen e-mailapp.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="downloadResults()" style="padding:12px 16px;background:var(--accent);border:none;border-radius:10px;color:white;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        &#11015;&#65039; Download resultaten (.txt)
+      </button>
+      <div style="display:flex;gap:8px">
+        <input id="email-input" type="email" inputmode="email" placeholder="jouw@email.be"
+          style="flex:1;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.84rem">
+        <button onclick="mailResults()" style="padding:10px 14px;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--blue);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;white-space:nowrap">
+          &#9993;&#65039; Mail mij
+        </button>
+      </div>
+      <p style="font-size:.68rem;color:var(--dim);line-height:1.5">
+        "Mail mij" opent je eigen e-mailapp met de resultaten ingevuld. Er worden geen gegevens naar een server gestuurd.
+      </p>
+    </div>
+  </div>
+  <p style="font-size:.7rem;color:var(--dim);line-height:1.7;margin-top:8px">
+    &#9888;&#65039; Alle cijfers zijn gemiddelden (&#177;30&#8211;50%). Bronnen: EDGAR/JRC v8.0 (2023) &#183; EEA &#183; ICCT (2025) &#183; Poore &amp; Nemecek (Science, 2018) &#183; NREL &#183; IEA NZE &#183; Okin (2017) huisdieren.
+  </p>
+</div>
+
+<div class="sticky-result">
+  <div class="sticky-total">
+    <span class="sticky-num" id="sticky-num">0,0 t</span>
+    <span class="sticky-lbl">CO&#8322;e / jaar</span>
+  </div>
+  <div class="sticky-budget">
+    <div style="font-size:.68rem;color:var(--muted);font-weight:700" id="sticky-pct">&#8212;% van 1,5&#176;C-budget</div>
+    <div class="budget-prog"><div class="budget-fill" id="budget-fill" style="width:0%;background:var(--green)"></div></div>
+  </div>
+  <button class="sticky-btn" id="nav-btn" onclick="nextTab()">Dagelijks &#8594;</button>
+</div>
+
+<script>
+// ═══ SOURCE INFO PER PRODUCT ════════════════════════════════
+const SOURCE_INFO = {
+  schoenen:  {title:'Paar schoenen', formula:'Embodied: ~13 kg CO₂e (prod+transport+EOL) ÷ 3j = 4,3 kg/j\nGebruik: verwaarloosbaar', ref:'MIT Sustainability Initiative (2013). Lifecycle assessment of running shoes. ~13 kg CO₂e embodied.'},
+  jeans:     {title:'Broek / jeans', formula:'Embodied: 30 kg CO₂e ÷ 3j = 10 kg/j\nGebruik (wassen): ~3 kg/j\nTotaal: ~11 kg/j', ref:'Levi Strauss & Co. (2015). The Life Cycle of a Jean. Cradle-to-grave: 33,4 kg CO₂e, 3.781 L water.'},
+  tshirt:    {title:'T-shirt (katoen)', formula:'Embodied: 6 kg CO₂e ÷ 2j = 3 kg/j\nGebruik: ~0,5 kg/j\nWater: 2.700 L (katoenteelt)', ref:'Carbon Trust (2011). Product Carbon Footprinting. T-shirt: 6–9 kg CO₂e lifetime.'},
+  trui:      {title:'Trui / sweater', formula:'Embodied: 14 kg CO₂e ÷ 4j = 3,5 kg/j', ref:'Carbon Trust (2011). Product Carbon Footprinting. ~15 kg cradle-to-grave.'},
+  jas:       {title:'Winterjas (polyester)', formula:'Embodied: 17 kg CO₂e ÷ 6j = 2,8 kg/j\nProductie = 72% van GHG impact', ref:'Steinberger et al. via BSR Apparel LCA (2009). Polyester jacket: productie dominant.'},
+  oven:      {title:'Elektrische oven', formula:'Embodied: 290 kg ÷ 15j = 19,3 kg/j\nGebruik: 200 beurten/j × 0,9 kWh × 136 g/kWh × 15j ÷ 15j = 24,5 kg/j', ref:'ConsoInfo EU Appliance Dataset. ScienceDirect — Appliance LCA (2022).'},
+  inductie:  {title:'Inductieplaat', formula:'Embodied: 250 kg ÷ 15j = 16,7 kg/j\nGebruik: 200 beurten × 0,6 kWh × 136 g/kWh = 16,3 kg/j', ref:'ConsoInfo EU. Inductie efficiënter dan oven door directe warmteoverdracht.'},
+  magnetron: {title:'Microgolfoven', formula:'Embodied: 90 kg ÷ 10j = 9 kg/j\nGebruik: ~50 kWh/j × 0,21 kg/kWh = 10,5 kg/j', ref:'ScienceDirect — Appliance LCA (2022). Magnetron laag vermogen, korte gebruikstijd.'},
+  koffie:    {title:'Koffiezetapparaat', formula:'Embodied: 95 kg ÷ 7j = 13,6 kg/j\nGebruik: stand-by 60 kWh/j × 0,19 kg/kWh = 11,4 kg/j\nStand-by domineert!', ref:'ConsoInfo EU. Stand-by koffiezetapparaat: ~60 kWh/jaar. IEA stand-by guide.'},
+  wasmachine:{title:'Wasmachine', formula:'Embodied: 320 kg ÷ 12j = 26,7 kg/j\nGebruik: 200 wassen × 0,65 kWh × 0,154 kg/kWh = 20,0 kg/j', ref:'ConsoInfo EU / ScienceDirect Appliance LCA (2022). 200 wassen/jaar gemiddeld (EEA 2024).'},
+  droogkast: {title:'Droogkast', formula:'Embodied: 280 kg ÷ 12j = 23,3 kg/j\nGebruik: 200 beurten × 3,5 kWh × 0,154 kg/kWh = 108 kg/j\nZeer energie-intensief!', ref:'ScienceDirect — Appliance LCA (2022). Droogkast = 3–4 kWh per beurt.'},
+  vaatwasmachine:{title:'Vaatwasmachine', formula:'Embodied: 300 kg ÷ 12j = 25 kg/j\nGebruik: 365 beurten × 1,2 kWh × 0,154 kg/kWh = 67,6 kg/j', ref:'ConsoInfo EU. ScienceDirect LCA (2022): 317–1.330 kg lifetime range.'},
+  koelkast:  {title:'IJskast', formula:'Embodied: 280 kg ÷ 15j = 18,7 kg/j\nGebruik: 0,35 kWh/dag × 365 × 136 g/kWh = 17,4 kg/j', ref:'ConsoInfo EU: 382 kg CO₂e product. Continu 0,35 kWh/dag modern model.'},
+  diepvries: {title:'Diepvries', formula:'Embodied: 280 kg ÷ 15j = 18,7 kg/j\nGebruik: 0,40 kWh/dag × 365 × 136 g/kWh = 19,9 kg/j', ref:'ConsoInfo EU. Diepvries iets meer energie dan koelkast (geen deursensor).'},
+  stofzuiger:{title:'Stofzuiger', formula:'Embodied: 180 kg ÷ 10j = 18 kg/j\nGebruik: 1,2 kWh × 2u/week × 52 × 0,154 = 19,3 kg/j', ref:'Ethical Consumer / ACEEE. Stofzuiger: ~180 kg embodied.'},
+  robotstofzuiger:{title:'Robotstofzuiger', formula:'Embodied: 160 kg ÷ 5j = 32 kg/j\nGebruik: 25W × 1u/dag × 365 × 0,19 kg/kWh = 1,7 kg/j\nKorte levensduur = hoge jaarlijkse embodied!', ref:'Schatting op basis van vergelijkbare elektronica + ScienceDirect (2022).'},
+  tv:        {title:'Televisie (55 inch)', formula:'Embodied: 380 kg ÷ 8j = 47,5 kg/j\nGebruik: 4u/dag × 0,1 kWh × 365 × 0,183 kg/kWh = 26,7 kg/j', ref:'ConsoInfo EU: 422 kg CO₂e product. Scherm = grote embodied factor.'},
+  smartphone:{title:'Smartphone', formula:'Embodied: 65 kg ÷ 3j = 21,7 kg/j\nGebruik: ~5 Wh/dag ÷ 1000 × 365 × 0,21 kg/kWh = 0,4 kg/j\nWater: 13.000 L/toestel (zeldzame metalen)', ref:'ScienceDirect — ICT User Devices (2023): 50 kg embodied + ~15 kg EOL.'},
+  laptop:    {title:'Laptop', formula:'Embodied: 300 kg ÷ 5j = 60 kg/j\nGebruik: 30W × 5u/dag × 365 × 0,21 kg/kWh = 11,5 kg/j', ref:'ACEEE (2012): 275–650 kg LCA range. ScienceDirect ICT (2023): ~200 kg embodied laptop.'},
+  pc:        {title:'PC (desktop + scherm)', formula:'Embodied: 450 kg ÷ 6j = 75 kg/j\nGebruik: 300W × 4u/dag × 365 × 0,21 kg/kWh = 87,7 kg/j', ref:'ACEEE (2012). Desktop + scherm: embodied ~450 kg. Hoog gebruik-vermogen.'},
+  tablet:    {title:'Tablet', formula:'Embodied: 110 kg ÷ 4j = 27,5 kg/j\nGebruik: 10W × 4u/dag × 365 × 0,21 kg/kWh = 6,1 kg/j', ref:'ScienceDirect ICT (2023): ~100 kg embodied + EOL. Laag gebruik-vermogen.'},
+  smartwatch:{title:'Smartwatch', formula:'Embodied: 30 kg ÷ 4j = 7,5 kg/j\nGebruik: ~2 Wh/dag × 365 × 0,21 kg/kWh = 0,15 kg/j', ref:'Schatting op basis van vergelijkbare kleine elektronica (zeldzame metalen, Li-batterij).'},
+  printer:   {title:'Printer', formula:'Embodied: 150 kg ÷ 5j = 30 kg/j\nGebruik: ~30 kWh/j (incl. stand-by) × 0,21 kg/kWh = 6,4 kg/j', ref:'Schatting. Cartridges niet meegerekend (die verhogen de impact aanzienlijk).'},
+  powerbank: {title:'Powerbank (10.000 mAh)', formula:'Embodied: 25 kg ÷ 3j = 8,3 kg/j\nGebruik: omvormingsverliezen klein', ref:'Schatting op basis van LiPo-batterijproductie. Batterij = dominant in embodied.'},
+  harddisk:  {title:'Externe harde schijf', formula:'Embodied: 30 kg ÷ 5j = 6 kg/j\nGebruik: ~5 kWh/j × 0,21 kg/kWh = 1 kg/j', ref:'Schatting op basis van HDD/SSD productie-LCA (ACEEE 2012 referentiekader).'},
+  playstation:{title:'Gameconsole', formula:'Embodied: 200 kg ÷ 6j = 33,3 kg/j\nGebruik: 150W × 2u/dag × 365 × 0,183 kg/kWh = 20,0 kg/j', ref:'Schatting op basis van vergelijkbare elektronica + ACEEE.'},
+  sofa:      {title:'Sofa 3-zit', formula:'Embodied: 300 kg ÷ 15j = 20 kg/j\nGebruik: geen energie\nMaterialen: hout, PU-schuim, stof/leer, metaalframe + EOL sloop', ref:'Schatting op basis van meubel-LCA studies. Polyurethaanschuim is CO₂-intensief.'},
+  pv:        {title:'10 PV-panelen + omvormer (4,5 kWp)', formula:'Embodied: 2.500 kg ÷ 25j = 100 kg/j\nVERMEDEN: 4.500 kWh/j × gem. 91 g/kWh (EU-mix 2025–2049) = -411 kg/j\nNetto: -311 kg/j (negatief = klimaatwinst)', ref:'NREL Solar PV LCA Harmonization (2024): ~400 kg CO₂e/kWp. 10×450 Wp = 4,5 kWp. ~900 kWh/kWp/jaar in België.'},
+  batterij5: {title:'Thuisbatterij 5 kWh (LFP)', formula:'Embodied: 1.050 kg ÷ 12j = 87,5 kg/j\n(LFP: ~210 kg CO₂e/kWh × 5 kWh)\nGebruik (verliezen): ~80 kWh/j × 0,154 = 12,3 kg/j', ref:'T&E EV LCA (2022). LFP = lithium-ijzerfosfaat, lagere CO₂ dan NMC. ~3.000 cycli levensduur.'},
+  moto:      {title:'Motorfiets — productie & sloop (embodied only)', formula:'Embodied (productie + EOL): ~3.000 kg ÷ 15j = 200 kg/j\nFrame (staal/aluminium), motor, batterij starters, banden, EOL\n\nLET OP: gebruik (brandstof per km) wordt apart\nberekend bij Dagelijks/Reizen op basis van ingegeven km.', ref:'Schatting op basis van vergelijkbare LCA-studies voor kleine voertuigen. Geen grote gepubliceerde motorfiets-LCA beschikbaar; range in literatuur: 1.500–4.000 kg embodied afhankelijk van cilinderinhoud.'},
+  laadpaal:  {title:'Laadpaal thuis (7–11 kW)', formula:'Embodied: 110 kg ÷ 15j = 7,3 kg/j\nGebruik (standby controller): ~44 kWh/j × 0,136 = 6 kg/j', ref:'Schatting. Eenvoudig product: staal + elektronica + kabel. Eigenlijk gebruik EV staat apart.'},
+  autoEV:    {title:'Elektrische wagen — productie & sloop (embodied only)', formula:'ICCT 2025: embodied (productie + EOL) = ~10.000 kg ÷ 15j = 667 kg/j\nIncludes batterij 53,4 kWh NMC = ~3.900 kg CO₂\n\nLET OP: gebruik (kWh per km) wordt apart berekend\nbij Dagelijks/Reizen op basis van de ingegeven kilometers.', ref:'ICCT — Life-cycle GHG emissions from passenger cars in the EU (juli 2025). BEV = 73% lager dan diesel.'},
+  autoDiesel:{title:'Dieselwagen — productie & sloop (embodied only)', formula:'ICCT 2025: embodied (productie + EOL) = ~7.000 kg ÷ 15j = 467 kg/j\n\nLET OP: gebruik (brandstof per km) wordt apart berekend\nbij Dagelijks/Reizen op basis van de ingegeven kilometers.', ref:'ICCT — Life-cycle GHG emissions from passenger cars in the EU (juli 2025).'},
+  streaming: {title:'Video streaming', formula:'Gebruik: uur/dag × 365 × 36 g CO₂/uur = jaarlijkse uitstoot\nBv. 2u/dag = 2 × 365 × 0,036 = 26,3 kg/jaar', ref:'IEA (2023). Electricity consumption of streaming: ~36 g CO₂/hour (datacenter + netwerk + device). Sterk afhankelijk van apparaat en resolutie.'},
+  gamen_online:{title:'Online gamen', formula:'Gebruik: uur/dag × 365 × 50 g CO₂/uur = jaarlijkse uitstoot\nBv. 2u/dag = 2 × 365 × 0,050 = 36,5 kg/jaar', ref:'Schatting op basis van serverinfrastructuur overhead. Varieert sterk per platform (cloud gaming vs lokale console).'},
+  ai_gebruik:{title:'AI-gebruik (ChatGPT, Claude, Gemini...)', formula:'Berekening: queries/dag × 365 × ~2 g CO₂e/query\nBv. 20 queries/dag = 20 × 365 × 0,002 kg = 14,6 kg/jaar\n\nOnzekerheidsrange: 0,03 g (Google Gemini, inference only)\ntot 4 g (incl. training, infrastructuur, hardware)\n⇒ Factor 10 onzekerheid in beide richtingen!\n\nHier gebruikte waarde: ~2 g/query (conservatief midden,\nincl. anteilig aandeel training + infrastructuur)', ref:'Google Gemini Environmental Report (aug. 2025): 0,03 g/query (inference only, 0,24 Wh). OpenAI/Sam Altman (jun. 2025): ~0,34 Wh/query. Scientific Reports — Luccioni et al. (2024): ~2,2 g/query incl. training (ChatGPT). Epoch AI (feb. 2025): ~0,3 Wh/query. Onzekerheid: 0,38–68 g/query range in literatuur (DesignWhine, 2025). Anthropic heeft geen per-query cijfers gepubliceerd.'},
+  hond:      {title:'Hond (middelgroot)', formula:'Jaarlijkse voer-impact: ~770 kg CO₂e/jaar\nGebaseerd op vlees in droogvoer (rund, kip)\nGrotere honden: 1.000–1.500 kg/jaar', ref:'Okin GS (2017). PLOS ONE: Environmental impacts of food consumption by dogs and cats. ~770 kg voor middelgrote hond.'},
+  // Budget and reference entries
+  _budget15: {title:'CO₂-budget 1,5°C (2,1 t/jaar)', formula:'Resterende koolstofruimte om de opwarming met 60% kans te beperken tot 1,5°C\n÷ wereldbevolking (8,1 miljard)\n= ~2.100 kg CO₂e/persoon/jaar', ref:'IPCC Special Report on Global Warming of 1.5°C (SR1.5, 2018). Hoofdstuk 2: Mitigation pathways. Budget van 420–1.170 GtCO₂ resterende ruimte afhankelijk van overshoot-scenario.'},
+  _budget20: {title:'CO₂-budget 2°C (2,9 t/jaar)', formula:'Resterende koolstofruimte om de opwarming met 60% kans te beperken tot 2°C\n÷ wereldbevolking (8,1 miljard)\n= ~2.900 kg CO₂e/persoon/jaar', ref:'IPCC Sixth Assessment Report (AR6, 2021). Working Group I. Tabel 5.8: Remaining carbon budgets.'},
+  _belg91:   {title:'Gemiddelde Belg: 9,1 t/jaar (territoriaal)', formula:'Totale Belgische GHG-emissies (2023): ~103 Mt CO₂e\n÷ bevolking 11,4 miljoen\n= ~9,1 t CO₂e/persoon/jaar\n\nTERRITORIAAL = wat fysiek in België uitgestoten wordt:\nIndustrie (27%), transport (22%), gebouwen (20%),\nlandbouw, afval, overheid, defensie...\nNIET inbegrepen: emissies van geïmporteerde goederen.', ref:'EDGAR Community GHG Database v8.0 — European Commission JRC / IEA (2023). Crippa et al. (2023), doi:10.2760/953322. Data beschikbaar op edgar.jrc.ec.europa.eu'},
+  _belg14:   {title:'Belgische consumptie-voetafdruk: ~14 t/jaar', formula:'Territoriale emissies (9,1 t)\n+ emissies ingebed in geïmporteerde goederen (~3–4 t)\n  (kleding, elektronica, voeding gemaakt buiten België)\n+ aandeel overheidsuitgaven (~1–1,5 t)\n  (wegen, scholen, ziekenhuizen, defensie...)\n= ~13–14 t CO₂e/persoon/jaar', ref:'Our World in Data — Consumption-based CO₂ emissions (Hannah Ritchie, 2022). Federaal Planbureau België. OECD Trade in Embodied Carbon dataset.'},
+  _eatlancet: {title:'EAT-Lancet Planetary Health Diet (referentie = 1×)', formula:'Referentie: EAT-Lancet planetary health diet = 1,0×\n(overwegend plantaardig, kleine hoeveelh. vlees/vis/zuivel)\n\nRelatieve landverhouding (Poore & Nemecek 2018):\nVeganist:      0,7× (minder dan referentie)\nVegetarier:    0,9×\nFlexitariër:   1,0× (= EAT-Lancet referentie)\nOmnivoor:      3,5× (3,5 keer meer land)', ref:'EAT-Lancet Commission on Healthy Diets From Sustainable Food Systems. The Lancet (2019), doi:10.1016/S0140-6736(18)31788-4. Update: EAT-Lancet 2025. Landdata: Poore J. & Nemecek T., Science (2018), doi:10.1126/science.aaq0216.'},
+  kat:       {title:'Kat', formula:'Jaarlijkse voer-impact: ~310 kg CO₂e/jaar\nGebaseerd op vlees in natvoer/droogvoer', ref:'Okin GS (2017). PLOS ONE: Environmental impacts of food consumption by dogs and cats. ~310 kg CO₂e/kat/jaar.'},
+};
+
+// ═══ DATA ═══════════════════════════════════════════════════════
+const PRODUCTS = [
+  // Kleding
+  {id:'schoenen',icon:'👟',name:'Paar schoenen',cat:'Kleding',sub:'Synthetisch/leer, 3j',embodied_pj:4.3,use_pj:0.3,water_pj:2667,shareable:false},
+  {id:'jeans',icon:'👖',name:'Broek / jeans',cat:'Kleding',sub:'Katoen, 3j',embodied_pj:10,use_pj:1,water_pj:2333,shareable:false},
+  {id:'tshirt',icon:'👕',name:'T-shirt',cat:'Kleding',sub:'Katoen, 2j',embodied_pj:3,use_pj:0.5,water_pj:1350,shareable:false},
+  {id:'trui',icon:'🧥',name:'Trui / sweater',cat:'Kleding',sub:'4j',embodied_pj:3.5,use_pj:0.3,water_pj:1000,shareable:false},
+  {id:'jas',icon:'🧣',name:'Jas (winter)',cat:'Kleding',sub:'Polyester, 6j',embodied_pj:2.8,use_pj:0.2,water_pj:833,shareable:false},
+  // Keuken
+  {id:'oven',icon:'🔲',name:'Elektrische oven',cat:'Keuken',sub:'15j',embodied_pj:19.3,use_pj:24.5,water_pj:1200,shareable:true},
+  {id:'inductie',icon:'⚡',name:'Inductieplaat',cat:'Keuken',sub:'15j',embodied_pj:16.7,use_pj:16.3,water_pj:1000,shareable:true},
+  {id:'magnetron',icon:'📡',name:'Microgolfoven',cat:'Keuken',sub:'10j',embodied_pj:9,use_pj:14,water_pj:500,shareable:true},
+  {id:'koffie',icon:'☕',name:'Koffiezetapparaat',cat:'Keuken',sub:'7j',embodied_pj:13.6,use_pj:11.4,water_pj:571,shareable:true},
+  // Huishouden
+  {id:'wasmachine',icon:'🫧',name:'Wasmachine',cat:'Huishouden',sub:'12j',embodied_pj:26.7,use_pj:20.1,water_pj:2083,shareable:true},
+  {id:'droogkast',icon:'🌀',name:'Droogkast',cat:'Huishouden',sub:'12j',embodied_pj:23.3,use_pj:108,water_pj:1667,shareable:true},
+  {id:'vaatwasmachine',icon:'🍽️',name:'Vaatwasmachine',cat:'Huishouden',sub:'12j',embodied_pj:25,use_pj:67.6,water_pj:1833,shareable:true},
+  {id:'koelkast',icon:'🧊',name:'Ijskast',cat:'Huishouden',sub:'15j',embodied_pj:18.7,use_pj:17.4,water_pj:1200,shareable:true},
+  {id:'diepvries',icon:'❄️',name:'Diepvries',cat:'Huishouden',sub:'15j',embodied_pj:18.7,use_pj:19.9,water_pj:1067,shareable:true},
+  {id:'stofzuiger',icon:'🌪️',name:'Stofzuiger',cat:'Huishouden',sub:'10j',embodied_pj:18,use_pj:21,water_pj:900,shareable:true},
+  {id:'robotstofzuiger',icon:'🤖',name:'Robotstofzuiger',cat:'Huishouden',sub:'5j',embodied_pj:32,use_pj:1.8,water_pj:1400,shareable:true},
+  // Elektronica
+  {id:'tv',icon:'📺',name:'Televisie (55 inch)',cat:'Elektronica',sub:'8j',embodied_pj:47.5,use_pj:26.8,water_pj:2500,shareable:true},
+  {id:'smartphone',icon:'📱',name:'Smartphone',cat:'Elektronica',sub:'3j',embodied_pj:21.7,use_pj:1.7,water_pj:4333,shareable:false},
+  {id:'laptop',icon:'💻',name:'Laptop',cat:'Elektronica',sub:'5j',embodied_pj:60,use_pj:11.6,water_pj:2400,shareable:false},
+  {id:'pc',icon:'🖥️',name:'PC (desktop + scherm)',cat:'Elektronica',sub:'6j',embodied_pj:75,use_pj:87.7,water_pj:3000,shareable:false},
+  {id:'tablet',icon:'⬛',name:'Tablet',cat:'Elektronica',sub:'4j',embodied_pj:27.5,use_pj:3.3,water_pj:2000,shareable:false},
+  {id:'smartwatch',icon:'⌚',name:'Smartwatch',cat:'Elektronica',sub:'4j',embodied_pj:7.5,use_pj:0.5,water_pj:1000,shareable:false},
+  {id:'printer',icon:'🖨️',name:'Printer',cat:'Elektronica',sub:'5j',embodied_pj:30,use_pj:6.4,water_pj:2000,shareable:true},
+  {id:'powerbank',icon:'🔋',name:'Powerbank',cat:'Elektronica',sub:'3j',embodied_pj:8.3,use_pj:0.7,water_pj:1000,shareable:false},
+  {id:'harddisk',icon:'💾',name:'Externe harde schijf',cat:'Elektronica',sub:'5j',embodied_pj:6,use_pj:0.8,water_pj:600,shareable:false},
+  {id:'playstation',icon:'🎮',name:'Gameconsole',cat:'Elektronica',sub:'6j',embodied_pj:33.3,use_pj:22,water_pj:1500,shareable:true},
+  // Meubels
+  {id:'sofa',icon:'🛋️',name:'Sofa 3-zit',cat:'Meubels',sub:'15j',embodied_pj:20,use_pj:0,water_pj:1667,shareable:true},
+  // Installaties
+  {id:'pv',icon:'☀️',name:'PV-panelen (zonnepanelen)',cat:'Installaties',sub:'25j — vermijdt CO2. Stel vermogen in via aantal panelen of kWp.',embodied_pj:0,use_pj:0,water_pj:0,shareable:true,isPV:true},
+  {id:'batterij5',icon:'🔌',name:'Thuisbatterij 5 kWh',cat:'Installaties',sub:'12j',embodied_pj:87.5,use_pj:14,water_pj:2083,shareable:true},
+  {id:'laadpaal',icon:'⚡',name:'Laadpaal thuis',cat:'Installaties',sub:'15j',embodied_pj:7.3,use_pj:6,water_pj:200,shareable:true},
+  // Transport (voertuig zelf)
+  {id:'autoEV',icon:'🚗',name:'Elektrische wagen — productie & sloop',cat:'Transport',sub:'Embodied only: 10.000 kg ÷ 15j (ICCT 2025). Km-gebruik staat bij Dagelijks/Reizen.',embodied_pj:667,use_pj:0,water_pj:10667,shareable:true},
+  {id:'autoDiesel',icon:'🚙',name:'Dieselwagen — productie & sloop',cat:'Transport',sub:'Embodied only: 7.000 kg ÷ 15j (ICCT 2025). Km-gebruik staat bij Dagelijks/Reizen.',embodied_pj:467,use_pj:0,water_pj:8000,shareable:true},
+  {id:'moto',icon:'🏍️',name:'Motorfiets — productie & sloop',cat:'Transport',sub:'Embodied only: ~3.000 kg ÷ 15j. Km-gebruik bij Dagelijks/Reizen.',embodied_pj:200,use_pj:0,water_pj:2000,shareable:false},
+  // Digitaal & streaming — qty = uur/dag; CO2 berekend dynamisch
+  {id:'streaming',icon:'🎬',name:'Video streaming (Netflix/YouTube)',cat:'Digitaal & Huisdieren',sub:'Stel uur per dag in',embodied_pj:0,use_pj:0,water_pj:0,shareable:true,isStreaming:true},
+  {id:'gamen_online',icon:'🕹️',name:'Online gamen (cloudservers)',cat:'Digitaal & Huisdieren',sub:'Stel uur per dag in',embodied_pj:0,use_pj:0,water_pj:0,shareable:false,isGaming:true},
+  {id:'ai_gebruik',icon:'🤖',name:'AI-gebruik (ChatGPT, Claude...)',cat:'Digitaal & Huisdieren',sub:'Stel queries per dag in — onzekerheid ± factor 10',embodied_pj:0,use_pj:0,water_pj:0,shareable:false,isAI:true},
+  // Huisdieren — use_pj = jaarlijkse voer-CO2
+  {id:'hond',icon:'🐶',name:'Hond (middelgroot)',cat:'Digitaal & Huisdieren',sub:'Voer ~770 kg CO2e/jaar (Okin 2017)',embodied_pj:0,use_pj:770,water_pj:0,shareable:true},
+  {id:'kat',icon:'🐱',name:'Kat',cat:'Digitaal & Huisdieren',sub:'Voer ~310 kg CO2e/jaar (Okin 2017)',embodied_pj:0,use_pj:310,water_pj:0,shareable:true},
+];
+
+const DAILY_TRANSPORT = [
+  {id:'dt_fiets',icon:'🚲',name:'Fiets',gco2:0,color:'#34d399',note:'Geen emissies'},
+  {id:'dt_ebike',icon:'🚵',name:'E-bike',gco2:1.8,color:'#6ee7b7',note:'~183 g/kWh x 0,1 kWh/km'},
+  {id:'dt_te',icon:'🚶',name:'Te voet',gco2:0,color:'#34d399',note:'Geen emissies'},
+  {id:'dt_trein',icon:'🚂',name:'Trein',gco2:6,color:'#60a5fa',note:'EEA EU-gem. 6 g/pkm'},
+  {id:'dt_bus',icon:'🚌',name:'Stadsbus / tram',gco2:60,color:'#a3e635',note:'EEA: ~60 g/pkm stedelijk'},
+  {id:'dt_auto_solo',icon:'🚗',name:'Auto (diesel/benzine) solo',gco2:192,color:'#f87171',note:'EEA: 192 g/pkm — stel mederijders in',isSoloCar:true},
+  {id:'dt_ecar1',icon:'🔋',name:'Elektrische wagen solo',gco2:13,color:'#34d399',note:'ICCT 2025: 13 g/km elektriciteitsgebruik. Productie/sloop staat apart bij Producten → Transport.',isSoloCar:true},
+  {id:'dt_moto',icon:'🏍️',name:'Motorfiets',gco2:80,color:'#f87171',note:'~80 g/pkm (EEA)'},
+];
+
+const TRAVEL_MODES = [
+  {id:'tr_trein',icon:'🚂',name:'Trein',gco2:6,color:'#34d399',note:'EEA EU-gem. 6 g/pkm'},
+  {id:'tr_slaaptrein',icon:'🛌',name:'Slaaptrein',gco2:6,color:'#34d399',note:'CE Delft: ~6 g/pkm'},
+  {id:'tr_bus',icon:'🚌',name:'Reisbus (~60 pers.)',gco2:27,color:'#a3e635',note:'EEA: 27 g/pkm'},
+  {id:'tr_auto1',icon:'🚗',name:'Auto solo',gco2:192,color:'#f87171',note:'192 g/pkm brandstofgebruik (EEA). Productie/sloop apart bij Producten.',isSoloCar:true},
+  {id:'tr_ecar1',icon:'🔋',name:'EV solo',gco2:13,color:'#34d399',note:'13 g/pkm elektriciteitsgebruik (ICCT 2025). Productie/sloop apart bij Producten.',isSoloCar:true},
+  {id:'tr_vlieg_kort',icon:'✈️',name:'Vliegtuig kort (<1.500 km)',gco2:350,color:'#f43f5e',note:'350 g/pkm: directe CO₂ ~160 g + RFI (Radiative Forcing Index) ×1,9 + 10% well-to-tank. Treecological gebruikt RFI (Radiative Forcing Index) ×3 → ~500 g/pkm. Wetenschappelijk debat: IPCC/Lee et al. (2021) → RFI 1,7–2,0.'},
+  {id:'tr_vlieg_lang',icon:'✈️',name:'Vliegtuig lang (>1.500 km)',gco2:195,color:'#f87171',note:'195 g/pkm: directe CO₂ ~80 g + RFI (Radiative Forcing Index) ×1,9 + 10% WTT. Treecological gebruikt RFI (Radiative Forcing Index) ×3 → ~290 g/pkm (lang traject). Verschil door hogere RFI-keuze (Kollmuss 2009 vs Lee et al. 2021).'},
+];
+
+const FOOD = [
+  {id:'omnivoor',icon:'🥩',name:'Omnivoor',sub:'Rood vlees meerdere keren/week',co2:2650,water:1500,landFactor:3.5,color:'#f43f5e'},
+  {id:'flexitarier',icon:'🍗',name:'Flexitarier',sub:'Alleen gevogelte, geen rood vlees — EAT-Lancet referentie',co2:1590,water:1100,landFactor:1.0,color:'#fb923c'},
+  {id:'vegetarier',icon:'🥗',name:'Vegetarier',sub:'Geen vlees, wel zuivel & eieren',co2:1390,water:1050,landFactor:0.9,color:'#fbbf24'},
+  {id:'veganist',icon:'🌱',name:'Veganist',sub:'Volledig plantaardig',co2:1000,water:750,landFactor:0.7,color:'#34d399'},
+];
+
+const ENERGY_SOURCES = [
+  {id:'aardgas',icon:'🔥',name:'Aardgas (verwarming)',placeholder:'bv. 1500',unit_label:'m³',factor:2.02,
+   note:'1 m³ aardgas = ~2,02 kg CO₂ | 1 kWh aardgas = ~0,202 kg CO₂ (1 m³ ≈ 10 kWh)',isGas:true,altUnit:'kWh',altFactor:0.202,altPlaceholder:'bv. 15000'},
+  {id:'stookolie',icon:'🛢️',name:'Stookolie / mazout',placeholder:'bv. 1200',unit_label:'liter',factor:2.66,
+   note:'1 L mazout = ~2,66 kg CO2',isOil:true},
+  {id:'warmtepomp',icon:'♨️',name:'Warmtepomp (elektriciteit)',placeholder:'bv. 3750',unit_label:'kWh',factor:0.111,
+   note:'Dynamisch EU-net gem. 111 g/kWh over 20j levensduur (EEA/IEA NZE)'},
+  {id:'elektriciteit',icon:'⚡',name:'Elektriciteitsverbruik huis',placeholder:'bv. 3500',unit_label:'kWh',factor:0.25,
+   note:'EU-gemiddelde 250 g/kWh (EEA 2023). Dynamisch over tijd: gem. ~210 g/kWh'},
+  {id:'drinkwater',icon:'💧',name:'Drinkwater',placeholder:'bv. 50',unit_label:'m³',factor:0.35,
+   note:'Distributie + zuivering + afvoer: ~0,35 kg CO2/m3 (Belgische watermaatschappijen)'},
+];
+
+// ═══ STATE ══════════════════════════════════════════════════════
+const state = {
+  products: {},
+  diet: {redmeat:0, poultry:0, fish:0, dairy:0, eggs:0},
+  daily: {}, dailyShared: {},
+  travel: {}, travelShared: {},
+  energy: {}, energyShared: {},
+  gasUnit: {}, // 'default' or 'alt' per energy source id
+  food: 'omnivoor',
+};
+
+function initState() {
+  PRODUCTS.forEach(p => { state.products[p.id] = {on:false,qty:p.isPV?4.5:p.isStreaming||p.isGaming||p.isAI?1:1,shared:1}; });
+  DAILY_TRANSPORT.forEach(t => { state.daily[t.id]=0; state.dailyShared[t.id]=1; });
+  TRAVEL_MODES.forEach(t => { state.travel[t.id]=0; state.travelShared[t.id]=1; });
+  ENERGY_SOURCES.forEach(e => { state.energy[e.id]=0; state.energyShared[e.id]=1; });
+  // diet state already initialized in state object
+}
+
+// ═══ DYNAMIC CO2 FOR STREAMING/GAMING ═══════════════════════════
+function getProductCO2pj(p) {
+  const s = state.products[p.id];
+  if (p.isStreaming) {
+    // IEA 2023: ~36g CO2/hour streaming (datacenter + network)
+    return s.qty * 365 * 0.036;
+  }
+  if (p.isGaming) {
+    // ~50g CO2/hour (server overhead)
+    return s.qty * 365 * 0.050;
+  }
+  if (p.isPV) {
+    // qty = kWp installed (default 4.5 kWp = 10 × 450Wp panels)
+    // embodied: ~400 kg CO2/kWp (NREL), ÷ 25j = 16 kg/kWp/j
+    // avoided: ~900 kWh/kWp/year in Belgium × dynamic EU grid avg ~91 g/kWh = 81.9 kg/kWp/j
+    // Net per kWp/year: 16 - 81.9 = -65.9 kg (negative = good)
+    const kWp = s.qty; // qty stores kWp (e.g. 4.5 for 10×450Wp)
+    const embodied_per_kWp_per_year = 16;  // 400 kg ÷ 25j
+    const avoided_per_kWp_per_year = 81.9; // 900 kWh × 91 g/kWh ÷ 1000
+    return kWp * (embodied_per_kWp_per_year - avoided_per_kWp_per_year) / (s.shared || 1);
+  }
+  if (p.isAI) {
+    // ~1-3g CO2 per query (conservatief, incl. anteilige training)
+    // Bron: Google Gemini 0.03g (inference only), ~1-3g incl. training amortisatie
+    // Onzekerheid: factor 10 in beide richtingen
+    return s.qty * 365 * 0.002; // 2g per query, per dag qty queries
+  }
+  return (p.embodied_pj + p.use_pj) * s.qty / s.shared;
+}
+
+// ═══ RENDER PRODUCTS ════════════════════════════════════════════
+function renderProducts() {
+  const cats = [...new Set(PRODUCTS.map(p => p.cat))];
+  let html = '';
+  cats.forEach(cat => {
+    html += `<div class="sec-head">${cat}</div>`;
+    PRODUCTS.filter(p => p.cat===cat).forEach(p => {
+      const s = state.products[p.id];
+      const pj = getProductCO2pj(p);
+      const isNeg = pj < 0;
+      const co2str = formatCO2(Math.abs(pj)) + '/j';
+      const isHourly = p.isStreaming || p.isGaming;
+      const isAI = p.isAI;
+      html += `<div class="prod-card${s.on?' active':''}" id="pc-${p.id}">
+        <div class="prod-top">
+          <div class="prod-icon">${p.icon}</div>
+          <div class="prod-info">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div class="prod-name">${p.name}</div>
+              <span class="src-btn" onclick="event.stopPropagation();showSrc('${p.id}')">i</span>
+            </div>
+            <div class="prod-sub">${p.isPV ? "~"+Math.round(s.qty*1000/450)+" panelen van 450 Wp | "+s.qty.toFixed(1)+" kWp totaal" : p.sub}</div>
+          </div>
+          ${s.on ? `<div class="prod-co2" style="color:${isNeg?'var(--green)':'var(--amber)'}">${isNeg?'&#8722;':''}${co2str}</div>` : ''}
+          <div class="prod-toggle${s.on?' on':''}" onclick="toggleProduct('${p.id}')"></div>
+        </div>
+        <div class="prod-controls">
+          <div class="ctrl-row">
+            <span class="ctrl-lbl">${isHourly ? 'Uur / dag' : isAI ? 'Queries / dag' : p.isPV ? 'Vermogen (kWp)' : 'Aantal'}</span>
+            <div class="stepper">
+              <button class="step-btn" onclick="stepProd('${p.id}','qty',${p.isPV?-0.5:-1})">&#8722;</button>
+              <span class="step-val" id="qty-${p.id}">${p.isPV ? s.qty.toFixed(1) : s.qty}</span>
+              <button class="step-btn" onclick="stepProd('${p.id}','qty',${p.isPV?0.5:1})">+</button>
+            </div>
+          </div>
+          ${p.shareable && !isHourly ? `<div class="ctrl-row">
+            <span class="ctrl-lbl">Gedeeld door</span>
+            <div class="stepper">
+              <button class="step-btn" onclick="stepProd('${p.id}','shared',-1)">&#8722;</button>
+              <span class="step-val" id="shared-${p.id}">${s.shared}</span>
+              <button class="step-btn" onclick="stepProd('${p.id}','shared',1)">+</button>
+            </div>
+            <span style="font-size:.72rem;color:var(--muted)">pers.</span>
+          </div>` : ''}
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById('products-list').innerHTML = html;
+}
+
+// ═══ RENDER TRANSPORT ════════════════════════════════════════════
+function renderTransport(modes, isDaily) {
+  const containerId = isDaily ? 'daily-transport-list' : 'travel-list';
+  const stObj = isDaily ? state.daily : state.travel;
+  const shObj = isDaily ? state.dailyShared : state.travelShared;
+  const list = document.getElementById(containerId);
+  list.innerHTML = modes.map(t => {
+    const km = stObj[t.id] || 0;
+    const shared = shObj[t.id] || 1;
+    const g = t.isSoloCar ? t.gco2 / shared : t.gco2;
+    const co2kg = g * km / 1000;
+    const disp = co2kg >= 1 ? (co2kg/1000).toFixed(2)+' t/j' : Math.round(co2kg)+' kg/j';
+    return `<div class="transport-row">
+      <div class="tr-head">
+        <span class="tr-icon">${t.icon}</span>
+        <span class="tr-name">${t.name}</span>
+        <span class="tr-rate">${t.gco2} g/pkm</span>
+        ${km > 0 ? `<span class="tr-co2" id="tco2-${t.id}">${disp}</span>` : `<span class="tr-co2" id="tco2-${t.id}" style="display:none"></span>`}
+      </div>
+      <div class="tr-input-row">
+        <label>km / jaar</label>
+        <input class="num-input" type="number" inputmode="decimal" min="0" step="100"
+          value="${km||''}" placeholder="0"
+          id="km-${t.id}"
+          oninput="onKmInput(this,'${t.id}',${isDaily})">
+      </div>
+      ${t.isSoloCar ? `<div class="tr-input-row" style="margin-top:8px">
+        <label>Mederijders (naast jou)</label>
+        <div class="stepper">
+          <button class="step-btn" onclick="stepShared('${t.id}',${isDaily},-1)">&#8722;</button>
+          <span class="step-val" id="sh-${t.id}">${shared - 1}</span>
+          <button class="step-btn" onclick="stepShared('${t.id}',${isDaily},1)">+</button>
+        </div>
+      </div>` : ''}
+      <div style="font-size:.68rem;color:var(--dim);margin-top:4px">${t.note}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ TRANSPORT INPUT HANDLERS (no re-render = no focus loss) ══
+function onKmInput(el, id, isDaily) {
+  const km = +(el.value) || 0;
+  if (isDaily) state.daily[id] = km;
+  else state.travel[id] = km;
+  // update badge in-place
+  const shared = isDaily ? (state.dailyShared[id]||1) : (state.travelShared[id]||1);
+  const modes = isDaily ? DAILY_TRANSPORT : TRAVEL_MODES;
+  const t = modes.find(x => x.id===id);
+  const g = t.isSoloCar ? t.gco2 / shared : t.gco2;
+  const co2kg = g * km / 1000;
+  const badge = document.getElementById('tco2-'+id);
+  if (badge) {
+    if (km > 0) {
+      badge.textContent = co2kg >= 1 ? (co2kg/1000).toFixed(2)+' t/j' : Math.round(co2kg)+' kg/j';
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  recalc();
+}
+
+function stepShared(id, isDaily, delta) {
+  const shObj = isDaily ? state.dailyShared : state.travelShared;
+  // shared = total occupants (you + mederijders), min = 1
+  shObj[id] = Math.max(1, (shObj[id]||1) + delta);
+  const display = shObj[id] - 1; // show mederijders (excl. yourself)
+  const el = document.getElementById('sh-'+id);
+  if (el) el.textContent = display;
+  // update badge
+  const km = isDaily ? (state.daily[id]||0) : (state.travel[id]||0);
+  const modes = isDaily ? DAILY_TRANSPORT : TRAVEL_MODES;
+  const t = modes.find(x => x.id===id);
+  const g = t.gco2 / shObj[id];
+  const co2kg = g * km / 1000;
+  const badge = document.getElementById('tco2-'+id);
+  if (badge && km > 0) {
+    badge.textContent = co2kg >= 1 ? (co2kg/1000).toFixed(2)+' t/j' : Math.round(co2kg)+' kg/j';
+  }
+  recalc();
+}
+
+// ═══ RENDER ENERGY ════════════════════════════════════════════
+function renderEnergy() {
+  const list = document.getElementById('energy-list');
+  list.innerHTML = ENERGY_SOURCES.map(e => {
+    const val = state.energy[e.id] || 0;
+    const shared = state.energyShared[e.id] || 1;
+    const co2 = (val/shared) * e.factor;
+    const disp = co2 >= 1000 ? (co2/1000).toFixed(2)+' t/j' : Math.round(co2)+' kg/j';
+    return `<div class="energy-card">
+      <div class="energy-head">
+        <span class="energy-icon">${e.icon}</span>
+        <span class="energy-name">${e.name}</span>
+        ${val > 0 ? `<span class="energy-co2" id="eco2-${e.id}">${disp}</span>` : `<span class="energy-co2" id="eco2-${e.id}" style="display:none"></span>`}
+      </div>
+      <div class="energy-inputs">
+        <div class="energy-row" style="flex-wrap:wrap;gap:6px">
+          <span class="energy-lbl">Verbruik (huishouden)</span>
+          ${e.altUnit ? `<div style="display:flex;gap:4px;font-size:.72rem;margin-bottom:4px;width:100%">
+            <button onclick="setGasUnit('${e.id}','${e.unit_label}')" id="gunit-m3-${e.id}"
+              style="padding:3px 9px;border-radius:5px;border:1px solid var(--border);background:${(state.gasUnit&&state.gasUnit[e.id])==='alt'?'var(--card2)':'var(--accent)'};color:${(state.gasUnit&&state.gasUnit[e.id])==='alt'?'var(--muted)':'white'};font-size:.72rem;font-weight:700;cursor:pointer">${e.unit_label}</button>
+            <button onclick="setGasUnit('${e.id}','${e.altUnit}')" id="gunit-kwh-${e.id}"
+              style="padding:3px 9px;border-radius:5px;border:1px solid var(--border);background:${(state.gasUnit&&state.gasUnit[e.id])==='alt'?'var(--accent)':'var(--card2)'};color:${(state.gasUnit&&state.gasUnit[e.id])==='alt'?'white':'var(--muted)'};font-size:.72rem;font-weight:700;cursor:pointer">${e.altUnit}</button>
+          </div>` : ''}
+          <input class="num-input" type="number" inputmode="decimal" min="0" step="50"
+            value="${val||''}" placeholder="${e.altUnit&&(state.gasUnit&&state.gasUnit[e.id])==='alt'?e.altPlaceholder:e.placeholder}"
+            id="eval-${e.id}"
+            oninput="onEnergyInput(this,'${e.id}')">
+          <span style="font-size:.74rem;color:var(--muted);width:38px">${e.altUnit&&(state.gasUnit&&state.gasUnit[e.id])==='alt'?e.altUnit:e.unit_label}</span>
+        </div>
+        <div class="energy-row">
+          <span class="energy-lbl">Bewoners huishouden</span>
+          <div class="stepper">
+            <button class="step-btn" onclick="stepEnergyShared('${e.id}',-1)">&#8722;</button>
+            <span class="step-val" id="esh-${e.id}">${shared}</span>
+            <button class="step-btn" onclick="stepEnergyShared('${e.id}',1)">+</button>
+          </div>
+          <span style="font-size:.72rem;color:var(--muted)">pers.</span>
+        </div>
+        <div style="font-size:.7rem;color:var(--dim);line-height:1.5">
+          ${e.note}${shared > 1 && val > 0 ? ' — jouw aandeel: '+(val/shared).toFixed(0)+' '+e.unit_label : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setGasUnit(id, unit) {
+  const e = ENERGY_SOURCES.find(x => x.id===id);
+  if (!e || !e.altUnit) return;
+  const isAlt = unit === e.altUnit;
+  state.gasUnit[id] = isAlt ? 'alt' : 'default';
+  // Convert existing value between units
+  const currentVal = state.energy[id] || 0;
+  if (currentVal > 0) {
+    if (isAlt) {
+      // m3 → kWh: multiply by 10
+      state.energy[id] = Math.round(currentVal * 10);
+    } else {
+      // kWh → m3: divide by 10
+      state.energy[id] = Math.round(currentVal / 10);
+    }
+  }
+  renderEnergy();
+  recalc();
+}
+
+function onEnergyInput(el, id) {
+  state.energy[id] = +(el.value) || 0;
+  const val = state.energy[id];
+  const shared = state.energyShared[id] || 1;
+  const e = ENERGY_SOURCES.find(x => x.id===id);
+  const isAlt = e.altUnit && state.gasUnit[id] === 'alt';
+  const factor = isAlt ? e.altFactor : e.factor;
+  const co2 = (val/shared) * factor;
+  const badge = document.getElementById('eco2-'+id);
+  if (badge) {
+    if (val > 0) {
+      badge.textContent = co2 >= 1000 ? (co2/1000).toFixed(2)+' t/j' : Math.round(co2)+' kg/j';
+      badge.style.display = '';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  recalc();
+}
+
+function stepEnergyShared(id, delta) {
+  state.energyShared[id] = Math.max(1, (state.energyShared[id]||1) + delta);
+  const el = document.getElementById('esh-'+id);
+  if (el) el.textContent = state.energyShared[id];
+  // update CO2 badge
+  const val = state.energy[id] || 0;
+  const shared = state.energyShared[id];
+  const e = ENERGY_SOURCES.find(x => x.id===id);
+  const isAltE = e.altUnit && state.gasUnit[id] === 'alt';
+  const co2 = (val/shared) * (isAltE ? (e.altFactor||e.factor) : e.factor);
+  const badge = document.getElementById('eco2-'+id);
+  if (badge && val > 0) {
+    badge.textContent = co2 >= 1000 ? (co2/1000).toFixed(2)+' t/j' : Math.round(co2)+' kg/j';
+  }
+  recalc();
+}
+
+// ═══ RENDER FOOD ═════════════════════════════════════════════
+// ── EAT-Lancet portion weights (g per meal/portion) ──
+// redmeat: 150g/meal, poultry: 150g/meal, fish: 150g/meal
+// dairy: 200g milk-equivalent/portion, eggs: 60g each
+// EAT-Lancet weekly limits: redmeat 98g, poultry 203g, fish 196g
+// dairy: 250g/day milk-eq = 1750g/week, eggs: 1.5/week
+const DIET_LIMITS = {
+  redmeat:  {gPerUnit:150, limitGperWeek:98,   label:'Rood vlees',  limitLabel:'max. ½/week'},
+  poultry:  {gPerUnit:150, limitGperWeek:203,  label:'Gevogelte',   limitLabel:'max. 1½/week'},
+  fish:     {gPerUnit:150, limitGperWeek:196,  label:'Vis',         limitLabel:'max. 1½/week'},
+  dairy:    {gPerUnit:200, limitGperWeek:1750, label:'Zuivel',      limitLabel:'max. ~10 porties/week'},
+  eggs:     {gPerUnit:60,  limitGperWeek:90,   label:'Eieren',      limitLabel:'max. 1½/week'},
+};
+
+function stepDiet(key, delta) {
+  const min = 0;
+  const max = {redmeat:14, poultry:14, fish:14, dairy:21, eggs:21}[key];
+  state.diet[key] = Math.max(min, Math.min(max, +(state.diet[key] + delta).toFixed(1)));
+  const el = document.getElementById('dv-' + key);
+  if (el) el.textContent = state.diet[key];
+  classifyAndRenderDiet();
+  recalc();
+}
+
+function classifyAndRenderDiet() {
+  const d = state.diet;
+  // Convert to grams per week
+  const redG   = d.redmeat  * 150;
+  const poulG  = d.poultry  * 150;
+  const fishG  = d.fish     * 150;
+  const dairyG = d.dairy    * 200;     // portions/week → g/week
+  const eggG   = d.eggs     * 60;
+
+  // Check EAT-Lancet limits
+  const overRed   = redG   > 98;
+  const overPoul  = poulG  > 203;
+  const overFish  = fishG  > 196;
+  const overDairy = dairyG > 1750;
+  const overEgg   = eggG   > 90;
+
+  const hasMeat   = redG > 0 || poulG > 0;
+  const hasFish   = fishG > 0;
+  const hasDairy  = dairyG > 0 || eggG > 0;
+  const anyAnimal = hasMeat || hasFish || hasDairy;
+
+  // Classify based on WHAT is eaten (type), not quantity
+  // EAT-Lancet limits are shown as warnings separately — they don't change the label
+  let profile = 'veganist';
+  if (redG > 0 || poulG > 0) {
+    profile = 'omnivoor';       // eats red meat or poultry → omnivoor
+  } else if (fishG > 0) {
+    profile = 'flexitarier';    // no meat, but eats fish → flexitarier
+  } else if (dairyG > 0 || eggG > 0) {
+    profile = 'vegetarier';     // no meat or fish, but dairy/eggs → vegetarier
+  }
+  // else: nothing → veganist
+
+  // Update state
+  if (state.food !== profile) {
+    state.food = profile;
+    renderFood();
+  }
+
+  // Build result card
+  const fd = FOOD.find(f=>f.id===profile)||FOOD[0];
+  const overItems = [];
+  if (overRed)   overItems.push(`rood vlees (${redG}g/week, max. 98g)`);
+  if (overPoul)  overItems.push(`gevogelte (${poulG}g/week, max. 203g)`);
+  if (overFish)  overItems.push(`vis (${fishG}g/week, max. 196g)`);
+  if (overDairy) overItems.push(`zuivel (${d.dairy} porties/week, max. ~10 porties)`);
+  if (overEgg)   overItems.push(`eieren (${Math.round(eggG)}g/week, max. 90g)`);
+
+  const profileColors = {omnivoor:'#f43f5e',flexitarier:'#fb923c',vegetarier:'#fbbf24',veganist:'#34d399'};
+  const col = profileColors[profile];
+  const lf = fd.landFactor;
+  const landCol = lf <= 1.0 ? 'var(--green)' : lf <= 2.0 ? 'var(--amber)' : 'var(--red)';
+  const landTxt = lf <= 1.0
+    ? `<span style="color:var(--green)">&#10003; Binnen de planetaire grenzen (${lf.toFixed(1)}&times; referentie)</span>`
+    : `<span style="color:${landCol}">&#9888; ${lf.toFixed(1)}&times; meer land dan het aanbevolen EAT-Lancet di&#235;et</span>`;
+
+  // Label explanation (what determines the label)
+  const labelExplain = {
+    omnivoor:    'Je eet rood vlees of gevogelte — dat bepaalt dit profiel.',
+    flexitarier: 'Je eet vis maar geen rood vlees of gevogelte.',
+    vegetarier:  'Je eet geen vlees of vis, maar wel zuivel en/of eieren.',
+    veganist:    'Je eet geen dierlijke producten.',
+  }[profile];
+
+  const overHtml = overItems.length > 0
+    ? `<div style="margin-top:8px;font-size:.74rem;color:var(--amber);line-height:1.7">
+        <strong>&#9888; Je zit boven de EAT-Lancet aanbeveling voor:</strong><br>
+        ${overItems.map(i=>'&#8226; '+i).join('<br>')}
+        <div style="margin-top:4px;color:var(--dim)">Dit be&#239;nvloedt je CO&#8322;-impact maar niet je di&#235;etlabel — dat is gebaseerd op <em>wat</em> je eet, niet hoeveel.</div>
+       </div>`
+    : `<div style="margin-top:6px;font-size:.74rem;color:var(--green)">&#10003; Je zit binnen alle EAT-Lancet aanbevelingen voor dierlijke producten.</div>`;
+
+  const card = document.getElementById('diet-result-card');
+  if (card) {
+    card.style.borderColor = col;
+    card.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <span style="font-size:1.4rem">${fd.icon}</span>
+        <div>
+          <div style="font-size:.9rem;font-weight:900;color:${col}">${fd.name}</div>
+          <div style="font-size:.72rem;color:var(--muted)">Di&#235;etprofiel op basis van jouw consumptie</div>
+        </div>
+        <div style="margin-left:auto;font-size:.82rem;font-weight:800;color:var(--amber)">${(fd.co2/1000).toFixed(2)} t CO&#8322;e/j</div>
+      </div>
+      <div style="font-size:.78rem;color:var(--muted);margin-bottom:4px">${landTxt}</div>
+      ${overHtml}
+    `;
+  }
+}
+
+function renderFood() {
+  const activeLandFactor = (FOOD.find(f=>f.id===state.food)||FOOD[0]).landFactor;
+  document.getElementById('food-grid').innerHTML = FOOD.map(f => {
+    const landTxt = f.landFactor <= 1.0
+      ? (f.landFactor < 1.0 ? `&#127807; ${(f.landFactor).toFixed(1)}&times; land (minder dan gezond referentiedieet)` : '&#127807; = referentie (EAT-Lancet)')
+      : `&#127807; ${f.landFactor.toFixed(1)}&times; méér land dan gezond referentiedieet`;
+    const landColor = f.landFactor <= 1.0 ? 'var(--green)' : f.landFactor <= 1.5 ? 'var(--amber)' : 'var(--red)';
+    return `<div class="food-card${state.food===f.id?' active':''}" onclick="state.food='${f.id}';renderFood();recalc()">
+      <div class="ficon">${f.icon}</div>
+      <div class="fname">${f.name}</div>
+      <div class="fco2" style="color:${f.color}">${(f.co2/1000).toFixed(2)} t CO&#8322;e/j</div>
+      <div style="font-size:.67rem;color:${landColor};margin-top:3px;line-height:1.4">${landTxt}</div>
+      <div class="fsub" style="margin-top:3px">${f.sub}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ PRODUCT INTERACTIONS ════════════════════════════════════
+function toggleProduct(id) {
+  state.products[id].on = !state.products[id].on;
+  const card = document.getElementById('pc-'+id);
+  if (!card) return;
+  const s = state.products[id];
+  card.classList.toggle('active', s.on);
+  // Toggle the switch knob
+  const toggle = card.querySelector('.prod-toggle');
+  if (toggle) toggle.classList.toggle('on', s.on);
+  const ctrl = card.querySelector('.prod-controls');
+  if (ctrl) ctrl.style.display = s.on ? 'flex' : 'none';
+  const p = PRODUCTS.find(x => x.id===id);
+  if (s.on) {
+    const pj = getProductCO2pj(p);
+    const isNeg = pj < 0;
+    let co2el = card.querySelector('.prod-co2');
+    if (!co2el) {
+      co2el = document.createElement('div');
+      co2el.className = 'prod-co2';
+      card.querySelector('.prod-top').insertBefore(co2el, card.querySelector('.prod-toggle'));
+    }
+    co2el.textContent = (isNeg ? '−' : '') + formatCO2(Math.abs(pj)) + '/j';
+    co2el.style.color = isNeg ? 'var(--green)' : 'var(--amber)';
+  } else {
+    const co2el = card.querySelector('.prod-co2');
+    if (co2el) co2el.remove();
+  }
+  recalc();
+}
+
+function stepProd(id, field, delta) {
+  const s = state.products[id];
+  const p2 = PRODUCTS.find(x => x.id===id); if (field==='qty') s.qty = Math.max(p2&&p2.isPV?0.5:1, +(s.qty+delta).toFixed(1));
+  if (field==='shared') s.shared = Math.max(1, s.shared+delta);
+  const valEl = document.getElementById(field+'-'+id);
+  if (valEl) valEl.textContent = s[field];
+  const p = PRODUCTS.find(x => x.id===id);
+  const pj = getProductCO2pj(p);
+  const isNeg = pj < 0;
+  const co2el = document.querySelector('#pc-'+id+' .prod-co2');
+  if (co2el) {
+    co2el.textContent = (isNeg?'−':'') + formatCO2(Math.abs(pj)) + '/j';
+    co2el.style.color = isNeg ? 'var(--green)' : 'var(--amber)';
+  }
+  recalc();
+}
+
+// ═══ CALCULATIONS ════════════════════════════════════════════
+function calcBase() {
+  let total=0, water=0;
+  const cats = {};
+
+  let prodCO2=0, prodWater=0;
+  PRODUCTS.forEach(p => {
+    const s = state.products[p.id];
+    if (!s.on) return;
+    const pj = getProductCO2pj(p);
+    prodCO2 += pj;
+    prodWater += p.water_pj * s.qty / s.shared;
+  });
+  total += prodCO2; water += prodWater;
+  cats['Producten'] = prodCO2;
+
+  let dailyCO2=0;
+  DAILY_TRANSPORT.forEach(t => {
+    const km = state.daily[t.id]||0;
+    const shared = state.dailyShared[t.id]||1;
+    dailyCO2 += (t.isSoloCar ? t.gco2/shared : t.gco2) * km / 1000;
+  });
+  total += dailyCO2;
+  cats['Dagelijks transport'] = dailyCO2;
+
+  let travelCO2=0;
+  TRAVEL_MODES.forEach(t => {
+    const km = state.travel[t.id]||0;
+    const shared = state.travelShared[t.id]||1;
+    travelCO2 += (t.isSoloCar ? t.gco2/shared : t.gco2) * km / 1000;
+  });
+  total += travelCO2;
+  cats['Reizen'] = travelCO2;
+
+  let energyCO2=0;
+  ENERGY_SOURCES.forEach(e => {
+    const val = state.energy[e.id]||0;
+    const shared = state.energyShared[e.id]||1;
+    const isAlt = e.altUnit && state.gasUnit[e.id] === 'alt';
+    const factor = isAlt ? (e.altFactor||e.factor) : e.factor;
+    energyCO2 += (val/shared) * factor;
+  });
+  const drinkM3 = (state.energy['drinkwater']||0) / (state.energyShared['drinkwater']||1);
+  water += drinkM3 * 1000;
+  total += energyCO2;
+  cats['Energie & water'] = energyCO2;
+
+  const fd = FOOD.find(f=>f.id===state.food) || FOOD[0];
+  total += fd.co2;
+  water += fd.water * 1000;
+  cats['Voeding'] = fd.co2;
+
+  return {total, water, cats, land: fd.land};
+}
+
+function calcElectric(base) {
+  // Replace gas/oil with WP; diesel km with EV km
+  let delta=0;
+  const gas=state.energy['aardgas']||0, gasS=state.energyShared['aardgas']||1;
+  const oil=state.energy['stookolie']||0, oilS=state.energyShared['stookolie']||1;
+  delta -= (gas/gasS)*2.02 + (oil/oilS)*2.66;
+  delta += ((gas/gasS)*10 + (oil/oilS)*10.3) / 4 * 0.111;
+  // diesel daily -> EV
+  const dkm = state.daily['dt_auto_solo']||0;
+  const dsh = state.dailyShared['dt_auto_solo']||1;
+  delta -= (192/dsh) * dkm/1000;
+  delta += (13/dsh) * dkm/1000;
+  return base.total + delta;
+}
+
+function calcVegan(base) {
+  const cur = (FOOD.find(f=>f.id===state.food)||FOOD[0]).co2;
+  return base.total - cur + 1000;
+}
+
+function calcGreenIndustry(base) {
+  let redProd=0;
+  PRODUCTS.forEach(p => {
+    const s=state.products[p.id];
+    if(!s.on) return;
+    redProd += p.isStreaming||p.isGaming ? getProductCO2pj(p)*0.1 : (p.embodied_pj*0.4 + Math.abs(p.use_pj)*0.1*(p.use_pj<0?-1:1))*s.qty/s.shared;
+  });
+  const curProd = base.cats['Producten'];
+  let greenEnergy=0;
+  ENERGY_SOURCES.forEach(e=>{
+    const val=state.energy[e.id]||0, sh=state.energyShared[e.id]||1;
+    greenEnergy += e.isGas||e.isOil ? (val/sh)*e.factor : (val/sh)*e.factor*0.02;
+  });
+  return base.total + (redProd - curProd) + (greenEnergy - base.cats['Energie & water']);
+}
+
+function calcAll(base) {
+  // scenario 5 = 2 (electric) + 4 (green industry), NOT vegan
+  const elecDelta = calcElectric(base) - base.total;
+  const greenDelta = calcGreenIndustry(base) - base.total;
+  return base.total + elecDelta + greenDelta;
+}
+
+// ═══ FORMAT HELPERS ══════════════════════════════════════════
+function formatCO2(n) {
+  if (n==null) return '—';
+  const v = Math.round(n);
+  if (v >= 1000) return (v/1000).toFixed(1).replace('.',',') + ' t';
+  return v.toLocaleString('nl-BE') + ' kg';
+}
+function fmtWater(m3) {
+  if (!m3) return '0 m³';
+  return m3 >= 1 ? m3.toFixed(0)+' m³' : Math.round(m3*1000)+' L';
+}
+
+// ═══ RECALC ══════════════════════════════════════════════════
+function recalc() {
+  const base = calcBase();
+  const scE = calcElectric(base);
+  const scV = calcVegan(base);
+  const scG = calcGreenIndustry(base);
+  const scA = calcAll(base);
+  const totalT = base.total / 1000;
+
+  // Ring
+  const CIRC = 352;
+  const pct15 = Math.min(300, base.total / 2100 * 100);
+  const offset = CIRC - (CIRC * Math.min(100, pct15) / 100);
+  const ring = document.getElementById('ring-circle');
+  ring.style.strokeDashoffset = offset;
+  const col = base.total < 2100 ? '#34d399' : base.total < 2900 ? '#fbbf24' : '#f87171';
+  ring.style.stroke = col;
+  const rtEl = document.getElementById('ring-total');
+  rtEl.textContent = totalT.toFixed(1);
+  rtEl.style.color = col;
+  document.getElementById('ring-vs').textContent = Math.round(pct15) + '% van 1,5\u00b0C-budget';
+
+  // Scenario pills
+  function fillPill(valId, diffId, val) {
+    const t = (val/1000).toFixed(1)+'t';
+    const diff = base.total > 0 ? Math.round((base.total-val)/1000*10)/10 : 0;
+    const pct = base.total > 0 ? Math.round((base.total-val)/base.total*100) : 0;
+    document.getElementById(valId).textContent = t;
+    const dEl = document.getElementById(diffId);
+    if (base.total > 0 && diff !== 0) {
+      dEl.textContent = diff > 0 ? `\u2212${diff}t (\u2212${pct}%)` : `+${Math.abs(diff)}t`;
+      dEl.className = 'sdiff' + (diff > 0 ? '' : ' worse');
+    } else { dEl.textContent = ''; }
+  }
+  fillPill('sc-e','sc-e-d',scE);
+  fillPill('sc-v','sc-v-d',scV);
+  fillPill('sc-g','sc-g-d',scG);
+  fillPill('sc-a','sc-a-d',scA);
+
+  // Sticky
+  document.getElementById('sticky-num').textContent = totalT.toFixed(1)+' t';
+  document.getElementById('sticky-num').style.color = col;
+  document.getElementById('budget-fill').style.width = Math.min(100, pct15)+'%';
+  document.getElementById('budget-fill').style.background = col;
+  document.getElementById('sticky-pct').textContent = Math.round(pct15)+'% van 1,5\u00b0C-budget (2,1 t/j)';
+
+  // Result tab
+  updateResultTab(base, scE, scV, scG, scA);
+
+}
+
+function buildScenCats(scenNum, base, scE, scV, scG, scA) {
+  // Returns category breakdown for each scenario
+  const fd = FOOD.find(f=>f.id===state.food)||FOOD[0];
+  const cats = {...base.cats}; // shallow copy
+
+  if (scenNum === '1') return cats;
+
+  if (scenNum === '2') {
+    // Electric: gas/oil replaced by WP, diesel km by EV
+    const gas=state.energy['aardgas']||0, gasS=state.energyShared['aardgas']||1;
+    const oil=state.energy['stookolie']||0, oilS=state.energyShared['stookolie']||1;
+    const wpEl = ((gas/gasS)*10 + (oil/oilS)*10.3) / 4;
+    const gasDelta = -((gas/gasS)*2.02 + (oil/oilS)*2.66) + wpEl*0.111;
+    const dkm=state.daily['dt_auto_solo']||0, dsh=state.dailyShared['dt_auto_solo']||1;
+    const transDelta = -(192/dsh)*dkm/1000 + (13/dsh)*dkm/1000;
+    return {...cats,
+      'Energie & water': cats['Energie & water'] + gasDelta,
+      'Dagelijks transport': cats['Dagelijks transport'] + transDelta,
+    };
+  }
+
+  if (scenNum === '3') {
+    // Vegan: replace food
+    return {...cats, 'Voeding': 1000};
+  }
+
+  if (scenNum === '4') {
+    // Green industry: reduce embodied + grid
+    let redProd = 0;
+    PRODUCTS.forEach(p => {
+      const s2=state.products[p.id]; if(!s2.on) return;
+      redProd += p.isStreaming||p.isGaming ? getProductCO2pj(p)*0.1
+        : (p.embodied_pj*0.4 + Math.abs(p.use_pj)*0.1*(p.use_pj<0?-1:1))*s2.qty/s2.shared;
+    });
+    let greenEnergy=0;
+    ENERGY_SOURCES.forEach(e=>{
+      const val=state.energy[e.id]||0, sh=state.energyShared[e.id]||1;
+      const isAlt=e.altUnit&&state.gasUnit[e.id]==='alt';
+      const f=isAlt?(e.altFactor||e.factor):e.factor;
+      greenEnergy += e.isGas||e.isOil ? (val/sh)*f : (val/sh)*f*0.02;
+    });
+    return {...cats,
+      'Producten': redProd,
+      'Energie & water': greenEnergy,
+    };
+  }
+
+  if (scenNum === '5') {
+    // Electric + Green industry combined
+    const c2 = buildScenCats('2', base, scE, scV, scG, scA);
+    const c4 = buildScenCats('4', base, scE, scV, scG, scA);
+    return {
+      'Producten': c4['Producten'],
+      'Dagelijks transport': c2['Dagelijks transport'],
+      'Reizen': cats['Reizen'],
+      'Energie & water': c2['Energie & water'] + (c4['Energie & water'] - cats['Energie & water']),
+      'Voeding': cats['Voeding'],
+    };
+  }
+
+  return cats;
+}
+
+function updateResultTab(base, scE, scV, scG, scA) {
+  // Update diet land card
+  const fdDiet = FOOD.find(f=>f.id===state.food)||FOOD[0];
+  const dietLandEl = document.getElementById('diet-land-result');
+  if (dietLandEl) {
+    const lf = fdDiet.landFactor;
+    const isRef = lf === 1.0;
+    const isBelow = lf < 1.0;
+    const isAbove = lf > 1.0;
+    const planetaryOk = lf <= 1.0;
+
+    // Color and icon
+    const col = isBelow ? 'var(--green)' : isRef ? 'var(--blue)' : lf <= 1.5 ? 'var(--amber)' : 'var(--red)';
+    const icon = isBelow ? '&#x2705;' : isRef ? '&#x2705;' : lf <= 2.0 ? '&#x26A0;&#xFE0F;' : '&#x274C;';
+
+    // Text
+    let landMsg = '';
+    if (isRef) {
+      landMsg = `Jouw dieet (<strong style="color:${col}">${fdDiet.name}</strong>) gebruikt evenveel land als het aanbevolen EAT-Lancet referentiedieet. Je zit <strong style="color:var(--green)">binnen de planetaire grenzen</strong> voor landgebruik.`;
+    } else if (isBelow) {
+      landMsg = `Jouw dieet (<strong style="color:${col}">${fdDiet.name}</strong>) gebruikt <strong style="color:${col}">${lf.toFixed(1)}&times; minder land</strong> dan het EAT-Lancet referentiedieet. Uitstekend &mdash; je zit ruim <strong style="color:var(--green)">binnen de planetaire grenzen</strong>.`;
+    } else {
+      landMsg = `Jouw dieet (<strong style="color:${col}">${fdDiet.name}</strong>) gebruikt <strong style="color:${col}">${lf.toFixed(1)}&times; meer land</strong> dan wat aanbevolen is voor een gezond en duurzaam dieet (EAT-Lancet referentie). Dit <strong style="color:${col}">overschrijdt de planetaire grenzen</strong> voor landgebruik.`;
+    }
+
+    // Bar visual
+    const barPct = Math.min(100, lf / 4 * 100); // scale: 4x = 100%
+    const refPct = 1 / 4 * 100; // reference line at 25%
+    dietLandEl.innerHTML = `
+      <div style="margin-bottom:8px">${icon} ${landMsg}</div>
+      <div style="position:relative;height:10px;background:rgba(255,255,255,.08);border-radius:5px;overflow:visible;margin:10px 0 4px">
+        <div style="height:100%;width:${barPct}%;background:${col};border-radius:5px;transition:width .5s"></div>
+        <div style="position:absolute;top:-3px;left:${refPct}%;width:2px;height:16px;background:var(--blue);border-radius:1px" title="EAT-Lancet referentie = 1x"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:.67rem;color:var(--dim)">
+        <span>0&times;</span>
+        <span style="color:var(--blue)">&#9660; EAT-Lancet (1&times;)</span>
+        <span>2&times;</span>
+        <span>3&times;</span>
+        <span>4&times;+</span>
+      </div>
+      <div style="font-size:.7rem;color:var(--dim);margin-top:8px;line-height:1.6">
+        Bron: Poore &amp; Nemecek (Science, 2018) &middot; EAT-Lancet Commission (The Lancet, 2019; update 2025)
+      </div>
+    `;
+  }
+
+  // Update global impact box
+  const pop = 8100000000;
+  const globalCO2_Gt = base.total * pop / 1e12; // gigatonne
+  const globalWater_km3 = base.water / 1000 * pop / 1e12; // km3
+  const globalLand_Gha = base.land * pop / 1e10; // billion hectares
+  const earthAgrLand = 5.0; // billion ha total agricultural land worldwide (FAO 2023)
+  const earthAreas = globalLand_Gha / earthAgrLand;
+  const globalBox = document.getElementById('global-impact-box');
+  if (globalBox && base.total > 0) {
+    globalBox.innerHTML = `
+      <div style="font-size:.78rem;font-weight:800;color:var(--text);margin-bottom:8px">
+        Als iedereen leeft zoals jij: ${(base.total/1000).toFixed(1)} t CO&#8322;e &times; 8,1 miljard mensen =
+      </div>
+      <div style="font-size:.7rem;color:var(--dim);margin-bottom:8px">
+        (alleen de posten die in deze calculator zitten — werkelijke impact ligt hoger)
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:1.1rem">&#127756;</span>
+          <div>
+            <span style="font-size:.95rem;font-weight:900;color:var(--use-col)">${globalCO2_Gt.toFixed(1)} Gt CO&#8322;e/jaar</span>
+            <span style="font-size:.7rem;color:var(--dim)"> (wereld: 53 Gt CO₂e/jaar, excl. LULUCF — EDGAR/JRC 2024)</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:1.1rem">&#128167;</span>
+          <div>
+            <span style="font-size:.95rem;font-weight:900;color:var(--blue)">${globalWater_km3.toFixed(0)} km&#179; zoet water/jaar</span>
+            <span style="font-size:.7rem;color:var(--dim)"> (beschikbaar op aarde: ~40.000 km&#179;/jaar)</span>
+          </div>
+        </div>
+
+      </div>
+      <div style="margin-top:10px;background:rgba(0,0,0,.2);border-radius:6px;overflow:hidden;height:8px;width:100%">
+        <div style="height:100%;background:var(--use-col);border-radius:6px;width:${Math.min(100,globalCO2_Gt/53*100).toFixed(0)}%;transition:width .5s"></div>
+      </div>
+      <div style="font-size:.68rem;color:var(--dim);margin-top:4px">Jouw bijdrage aan de globale uitstoot als iedereen zo leefde (vergeleken met de huidige 53 Gt/jaar)</div>
+    `;
+  } else if (globalBox) {
+    globalBox.innerHTML = '<span style="color:var(--dim);font-size:.78rem">Vul je gegevens in om de wereldschaal te zien.</span>';
+  }
+
+  // Water
+  document.getElementById('water-total').textContent = fmtWater(base.water/1000) + '/jaar';
+
+  // Breakdown
+  const maxC = Math.max(...Object.values(base.cats).map(Math.abs), 1);
+  const bkHtml = Object.entries(base.cats)
+    .filter(([,v]) => Math.abs(v) > 0.5)
+    .sort((a,b) => Math.abs(b[1]) - Math.abs(a[1]))
+    .map(([name, val]) => {
+      const pct = Math.min(100, Math.abs(val)/maxC*100);
+      const disp = formatCO2(val);
+      const c = val < 0 ? 'var(--green)' : val > 1500 ? 'var(--red)' : val > 500 ? 'var(--amber)' : 'var(--blue)';
+      const icons = {Producten:'📦','Dagelijks transport':'🚗',Reizen:'✈️','Energie & water':'🔥',Voeding:'🥩'};
+      return `<div class="bk-row">
+        <span class="bk-icon">${icons[name]||'📌'}</span>
+        <span class="bk-name">${name}</span>
+        <div class="bk-bar-wrap"><div class="bk-bar" style="width:${pct}%;background:${c}"></div></div>
+        <span class="bk-val" style="color:${c}">${disp}/j</span>
+      </div>`;
+    }).join('');
+  document.getElementById('breakdown').innerHTML = bkHtml || '<div style="padding:14px;color:var(--muted);font-size:.8rem">Vul de tabbladen in om je uitstoot te berekenen.</div>';
+
+  // Scenarios
+  const fd = FOOD.find(f=>f.id===state.food)||FOOD[0];
+  const scens = [
+    {n:'1',title:'Jouw huidige situatie',
+     desc:'Jouw ingevulde profiel. Dieet landgebruik: '+((FOOD.find(f=>f.id===state.food)||FOOD[0]).landFactor).toFixed(1)+'× het EAT-Lancet referentieëdieet.',
+     val:base.total, col:'var(--muted)', bg:'rgba(255,255,255,.04)',
+     water:base.water/1000},
+    {n:'2',title:'Alles elektrisch (WP + EV)',
+     desc:'Verwarming via warmtepomp i.p.v. gas/stookolie. Dieselwagen vervangen door EV. Stroomnet ongewijzigd.',
+     val:scE, col:'var(--blue)', bg:'rgba(96,165,250,.07)',
+     water:base.water/1000},
+    {n:'3',title:'Vegan dieet',
+     desc:'Volledig plantaardig dieet. Geen andere wijzigingen. Landgebruik t.o.v. EAT-Lancet referentie: 0,7× (minder dan referentie).',
+     val:scV, col:'var(--green)', bg:'rgba(52,211,153,.07)',
+     water:(base.water - fd.water*1000 + 750000)/1000},
+    {n:'4',title:'Groene industrie (embodied + net-zero grid)',
+     desc:'Alle productieketens op hernieuwbare energie. Stroomnet bijna-zero (IEA NZE 2050). Embodied CO\u2082 -60%, operationeel -98%.',
+     val:scG, col:'var(--purple)', bg:'rgba(167,139,250,.07)',
+     water:base.water/1000*0.5},
+    {n:'5',title:'Elektrisch + Groene industrie (2+4)',
+     desc:'Combinatie van scenario 2 en 4. Voedingspatroon blijft ongewijzigd. Dit is het maximaal haalbare zonder dieetwijziging.',
+     val:scA, col:'var(--amber)', bg:'rgba(251,191,36,.07)',
+     water:base.water/1000*0.45},
+  ];
+
+  const maxS = Math.max(...scens.map(s=>s.val), 1);
+  document.getElementById('scen-grid').innerHTML = scens.map(s => {
+    const t = (s.val/1000).toFixed(1);
+    const pct = Math.min(100, s.val/maxS*100);
+    const saving = s.n!=='1' && base.total > 0 ?
+      `\u2212${((base.total-s.val)/1000).toFixed(1)} t (\u2212${Math.round((base.total-s.val)/base.total*100)}%)` : '';
+    // Build per-scenario category breakdown
+    const scenCats = buildScenCats(s.n, base, scE, scV, scG, scA);
+    const topEntries = s.val > 0 ? Object.entries(scenCats)
+      .filter(([,v]) => v > 0).sort((a,b)=>b[1]-a[1]).slice(0,3) : [];
+    const top = topEntries
+      .map(([n,v],i) => {
+        const medals = ['🥇','🥈','🥉'];
+        const pct = Math.round(v/s.val*100);
+        const col = i===0?'var(--red)':i===1?'var(--amber)':'var(--a8b0cc)';
+        return `<div class="top-item">${medals[i]} <strong style="color:${col}">${n}</strong>: ${formatCO2(v)}/j (${pct}%)</div>`;
+      }).join('');
+    // Aviation warning: show if Reizen is in top 3 and flight km > 0
+    const hasFlights = (state.travel['tr_vlieg_kort']||0) > 0 || (state.travel['tr_vlieg_lang']||0) > 0;
+    const reizenInTop3 = topEntries.some(([n]) => n === 'Reizen');
+    const aviationWarn = (hasFlights && reizenInTop3 && s.n === '1') ? `
+      <div style="margin-top:10px;background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.25);border-radius:8px;padding:10px 12px;font-size:.75rem;color:var(--a8b0cc);line-height:1.75">
+        <strong style="color:#f87171">✈️ Waarom scoort reizen zo hoog?</strong><br>
+        Vliegtuigreizen zijn extreem CO&#8322;-intensief door de combinatie van kerosine&#173;verbranding en het Radiative Forcing Index-effect op grote hoogte (&times;1,9 t.o.v. grondniveau).<br><br>
+        <strong style="color:var(--text)">Moeilijk te decarboniseren:</strong> Anders dan verwarming (warmtepomp) of transport (EV), bestaat er momenteel geen schaalbare klimaatneutrale oplossing voor langeafstandsvluchten. Waterstof- en batterijvliegtuigen zijn hooguit geschikt voor korte afstanden (&lt; 1.000 km) en worden pas na 2040 verwacht. Synthetische kerosine (e-fuels) bestaat maar is 3&ndash;5&times; duurder en beperkt in productie.<br><br>
+        <strong style="color:#f43f5e">Wat dit betekent:</strong> Zelfs als je verwarming, wagen en elektriciteit volledig decarboniseert (scenario 2+4), blijft de uitstoot van vliegreizen <strong style="color:var(--text)">nagenoeg onveranderd</strong>. Minder vliegen is de enige effectieve maatregel op korte termijn.
+      </div>` : '';
+    return `<div class="scen-card" style="border-color:${s.col};background:${s.bg}">
+      <div class="scen-head">
+        <div class="scen-num" style="background:${s.col};color:${s.n==='1'?'var(--text)':'#000'}">${s.n}</div>
+        <div class="scen-title">${s.title}</div>
+      </div>
+      <div class="scen-desc">${s.desc}</div>
+      <div class="scen-val" style="color:${s.col}">${t} t CO&#8322;e/jaar</div>
+      ${saving ? `<div class="scen-saving">${saving} t.o.v. huidig</div>` : ''}
+      <div class="scen-meta">
+        <span>&#128167; ${fmtWater(s.water)}/j (watervoetstap productie)</span>
+      </div>
+      <div class="scen-bar"><div class="scen-fill" style="width:${pct}%;background:${s.col}"></div></div>
+      ${top ? `<div class="top-items">${top}</div>` : ''}
+      ${aviationWarn}
+    </div>`;
+  }).join('');
+}
+
+// ═══ NAVIGATION ══════════════════════════════════════════════
+const TAB_ORDER = ['producten','dagelijks','reizen','energie','voeding','resultaat'];
+const TAB_LABELS = {
+  producten:'Dagelijks transport \u2192',
+  dagelijks:'Reizen \u2192',
+  reizen:'Energie \u2192',
+  energie:'Voeding \u2192',
+  voeding:'Bekijk resultaat \u2192',
+  resultaat:'Resultaat',
+};
+
+function switchTab(tabId) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab===tabId));
+  document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id==='tab-'+tabId));
+  // Force scroll to top — use both methods for cross-browser reliability
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+  window.scrollTo(0, 0);
+  const btn = document.getElementById('nav-btn');
+  const idx = TAB_ORDER.indexOf(tabId);
+  if (idx >= TAB_ORDER.length-1) {
+    btn.textContent = '📊 Resultaat';
+  } else {
+    btn.textContent = TAB_LABELS[tabId] || 'Volgende \u2192';
+  }
+}
+
+function nextTab() {
+  const active = document.querySelector('.tab.active');
+  const cur = active ? active.dataset.tab : TAB_ORDER[0];
+  const idx = TAB_ORDER.indexOf(cur);
+  if (idx < TAB_ORDER.length-1) switchTab(TAB_ORDER[idx+1]);
+  else switchTab('resultaat');
+}
+
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+// ═══ DOWNLOAD & EMAIL ═══════════════════════════════════════
+function buildResultText() {
+  const base = calcBase();
+  const scE = calcElectric(base);
+  const scV = calcVegan(base);
+  const scG = calcGreenIndustry(base);
+  const scA = calcAll(base);
+  const fd = FOOD.find(f=>f.id===state.food)||FOOD[0];
+  const now = new Date().toLocaleDateString('nl-BE');
+
+  let lines = [];
+  lines.push('=== MIJN CO2-VOETAFDRUK (' + now + ') ===');
+  lines.push('');
+  lines.push('TOTAAL: ' + (base.total/1000).toFixed(2) + ' t CO2e/jaar');
+  lines.push('Waterverbruik: ' + fmtWater(base.water/1000) + '/jaar');
+  lines.push('Landgebruik (voeding): ' + (base.land/10000).toFixed(2) + ' ha/jaar');
+  lines.push('');
+  lines.push('--- UITSTOOT PER CATEGORIE ---');
+  Object.entries(base.cats).filter(([,v])=>Math.abs(v)>0.5).sort((a,b)=>b[1]-a[1]).forEach(([n,v]) => {
+    const pct = base.total > 0 ? Math.round(v/base.total*100) : 0;
+    lines.push('  ' + n + ': ' + formatCO2(v) + '/jaar (' + pct + '%)');
+  });
+  lines.push('');
+  lines.push('--- SCENARIO VERGELIJKING ---');
+  lines.push('1. Huidig:                  ' + (base.total/1000).toFixed(2) + ' t/jaar');
+  lines.push('2. Alles elektrisch (WP+EV): ' + (scE/1000).toFixed(2) + ' t/jaar (-' + Math.round((base.total-scE)/base.total*100) + '%)');
+  lines.push('3. Vegan dieet:             ' + (scV/1000).toFixed(2) + ' t/jaar (-' + Math.round((base.total-scV)/base.total*100) + '%)');
+  lines.push('4. Groene industrie:        ' + (scG/1000).toFixed(2) + ' t/jaar (-' + Math.round((base.total-scG)/base.total*100) + '%)');
+  lines.push('5. Elektrisch + Groen (2+4):' + (scA/1000).toFixed(2) + ' t/jaar (-' + Math.round((base.total-scA)/base.total*100) + '%)');
+  lines.push('');
+  lines.push('--- KLIMAATBUDGETTEN ---');
+  lines.push('1,5 graden budget: 2,1 t/jaar | Jij gebruikt: ' + Math.round(base.total/2100*100) + '% hiervan');
+  lines.push('2 graden budget:   2,9 t/jaar | Jij gebruikt: ' + Math.round(base.total/2900*100) + '% hiervan');
+  lines.push('Gemiddelde Belg:   9,1 t/jaar (territoriaal, EDGAR/JRC 2023)');
+  lines.push('');
+  lines.push('Berekend met: CO2-Calculator op basis van EEA, ICCT (2025), Poore & Nemecek (Science 2018), NREL, IEA NZE');
+  lines.push('Alle cijfers zijn gemiddelden. Marges van +/-30-50% zijn normaal in LCA-studies.');
+  return lines.join('\n');
+}
+
+function downloadResults() {
+  const text = buildResultText();
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'mijn-co2-voetafdruk.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function mailResults() {
+  const email = document.getElementById('email-input').value.trim();
+  const text = buildResultText();
+  const subject = encodeURIComponent('Mijn CO2-voetafdruk — ' + new Date().toLocaleDateString('nl-BE'));
+  const body = encodeURIComponent(text);
+  const to = email ? encodeURIComponent(email) : '';
+  window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+}
+
+function showSrc(id) {
+  const info = SOURCE_INFO[id];
+  if (!info) return;
+  document.getElementById('src-title').textContent = info.title;
+  // format formula with line breaks
+  document.getElementById('src-formula').innerHTML = info.formula.replace(/\n/g,'<br>');
+  document.getElementById('src-ref').textContent = info.ref;
+  document.getElementById('src-overlay').classList.add('open');
+}
+
+function closeSrcPopup(e) {
+  if (e.target === document.getElementById('src-overlay')) {
+    document.getElementById('src-overlay').classList.remove('open');
+  }
+}
+
+// ═══ BOOT ════════════════════════════════════════════════════
+initState();
+renderProducts();
+renderTransport(DAILY_TRANSPORT, true);
+renderTransport(TRAVEL_MODES, false);
+renderEnergy();
+renderFood();
+recalc();
+</script>
+
+<!-- Source info popup -->
+<div class="src-overlay" id="src-overlay" onclick="closeSrcPopup(event)">
+  <div class="src-sheet" id="src-sheet">
+    <button class="src-close" onclick="document.getElementById('src-overlay').classList.remove('open')">&#10005; Sluiten</button>
+    <h3 id="src-title"></h3>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:6px;font-weight:700">Berekening:</div>
+    <div class="src-formula" id="src-formula"></div>
+    <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px;font-weight:700">Bron:</div>
+    <div class="src-ref" id="src-ref"></div>
+  </div>
+</div>
+</body>
+</html>
