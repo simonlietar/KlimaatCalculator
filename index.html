@@ -398,7 +398,7 @@ Marges zijn realistisch: LCA-studies vertonen typisch 30-50% spreiding.
           Houtverbranding stoot aanzienlijke hoeveelheden <strong style="color:var(--text)">fijn stof (PM2,5 en PM10)</strong> uit, evenals <strong style="color:var(--text)">roet (black carbon)</strong>, polycyclische aromatische koolwaterstoffen (PAK) en vluchtige organische stoffen (VOS). Zelfs moderne gecertificeerde pelletkachels produceren significant meer fijn stof dan aardgas of een warmtepomp.
         </div>
         <div style="font-size:.76rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
-          <strong style="color:var(--text)">Gezondheidseffecten:</strong> PM2,5 dringt diep in de longen en het bloed door. Langdurige blootstelling verhoogt het risico op hart- en vaatziekten, longkanker, COPD en astma. De WHO beoordeelt binnenluchtvervuiling door houtverbranding als een van de grootste vermijdbare gezondheidsrisico&#8217;s in Europa. Kinderen, ouderen en mensen met longaandoeningen zijn het kwetsbaarst.
+          <strong style="color:var(--text)">Gezondheidseffecten:</strong> PM2,5 dringt diep in de longen en het bloed door. Langdurige blootstelling verhoogt het risico op hart- en vaatziekten, longkanker, COPD en astma. Recent onderzoek (BMJ 2023, The Lancet Psychiatry) verbindt chronische blootstelling aan fijn stof ook met een verhoogd risico op <strong style="color:var(--text)">depressie en angststoornissen</strong>. De WHO beoordeelt binnenluchtvervuiling door houtverbranding als een van de grootste vermijdbare gezondheidsrisico&#8217;s in Europa. Kinderen, ouderen en mensen met longaandoeningen zijn het kwetsbaarst.
         </div>
         <div style="font-size:.76rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
           <strong style="color:var(--text)">Impact op omliggende natuur:</strong> Neergeslagen roet en PAK&#8217;s verminderen de fotosynthese van omliggende planten. Stikstofverbindingen uit rookgassen dragen bij aan verzuring en vermesting van nabijgelegen ecosystemen. In dichtbevolkte gebieden telt de cumulatieve impact van huishoudelijke houtverbranding zwaar door.
@@ -1430,7 +1430,7 @@ function updateResultTab(base, scE, scV, scG, scA) {
       const co2 = (woodVal/sh)*factor;
       const disp = co2>=1000 ? (co2/1000).toFixed(1)+' t' : Math.round(co2)+' kg';
       const noteEl = document.getElementById('wood-co2-note');
-      if (noteEl) noteEl.innerHTML = `Jouw gebruik van <strong style="color:var(--text)">${(woodVal/sh).toFixed(0)} ${isAlt?'kg pellets':'kg hout'}/jaar</strong> stoot <strong style="color:var(--amber)">${disp} CO&#8322;</strong> uit via winning, transport en verwerking &mdash; boven op de biogene CO&#8322; van de verbranding zelf (${(woodVal/sh*1.9).toFixed(0)} kg CO&#8322; biogeen, niet meegerekend maar wél tijdelijk in de atmosfeer).`;
+      if (noteEl) noteEl.innerHTML = `Jouw gebruik van <strong style="color:var(--text)">${(woodVal/sh).toFixed(0)} ${isAlt?'kg pellets':'kg hout'}/jaar</strong> stoot <strong style="color:var(--amber)">${disp} CO&#8322;</strong> uit via winning, transport en verwerking &mdash; boven op de biogene CO&#8322; van de verbranding zelf (<strong style="color:var(--amber)">${(woodVal/sh*1.9).toFixed(0)} kg CO&#8322; biogeen</strong>, niet meegerekend in je score maar wél tijdelijk in de atmosfeer).`;
     }
   }
 
