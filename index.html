@@ -201,11 +201,21 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
   <button class="tab" data-tab="dagelijks">&#128663; Dagelijks</button>
   <button class="tab" data-tab="reizen">&#9992;&#65039; Reizen</button>
   <button class="tab" data-tab="energie">&#128293; Energie</button>
-  <button class="tab" data-tab="voeding">&#129385; Voeding</button>
+  <button class="tab" data-tab="voeding">🍽️ Voeding</button>
   <button class="tab" data-tab="resultaat">&#128202; Resultaat</button>
 </div>
 
 <div class="section active" id="tab-producten">
+  <div class="info-box" style="margin-bottom:8px">
+    <strong>&#9851; Tweedehands kopen</strong> vermindert je persoonlijke embodied impact met ~50%: de productie-emissies worden gedeeld met de vorige eigenaar. Maar het heeft grenzen:
+    <ul style="margin-top:6px;margin-left:16px;font-size:.74rem;line-height:1.8;color:var(--muted)">
+      <li>Tweedehands <em>stimuleert</em> ook het verlangen naar producten bij anderen (&ldquo;ik wil dat ook&rdquo;)</li>
+      <li>Eens versleten, koop je opnieuw &mdash; al dan niet tweedehands</li>
+      <li>De <em>gebruik</em>-emissies (stroom, onderhoud) blijven gelijk</li>
+      <li>Het is beter dan nieuw kopen, maar minder dan <em>niet kopen</em></li>
+    </ul>
+    Zet de schakelaar &#9851; aan bij een product als je het tweedehands hebt.
+  </div>
   <div class="info-box"><strong>Zet producten aan die je bezit.</strong> Stel in hoeveel je er hebt en met hoeveel mensen je ze deelt. De CO&#8322;-impact is de jaarlijkse bijdrage (levenscyclus &#247; levensduur).</div>
   <div id="products-list"></div>
 </div>
@@ -237,7 +247,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
     <a class="link-btn" href="https://www.treecological.be" target="_blank">&#9992;&#65039; Treecological &mdash; bereken vliegafstand</a>
     <div style="margin-top:10px;font-size:.74rem;color:var(--dim);line-height:1.65;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:7px;padding:9px 11px">
       <strong style="color:var(--amber)">Waarom verschilt onze berekening van Treecological?</strong><br>
-      Treecological gebruikt een <strong style="color:var(--text)">RFI-factor van 3</strong> (Radiative Forcing Index (RFI): warmte-effect op grote hoogte). Wij gebruiken <strong style="color:var(--text)">RFI 1,9</strong> (ICAO/EEA/Our World in Data). Treecological volgt oudere studies (Kollmuss 2009); wij volgen de recentere wetenschappelijke consensus (Lee et al., <em>Atmospheric Environment</em>, 2021: RFI 1,7&ndash;2,0). Treecological telt ook infrastructuur en raffinage mee (+20%). Hierdoor is hun uitstoot voor lange vluchten <strong style="color:var(--text)">~1,5&times; hoger</strong> dan onze berekening. Beide zijn verdedigbaar &mdash; de werkelijkheid ligt er ergens tussenin.
+      Zowel wij als Treecological gebruiken <strong style="color:var(--text)">RFI 3</strong> (Radiative Forcing Index: totale warmte-effect van vliegtuigemissies op grote hoogte, incl. contrails, waterdamp, NOx en roet). <strong style="color:var(--text)">Waarom RFI 3?</strong> Lee et al. (2021) toonde aan dat niet-CO&#8322; effecten twee derde van de totale klimaatimpact van de luchtvaart uitmaken. Voor een <strong style="color:var(--text)">30-jaar tijdshorizon</strong> &mdash; de relevante horizon voor het halen van de 2050-klimaatdoelen &mdash; is RFI 3 de wetenschappelijk correcte keuze (myclimate 2023, SCNAT 2021). Treecological telt ook infrastructuur en raffinage mee (+20%), waardoor hun uitstoot iets hoger ligt. De CO&#8322;-waarde van Treecological is daarom een goede bovengrens; onze berekening is een goede ondergrens.
     </div>
   </div>
   <div id="travel-list"></div>
@@ -329,6 +339,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
       <div style="font-size:.82rem;font-weight:800;color:var(--amber);margin-bottom:4px">Deze calculator is niet volledig</div>
       <div style="font-size:.76rem;color:var(--muted);line-height:1.7">
         Veel zaken ontbreken: de bouw en renovatie van je <strong style="color:var(--text)">woning</strong>, <strong style="color:var(--text)">meubels, tapijten en textiel</strong> thuis, de <strong style="color:var(--text)">overproductie</strong> van goederen en voeding die vernietigd worden voor ze de consument bereiken, <strong style="color:var(--text)">gezondheidszorg en medicijnen</strong>, <strong style="color:var(--text)">evenementen en publieke ruimtes</strong>, en de emissies van je <strong style="color:var(--text)">bank- en pensioenbeleggingen</strong> (kan 1–5 t/jaar zijn). De werkelijke persoonlijke voetafdruk is daardoor aanzienlijk hoger dan wat hier berekend wordt. Gebruik dit als oriëntatie, niet als exacte meting.
+Marges zijn realistisch: LCA-studies vertonen typisch 30-50% spreiding.
       </div>
     </div>
   </div>
@@ -363,7 +374,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
   <!-- DIET LAND CARD -->
   <div id="diet-land-card" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-      <span style="font-size:1.3rem">&#127807;</span>
+      <span style="font-size:1.3rem">&#127869;&#65039;</span>
       <div style="flex:1">
         <div style="font-size:.86rem;font-weight:800">Landgebruik van jouw dieet</div>
         <div style="font-size:.72rem;color:var(--muted)">t.o.v. EAT-Lancet planetary health diet als referentie (= 1&times;)</div>
@@ -372,6 +383,63 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
     </div>
     <div id="diet-land-result" style="font-size:.82rem;color:var(--muted);line-height:1.7">
       Vul je dieet in bij het tabblad Voeding.
+    </div>
+  </div>
+
+  <!-- WOOD/PELLETS WARNING - shown only when hout energy > 0 -->
+  <div id="wood-warning-card" style="display:none;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.3);border-radius:12px;padding:14px;margin-bottom:10px">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:1.3rem;flex-shrink:0">&#129717;</span>
+      <div>
+        <div style="font-size:.86rem;font-weight:800;color:var(--amber);margin-bottom:6px">Verbranding van hout en pellets: meer dan alleen CO&#8322;</div>
+        <div id="wood-co2-note" style="font-size:.78rem;color:var(--muted);margin-bottom:10px;line-height:1.7"></div>
+        <div style="font-size:.8rem;font-weight:800;color:var(--text);margin-bottom:6px">&#128168; Fijn stof en gezondheidsimpact</div>
+        <div style="font-size:.76rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+          Houtverbranding stoot aanzienlijke hoeveelheden <strong style="color:var(--text)">fijn stof (PM2,5 en PM10)</strong> uit, evenals <strong style="color:var(--text)">roet (black carbon)</strong>, polycyclische aromatische koolwaterstoffen (PAK) en vluchtige organische stoffen (VOS). Zelfs moderne gecertificeerde pelletkachels produceren significant meer fijn stof dan aardgas of een warmtepomp.
+        </div>
+        <div style="font-size:.76rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+          <strong style="color:var(--text)">Gezondheidseffecten:</strong> PM2,5 dringt diep in de longen en het bloed door. Langdurige blootstelling verhoogt het risico op hart- en vaatziekten, longkanker, COPD en astma. De WHO beoordeelt binnenluchtvervuiling door houtverbranding als een van de grootste vermijdbare gezondheidsrisico&#8217;s in Europa. Kinderen, ouderen en mensen met longaandoeningen zijn het kwetsbaarst.
+        </div>
+        <div style="font-size:.76rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+          <strong style="color:var(--text)">Impact op omliggende natuur:</strong> Neergeslagen roet en PAK&#8217;s verminderen de fotosynthese van omliggende planten. Stikstofverbindingen uit rookgassen dragen bij aan verzuring en vermesting van nabijgelegen ecosystemen. In dichtbevolkte gebieden telt de cumulatieve impact van huishoudelijke houtverbranding zwaar door.
+        </div>
+        <div style="font-size:.76rem;color:var(--muted);line-height:1.75">
+          <strong style="color:var(--text)">Biogeen CO&#8322; en klimaat:</strong> Hoewel de CO&#8322; van houtverbranding biogeen is (kringloop), pompt u <em>nu</em> CO&#8322; in de atmosfeer die een boom tientallen jaren nodig had om op te slaan. In een periode waarin het klimaatevenwicht ernstig verstoord is, is dit geen neutrale handeling. Een boom die vandaag verbrand wordt, kan pas over 50&#8211;100 jaar opnieuw de uitgestoten CO&#8322; opnemen &mdash; als hij al herplant wordt.
+        </div>
+        <div style="font-size:.7rem;color:var(--dim);margin-top:8px;line-height:1.6">
+          Bronnen: WHO (2021) Global Air Quality Guidelines &#183; EEA (2022) Air Quality in Europe &#183; RIVM (2023) Houtrook en gezondheid &#183; Klimeck et al. (2022) Atmospheric Environment
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAATSCHAPPELIJKE KOST KADER -->
+  <div id="social-cost-card" style="background:linear-gradient(135deg,rgba(167,139,250,.08) 0%,rgba(99,102,241,.05) 100%);border:1px solid rgba(167,139,250,.3);border-radius:12px;padding:14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+      <span style="font-size:1.3rem;flex-shrink:0">&#128184;</span>
+      <div style="flex:1">
+        <div style="font-size:.86rem;font-weight:800;color:var(--purple)">Maatschappelijke kostprijs van jouw uitstoot</div>
+        <div style="font-size:.72rem;color:var(--muted)">Geschatte economische schade voor de samenleving &mdash; nu en in de toekomst</div>
+      </div>
+      <span class="src-btn" onclick="showSrc('_socialcost')">i</span>
+    </div>
+    <div id="social-cost-content" style="font-size:.8rem;color:var(--muted);line-height:1.7">
+      Vul je gegevens in om de maatschappelijke kostprijs te zien.
+    </div>
+  </div>
+
+  <!-- BOSCOMPENSATIE KADER -->
+  <div id="forest-card" style="background:linear-gradient(135deg,rgba(52,211,153,.07) 0%,rgba(16,185,129,.04) 100%);border:1px solid rgba(52,211,153,.25);border-radius:12px;padding:14px;margin-bottom:10px">
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+      <span style="font-size:1.3rem;flex-shrink:0">&#127795;</span>
+      <div style="flex:1">
+        <div style="font-size:.86rem;font-weight:800;color:var(--green)">Wat zou het kosten om jouw uitstoot te compenseren door bosaanplanting?</div>
+        <div style="font-size:.72rem;color:var(--muted)">Een indicatieve berekening &mdash; met de nodige nuance</div>
+      </div>
+      <span class="src-btn" onclick="showSrc('_forest')">i</span>
+    </div>
+    <div id="forest-content" style="font-size:.8rem;color:var(--muted);line-height:1.7">
+      Vul je gegevens in om de boscompensatie te berekenen.
     </div>
   </div>
 
@@ -430,16 +498,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
       <button onclick="downloadResults()" style="padding:12px 16px;background:var(--accent);border:none;border-radius:10px;color:white;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
         &#11015;&#65039; Download resultaten (.txt)
       </button>
-      <div style="display:flex;gap:8px">
-        <input id="email-input" type="email" inputmode="email" placeholder="jouw@email.be"
-          style="flex:1;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.84rem">
-        <button onclick="mailResults()" style="padding:10px 14px;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--blue);font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;white-space:nowrap">
-          &#9993;&#65039; Mail mij
-        </button>
-      </div>
-      <p style="font-size:.68rem;color:var(--dim);line-height:1.5">
-        "Mail mij" opent je eigen e-mailapp met de resultaten ingevuld. Er worden geen gegevens naar een server gestuurd.
-      </p>
+
     </div>
   </div>
   <p style="font-size:.7rem;color:var(--dim);line-height:1.7;margin-top:8px">
@@ -462,6 +521,8 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
 <script>
 // ═══ SOURCE INFO PER PRODUCT ════════════════════════════════
 const SOURCE_INFO = {
+  fiets:     {title:'Fiets (conventioneel)', formula:'Embodied: ~165 kg CO₂e (prod + EOL) ÷ 15j = 11 kg/j\nMaterialen: staalframe (~60%), rubber banden, aluminium velgen\nGebruik: 0 (geen motor, geen accu)\n\nOpmerking: de productie-impact per km is uiterst laag bij intensief gebruik.\nBij 5.000 km/jaar: 11 kg/5.000 km = 2,2 g CO₂/km (vergelijk: auto 192 g/km)', ref:'Cycleplan / Shimano LCA (2019): ~120–180 kg CO₂e voor een gemiddelde stadsfiets (staal). Chester & Horvath (2010), Environ. Res. Lett.: fiets = laagste klimaatimpact van alle transportmodi incl. productie.'},
+  efiets:    {title:'Elektrische fiets (e-bike)', formula:'Embodied: ~300 kg CO₂e ÷ 10j = 30 kg/j\nIncl. Li-Ion accu (~100–150 kg CO₂e voor 500 Wh accu)\nFrame, motor, elektronica\nGebruik: ~8–12 kWh/jaar × 0,25 kg/kWh = 2–3 kg/j (verwaarloosbaar)\n\nAccu-levensduur: ~3–5 jaar / 500–800 laadcycli\nAccuvervanning telt niet mee (conservatieve schatting).', ref:'Bonou et al. (2016), J. Cleaner Production: LCA e-bike vs auto vs ov. E-bike embodied: 240–400 kg CO₂e afhankelijk van accugrootte. Transport & Environment (2020): e-bikes 10–20× minder CO₂/km dan auto.'},
   schoenen:  {title:'Paar schoenen', formula:'Embodied: ~13 kg CO₂e (prod+transport+EOL) ÷ 3j = 4,3 kg/j\nGebruik: verwaarloosbaar', ref:'MIT Sustainability Initiative (2013). Lifecycle assessment of running shoes. ~13 kg CO₂e embodied.'},
   jeans:     {title:'Broek / jeans', formula:'Embodied: 30 kg CO₂e ÷ 3j = 10 kg/j\nGebruik (wassen): ~3 kg/j\nTotaal: ~11 kg/j', ref:'Levi Strauss & Co. (2015). The Life Cycle of a Jean. Cradle-to-grave: 33,4 kg CO₂e, 3.781 L water.'},
   tshirt:    {title:'T-shirt (katoen)', formula:'Embodied: 6 kg CO₂e ÷ 2j = 3 kg/j\nGebruik: ~0,5 kg/j\nWater: 2.700 L (katoenteelt)', ref:'Carbon Trust (2011). Product Carbon Footprinting. T-shirt: 6–9 kg CO₂e lifetime.'},
@@ -469,6 +530,7 @@ const SOURCE_INFO = {
   jas:       {title:'Winterjas (polyester)', formula:'Embodied: 17 kg CO₂e ÷ 6j = 2,8 kg/j\nProductie = 72% van GHG impact', ref:'Steinberger et al. via BSR Apparel LCA (2009). Polyester jacket: productie dominant.'},
   oven:      {title:'Elektrische oven', formula:'Embodied: 290 kg ÷ 15j = 19,3 kg/j\nGebruik: 200 beurten/j × 0,9 kWh × 136 g/kWh × 15j ÷ 15j = 24,5 kg/j', ref:'ConsoInfo EU Appliance Dataset. ScienceDirect — Appliance LCA (2022).'},
   inductie:  {title:'Inductieplaat', formula:'Embodied: 250 kg ÷ 15j = 16,7 kg/j\nGebruik: 200 beurten × 0,6 kWh × 136 g/kWh = 16,3 kg/j', ref:'ConsoInfo EU. Inductie efficiënter dan oven door directe warmteoverdracht.'},
+  airfryer:  {title:'Airfryer', formula:'Embodied: ~120 kg CO₂e ÷ 8j = 15 kg/j\nGebruik: ~50W gem. × 1u/dag × 365 × 0,21 kg/kWh = 18 kg/j\nEnergie-efficiënt t.o.v. conventionele oven (30–50% minder)', ref:'Schatting op basis van vergelijkbare kleine keukenapparaten. Geen specifieke gepubliceerde LCA beschikbaar; range 100–150 kg embodied op basis van materiaalsamenstelling (staal, plastic, weerstandsdraad).'},
   magnetron: {title:'Microgolfoven', formula:'Embodied: 90 kg ÷ 10j = 9 kg/j\nGebruik: ~50 kWh/j × 0,21 kg/kWh = 10,5 kg/j', ref:'ScienceDirect — Appliance LCA (2022). Magnetron laag vermogen, korte gebruikstijd.'},
   koffie:    {title:'Koffiezetapparaat', formula:'Embodied: 95 kg ÷ 7j = 13,6 kg/j\nGebruik: stand-by 60 kWh/j × 0,19 kg/kWh = 11,4 kg/j\nStand-by domineert!', ref:'ConsoInfo EU. Stand-by koffiezetapparaat: ~60 kWh/jaar. IEA stand-by guide.'},
   wasmachine:{title:'Wasmachine', formula:'Embodied: 320 kg ÷ 12j = 26,7 kg/j\nGebruik: 200 wassen × 0,65 kWh × 0,154 kg/kWh = 20,0 kg/j', ref:'ConsoInfo EU / ScienceDirect Appliance LCA (2022). 200 wassen/jaar gemiddeld (EEA 2024).'},
@@ -503,7 +565,14 @@ const SOURCE_INFO = {
   _budget15: {title:'CO₂-budget 1,5°C (2,1 t/jaar)', formula:'Resterende koolstofruimte om de opwarming met 60% kans te beperken tot 1,5°C\n÷ wereldbevolking (8,1 miljard)\n= ~2.100 kg CO₂e/persoon/jaar', ref:'IPCC Special Report on Global Warming of 1.5°C (SR1.5, 2018). Hoofdstuk 2: Mitigation pathways. Budget van 420–1.170 GtCO₂ resterende ruimte afhankelijk van overshoot-scenario.'},
   _budget20: {title:'CO₂-budget 2°C (2,9 t/jaar)', formula:'Resterende koolstofruimte om de opwarming met 60% kans te beperken tot 2°C\n÷ wereldbevolking (8,1 miljard)\n= ~2.900 kg CO₂e/persoon/jaar', ref:'IPCC Sixth Assessment Report (AR6, 2021). Working Group I. Tabel 5.8: Remaining carbon budgets.'},
   _belg91:   {title:'Gemiddelde Belg: 9,1 t/jaar (territoriaal)', formula:'Totale Belgische GHG-emissies (2023): ~103 Mt CO₂e\n÷ bevolking 11,4 miljoen\n= ~9,1 t CO₂e/persoon/jaar\n\nTERRITORIAAL = wat fysiek in België uitgestoten wordt:\nIndustrie (27%), transport (22%), gebouwen (20%),\nlandbouw, afval, overheid, defensie...\nNIET inbegrepen: emissies van geïmporteerde goederen.', ref:'EDGAR Community GHG Database v8.0 — European Commission JRC / IEA (2023). Crippa et al. (2023), doi:10.2760/953322. Data beschikbaar op edgar.jrc.ec.europa.eu'},
+  _socialcost:{title:'Maatschappelijke kostprijs van CO₂ (Social Cost of Carbon)',
+    formula:'Gebruikte centrale schatting: €250/ton CO₂e (30-jaar tijdshorizon, 2% discontovoet)\n\nRange wetenschappelijke schattingen:\n• EPA (2023): $190/ton (2% discontovoet, 100+ jaar)\n• Rennert et al., Nature (2022): $185/ton (GIVE-model)\n• PNAS synthese (dec. 2024, 1.823 schattingen): gemiddeld $283/ton\n• Duits Umweltbundesamt (2024): €300/ton\n• Bij 1,5% discontovoet: $340/ton\n• Bij 2,5% discontovoet: $120/ton\n\nBelangrijke nuance:\nDeze berekeningen gaan uit van 100–300 jaar tijdshorizon.\nVoor een 30-jaar horizon (relevant voor 2050-doelen) ligt de\nschatting lager, maar de discontovoet is dan ook lager.\n€250/ton is een wetenschappelijk verdedigbaar midden voor Europa.\n\nNiet inbegrepen in de meeste modellen:\ntipping points, biodiversiteitsverlies, migratiedruk,\ngezondheidskost fijn stof, conflicten over water en voedsel.',
+    ref:'Rennert et al. (2022), Nature 610: 687-692. doi:10.1038/s41586-022-05224-9. EPA (2023): Supplementary Material, Technical Report on the Social Cost of Carbon. Moore et al. (2024), PNAS 121(52): synthese van 1.823 schattingen. Umweltbundesamt (2024): Methodenkonvention 3.2. Brookings Institution (2023): What is the social cost of carbon?'},
+  _forest:    {title:'Boscompensatie: aannames en berekeningen',
+    formula:'OPNAME PER BOOM: ~10 kg CO₂/boom/jaar (gemiddeld gemengd bos, temperate zone)\nOver 20 jaar: ~200 kg CO₂/boom (WWF Trillion Trees 2022)\n\nBOMEN PER HECTARE: 1.500–2.500 bomen/ha bij aanplant\nWe rekenen met 1.800 bomen/ha (EU-norm, ForestNavigator 2024)\nNa uitdunning en volwassen bos: ~400–600 bomen/ha\n\nCO₂ OPNAME PER HA/JAAR: ~10–15 t CO₂/ha/jaar (temperate bos, volwassen)\nWe rekenen met 7 t CO₂/ha/jaar (conservatieve schatting voor Europees klimaat)\n\nKOSTEN (Polen-arbeidskost als referentie):\nUurloon bosexploitant Polen: ~€12–15/uur (Eurostat 2023)\nAanplant: ~200 uur/ha = ~€2.500/ha (eenmalig)\nOnderhoudskosten jaar 1–5: ~€300–500/ha/jaar\nZaailingen: ~€0,30–0,50/stuk × 1.800 = ~€600/ha\nTotale kost 20 jaar: ~€9.000–12.000/ha\n\nBELGIË GRONDGEBIED: 30.528 km² = 3.052.800 ha\n\nBEPERKING van boscompensatie:\n- Een boom groeit tientallen jaren; CO₂ is NU al in de atmosfeer\n- Bossen kunnen branden, ziek worden, gekapt worden\n- Fossieel CO₂ was miljoenen jaar opgeslagen; bos slaat\n  slechts tientallen tot honderden jaar op (niet gelijkwaardig)\n- BOS+ noemt het zelf een \"aanvulling\", geen neutralisatie',
+    ref:'WWF Trillion Trees (2022): Defining the Real Cost of Restoring Forests. Austin et al. (2020), Nature Communications 11:5946: Economic costs of forest carbon. ForestNavigator EU D4.4 (2024): Forest management costing. Eurostat (2023): Labour costs in forestry, Poland. BOS+ / Treecological Q&A (2024): Methodologie klimaatbosprojecten. Pachama (2023): How much should a reforestation carbon credit cost?'},
   _belg14:   {title:'Belgische consumptie-voetafdruk: ~14 t/jaar', formula:'Territoriale emissies (9,1 t)\n+ emissies ingebed in geïmporteerde goederen (~3–4 t)\n  (kleding, elektronica, voeding gemaakt buiten België)\n+ aandeel overheidsuitgaven (~1–1,5 t)\n  (wegen, scholen, ziekenhuizen, defensie...)\n= ~13–14 t CO₂e/persoon/jaar', ref:'Our World in Data — Consumption-based CO₂ emissions (Hannah Ritchie, 2022). Federaal Planbureau België. OECD Trade in Embodied Carbon dataset.'},
+  hout: {title:'Hout / pellets (verwarming)', formula:'Hout (stookhout): ~20 g CO₂/kg\n  (biogeen CO₂ telt niet mee — kringloop; enkel winning, drogen, transport)\nPellets: ~25 g CO₂/kg\n  (extra verwerking en bindmiddelen t.o.v. stookhout)\n\nBerekening: kg/jaar ÷ bewoners × factor = CO₂/jaar\n\nBiogeen vs. fossiel:\nBij verbranding van hout komt CO₂ vrij, maar die werd\nopgeslagen tijdens groei → kringloop (telt als neutraal).\nMaar: winning, transport, drogen en pelletiseren\ngebruiken wel fossiele energie → ~20–25 g/kg.\n\nNiet meegerekend: impact op biodiversiteit van houtoogst,\nnoch de CO₂-opslag die verloren gaat door kappen.', ref:'IPCC Guidelines for National GHG Inventories (2006/2019): biogeen CO₂ van houtverbranding telt niet mee in nationale emissies. Upstream emissies (winning, transport, verwerking): ~20–25 g CO₂/kg (ecoinvent v3.9 database; Wood Pellet Association of Canada, 2022). Pellets: gemiddeld 5 g/km transport + verwerking. Zie ook: EEA (2023) — Solid Biomass Emissions Factors.'},
   _eatlancet: {title:'EAT-Lancet Planetary Health Diet (referentie = 1×)', formula:'Referentie: EAT-Lancet planetary health diet = 1,0×\n(overwegend plantaardig, kleine hoeveelh. vlees/vis/zuivel)\n\nRelatieve landverhouding (Poore & Nemecek 2018):\nVeganist:      0,7× (minder dan referentie)\nVegetarier:    0,9×\nFlexitariër:   1,0× (= EAT-Lancet referentie)\nOmnivoor:      3,5× (3,5 keer meer land)', ref:'EAT-Lancet Commission on Healthy Diets From Sustainable Food Systems. The Lancet (2019), doi:10.1016/S0140-6736(18)31788-4. Update: EAT-Lancet 2025. Landdata: Poore J. & Nemecek T., Science (2018), doi:10.1126/science.aaq0216.'},
   kat:       {title:'Kat', formula:'Jaarlijkse voer-impact: ~310 kg CO₂e/jaar\nGebaseerd op vlees in natvoer/droogvoer', ref:'Okin GS (2017). PLOS ONE: Environmental impacts of food consumption by dogs and cats. ~310 kg CO₂e/kat/jaar.'},
 };
@@ -511,6 +580,8 @@ const SOURCE_INFO = {
 // ═══ DATA ═══════════════════════════════════════════════════════
 const PRODUCTS = [
   // Kleding
+  {id:'fiets',icon:'🚲',name:'Fiets (conventioneel)',cat:'Transport',sub:'15j — alleen embodied',embodied_pj:11,use_pj:0,water_pj:1500,shareable:false},
+  {id:'efiets',icon:'🚵',name:'Elektrische fiets (e-bike)',cat:'Transport',sub:'10j — alleen embodied. Elektriciteitsverbruik verwaarloosbaar (<10 kWh/jaar).',embodied_pj:30,use_pj:0,water_pj:3000,shareable:false},
   {id:'schoenen',icon:'👟',name:'Paar schoenen',cat:'Kleding',sub:'Synthetisch/leer, 3j',embodied_pj:4.3,use_pj:0.3,water_pj:2667,shareable:false},
   {id:'jeans',icon:'👖',name:'Broek / jeans',cat:'Kleding',sub:'Katoen, 3j',embodied_pj:10,use_pj:1,water_pj:2333,shareable:false},
   {id:'tshirt',icon:'👕',name:'T-shirt',cat:'Kleding',sub:'Katoen, 2j',embodied_pj:3,use_pj:0.5,water_pj:1350,shareable:false},
@@ -520,6 +591,7 @@ const PRODUCTS = [
   {id:'oven',icon:'🔲',name:'Elektrische oven',cat:'Keuken',sub:'15j',embodied_pj:19.3,use_pj:24.5,water_pj:1200,shareable:true},
   {id:'inductie',icon:'⚡',name:'Inductieplaat',cat:'Keuken',sub:'15j',embodied_pj:16.7,use_pj:16.3,water_pj:1000,shareable:true},
   {id:'magnetron',icon:'📡',name:'Microgolfoven',cat:'Keuken',sub:'10j',embodied_pj:9,use_pj:14,water_pj:500,shareable:true},
+  {id:'airfryer',icon:'🍟',name:'Airfryer',cat:'Keuken',sub:'8j',embodied_pj:15,use_pj:18,water_pj:600,shareable:true},
   {id:'koffie',icon:'☕',name:'Koffiezetapparaat',cat:'Keuken',sub:'7j',embodied_pj:13.6,use_pj:11.4,water_pj:571,shareable:true},
   // Huishouden
   {id:'wasmachine',icon:'🫧',name:'Wasmachine',cat:'Huishouden',sub:'12j',embodied_pj:26.7,use_pj:20.1,water_pj:2083,shareable:true},
@@ -543,8 +615,8 @@ const PRODUCTS = [
   // Meubels
   {id:'sofa',icon:'🛋️',name:'Sofa 3-zit',cat:'Meubels',sub:'15j',embodied_pj:20,use_pj:0,water_pj:1667,shareable:true},
   // Installaties
-  {id:'pv',icon:'☀️',name:'PV-panelen (zonnepanelen)',cat:'Installaties',sub:'25j — vermijdt CO2. Stel vermogen in via aantal panelen of kWp.',embodied_pj:0,use_pj:0,water_pj:0,shareable:true,isPV:true},
-  {id:'batterij5',icon:'🔌',name:'Thuisbatterij 5 kWh',cat:'Installaties',sub:'12j',embodied_pj:87.5,use_pj:14,water_pj:2083,shareable:true},
+  {id:'pv',icon:'☀️',name:'PV-panelen (zonnepanelen)',cat:'Installaties',sub:'25j — alleen productie-impact (embodied). Vermeden stroom = lager verbruik bij Energie.',embodied_pj:0,use_pj:0,water_pj:0,shareable:true,isPV:true},
+  {id:'batterij5',icon:'🔌',name:'Thuisbatterij 5 kWh',cat:'Installaties',sub:'12j — alleen embodied. Laadverliezen zitten in elektriciteitsverbruik.',embodied_pj:87.5,use_pj:0,water_pj:2083,shareable:true},
   {id:'laadpaal',icon:'⚡',name:'Laadpaal thuis',cat:'Installaties',sub:'15j',embodied_pj:7.3,use_pj:6,water_pj:200,shareable:true},
   // Transport (voertuig zelf)
   {id:'autoEV',icon:'🚗',name:'Elektrische wagen — productie & sloop',cat:'Transport',sub:'Embodied only: 10.000 kg ÷ 15j (ICCT 2025). Km-gebruik staat bij Dagelijks/Reizen.',embodied_pj:667,use_pj:0,water_pj:10667,shareable:true},
@@ -576,8 +648,8 @@ const TRAVEL_MODES = [
   {id:'tr_bus',icon:'🚌',name:'Reisbus (~60 pers.)',gco2:27,color:'#a3e635',note:'EEA: 27 g/pkm'},
   {id:'tr_auto1',icon:'🚗',name:'Auto solo',gco2:192,color:'#f87171',note:'192 g/pkm brandstofgebruik (EEA). Productie/sloop apart bij Producten.',isSoloCar:true},
   {id:'tr_ecar1',icon:'🔋',name:'EV solo',gco2:13,color:'#34d399',note:'13 g/pkm elektriciteitsgebruik (ICCT 2025). Productie/sloop apart bij Producten.',isSoloCar:true},
-  {id:'tr_vlieg_kort',icon:'✈️',name:'Vliegtuig kort (<1.500 km)',gco2:350,color:'#f43f5e',note:'350 g/pkm: directe CO₂ ~160 g + RFI (Radiative Forcing Index) ×1,9 + 10% well-to-tank. Treecological gebruikt RFI (Radiative Forcing Index) ×3 → ~500 g/pkm. Wetenschappelijk debat: IPCC/Lee et al. (2021) → RFI 1,7–2,0.'},
-  {id:'tr_vlieg_lang',icon:'✈️',name:'Vliegtuig lang (>1.500 km)',gco2:195,color:'#f87171',note:'195 g/pkm: directe CO₂ ~80 g + RFI (Radiative Forcing Index) ×1,9 + 10% WTT. Treecological gebruikt RFI (Radiative Forcing Index) ×3 → ~290 g/pkm (lang traject). Verschil door hogere RFI-keuze (Kollmuss 2009 vs Lee et al. 2021).'},
+  {id:'tr_vlieg_kort',icon:'✈️',name:'Vliegtuig kort (<1.500 km)',gco2:530,color:'#f43f5e',note:'530 g/pkm: directe CO₂ ~160 g × RFI 3,0 (Radiative Forcing Index) + 10% well-to-tank (30j tijdshorizon, relevant voor 2050-doelen). Bron: myclimate (2023), Lee et al. (2021), SCNAT (2021).'},
+  {id:'tr_vlieg_lang',icon:'✈️',name:'Vliegtuig lang (>1.500 km)',gco2:265,color:'#f87171',note:'265 g/pkm: directe CO₂ ~80 g × RFI 3,0 (Radiative Forcing Index) + 10% WTT (30j tijdshorizon). Niet-CO₂ effecten = 2/3 van totale luchtvaartimpact (Lee et al. 2021). RFI 3 correct voor 2050-reductiedoelen.'},
 ];
 
 const FOOD = [
@@ -592,8 +664,8 @@ const ENERGY_SOURCES = [
    note:'1 m³ aardgas = ~2,02 kg CO₂ | 1 kWh aardgas = ~0,202 kg CO₂ (1 m³ ≈ 10 kWh)',isGas:true,altUnit:'kWh',altFactor:0.202,altPlaceholder:'bv. 15000'},
   {id:'stookolie',icon:'🛢️',name:'Stookolie / mazout',placeholder:'bv. 1200',unit_label:'liter',factor:2.66,
    note:'1 L mazout = ~2,66 kg CO2',isOil:true},
-  {id:'warmtepomp',icon:'♨️',name:'Warmtepomp (elektriciteit)',placeholder:'bv. 3750',unit_label:'kWh',factor:0.111,
-   note:'Dynamisch EU-net gem. 111 g/kWh over 20j levensduur (EEA/IEA NZE)'},
+  {id:'hout',icon:'🪵',name:'Hout / pellets (verwarming)',placeholder:'bv. 2000',unit_label:'kg hout',factor:0.02,
+   note:'Biogeen CO₂ telt niet mee (kringloop), maar ~20 g/kg voor winning+transport. Pellets: gebruik altUnit.',isWood:true,altUnit:'kg pellets',altFactor:0.025,altPlaceholder:'bv. 1500'},
   {id:'elektriciteit',icon:'⚡',name:'Elektriciteitsverbruik huis',placeholder:'bv. 3500',unit_label:'kWh',factor:0.25,
    note:'EU-gemiddelde 250 g/kWh (EEA 2023). Dynamisch over tijd: gem. ~210 g/kWh'},
   {id:'drinkwater',icon:'💧',name:'Drinkwater',placeholder:'bv. 50',unit_label:'m³',factor:0.35,
@@ -612,7 +684,7 @@ const state = {
 };
 
 function initState() {
-  PRODUCTS.forEach(p => { state.products[p.id] = {on:false,qty:p.isPV?4.5:p.isStreaming||p.isGaming||p.isAI?1:1,shared:1}; });
+  PRODUCTS.forEach(p => { state.products[p.id] = {on:false,qty:p.isPV?4.5:1,shared:1,secondhand:false}; });
   DAILY_TRANSPORT.forEach(t => { state.daily[t.id]=0; state.dailyShared[t.id]=1; });
   TRAVEL_MODES.forEach(t => { state.travel[t.id]=0; state.travelShared[t.id]=1; });
   ENERGY_SOURCES.forEach(e => { state.energy[e.id]=0; state.energyShared[e.id]=1; });
@@ -622,6 +694,7 @@ function initState() {
 // ═══ DYNAMIC CO2 FOR STREAMING/GAMING ═══════════════════════════
 function getProductCO2pj(p) {
   const s = state.products[p.id];
+  const shFactor = s.secondhand ? 0.5 : 1.0; // secondhand: embodied halved
   if (p.isStreaming) {
     // IEA 2023: ~36g CO2/hour streaming (datacenter + network)
     return s.qty * 365 * 0.036;
@@ -631,14 +704,11 @@ function getProductCO2pj(p) {
     return s.qty * 365 * 0.050;
   }
   if (p.isPV) {
-    // qty = kWp installed (default 4.5 kWp = 10 × 450Wp panels)
-    // embodied: ~400 kg CO2/kWp (NREL), ÷ 25j = 16 kg/kWp/j
-    // avoided: ~900 kWh/kWp/year in Belgium × dynamic EU grid avg ~91 g/kWh = 81.9 kg/kWp/j
-    // Net per kWp/year: 16 - 81.9 = -65.9 kg (negative = good)
-    const kWp = s.qty; // qty stores kWp (e.g. 4.5 for 10×450Wp)
-    const embodied_per_kWp_per_year = 16;  // 400 kg ÷ 25j
-    const avoided_per_kWp_per_year = 81.9; // 900 kWh × 91 g/kWh ÷ 1000
-    return kWp * (embodied_per_kWp_per_year - avoided_per_kWp_per_year) / (s.shared || 1);
+    // Alleen embodied (productie + EOL panelen + omvormer).
+    // Vermeden netafname = lager elektriciteitsverbruik bij Energie invullen.
+    const kWp = s.qty;
+    const embodied_per_kWp_per_year = 16 * shFactor; // 400 kg CO2/kWp ÷ 25j (NREL)
+    return kWp * embodied_per_kWp_per_year / (s.shared || 1);
   }
   if (p.isAI) {
     // ~1-3g CO2 per query (conservatief, incl. anteilige training)
@@ -646,7 +716,7 @@ function getProductCO2pj(p) {
     // Onzekerheid: factor 10 in beide richtingen
     return s.qty * 365 * 0.002; // 2g per query, per dag qty queries
   }
-  return (p.embodied_pj + p.use_pj) * s.qty / s.shared;
+  return (p.embodied_pj * shFactor + p.use_pj) * s.qty / s.shared;
 }
 
 // ═══ RENDER PRODUCTS ════════════════════════════════════════════
@@ -662,6 +732,7 @@ function renderProducts() {
       const co2str = formatCO2(Math.abs(pj)) + '/j';
       const isHourly = p.isStreaming || p.isGaming;
       const isAI = p.isAI;
+      const isPV = p.isPV;
       html += `<div class="prod-card${s.on?' active':''}" id="pc-${p.id}">
         <div class="prod-top">
           <div class="prod-icon">${p.icon}</div>
@@ -684,7 +755,7 @@ function renderProducts() {
               <button class="step-btn" onclick="stepProd('${p.id}','qty',${p.isPV?0.5:1})">+</button>
             </div>
           </div>
-          ${p.shareable && !isHourly ? `<div class="ctrl-row">
+          ${p.shareable && !isHourly && !p.isAI ? `<div class="ctrl-row">
             <span class="ctrl-lbl">Gedeeld door</span>
             <div class="stepper">
               <button class="step-btn" onclick="stepProd('${p.id}','shared',-1)">&#8722;</button>
@@ -692,6 +763,14 @@ function renderProducts() {
               <button class="step-btn" onclick="stepProd('${p.id}','shared',1)">+</button>
             </div>
             <span style="font-size:.72rem;color:var(--muted)">pers.</span>
+          </div>` : ''}
+          ${!p.isStreaming && !p.isGaming && !p.isAI && p.cat !== 'Digitaal & Huisdieren' ? `<div class="ctrl-row">
+            <span class="ctrl-lbl" style="font-size:.74rem">
+              &#9851; Tweedehands
+              <span style="font-size:.67rem;color:var(--dim)"> (embodied ÷ 2)</span>
+            </span>
+            <div class="prod-toggle${s.secondhand?' on':''}" style="width:38px;height:22px" onclick="toggleSecondhand('${p.id}')">
+            </div>
           </div>` : ''}
         </div>
       </div>`;
@@ -909,6 +988,16 @@ function stepDiet(key, delta) {
   recalc();
 }
 
+function updateDietLandCard() {
+  // Update diet land card in resultaat when food profile changes directly
+  const base = calcBase();
+  const scE = calcElectric(base);
+  const scV = calcVegan(base);
+  const scG = calcGreenIndustry(base);
+  const scA = calcAll(base);
+  updateResultTab(base, scE, scV, scG, scA);
+}
+
 function classifyAndRenderDiet() {
   const d = state.diet;
   // Convert to grams per week
@@ -1006,7 +1095,7 @@ function renderFood() {
       ? (f.landFactor < 1.0 ? `&#127807; ${(f.landFactor).toFixed(1)}&times; land (minder dan gezond referentiedieet)` : '&#127807; = referentie (EAT-Lancet)')
       : `&#127807; ${f.landFactor.toFixed(1)}&times; méér land dan gezond referentiedieet`;
     const landColor = f.landFactor <= 1.0 ? 'var(--green)' : f.landFactor <= 1.5 ? 'var(--amber)' : 'var(--red)';
-    return `<div class="food-card${state.food===f.id?' active':''}" onclick="state.food='${f.id}';renderFood();recalc()">
+    return `<div class="food-card${state.food===f.id?' active':''}" onclick="state.food='${f.id}';renderFood();updateDietLandCard();recalc()">
       <div class="ficon">${f.icon}</div>
       <div class="fname">${f.name}</div>
       <div class="fco2" style="color:${f.color}">${(f.co2/1000).toFixed(2)} t CO&#8322;e/j</div>
@@ -1017,6 +1106,18 @@ function renderFood() {
 }
 
 // ═══ PRODUCT INTERACTIONS ════════════════════════════════════
+function toggleSecondhand(id) {
+  state.products[id].secondhand = !state.products[id].secondhand;
+  // update the toggle visual
+  const card = document.getElementById('pc-'+id);
+  if (!card) return;
+  // find the secondhand toggle (second .prod-toggle in card)
+  const toggles = card.querySelectorAll('.prod-toggle');
+  const shToggle = toggles[toggles.length-1];
+  if (shToggle) shToggle.classList.toggle('on', state.products[id].secondhand);
+  recalc();
+}
+
 function toggleProduct(id) {
   state.products[id].on = !state.products[id].on;
   const card = document.getElementById('pc-'+id);
@@ -1124,14 +1225,22 @@ function calcElectric(base) {
   let delta=0;
   const gas=state.energy['aardgas']||0, gasS=state.energyShared['aardgas']||1;
   const oil=state.energy['stookolie']||0, oilS=state.energyShared['stookolie']||1;
-  delta -= (gas/gasS)*2.02 + (oil/oilS)*2.66;
-  delta += ((gas/gasS)*10 + (oil/oilS)*10.3) / 4 * 0.111;
-  // diesel daily -> EV
+  // Account for gas unit toggle (m³ or kWh)
+  const gasIsAlt = state.gasUnit && state.gasUnit['aardgas']==='alt';
+  const gasFactor = gasIsAlt ? 0.202 : 2.02;
+  const gasKwh = gasIsAlt ? (gas/gasS) : (gas/gasS)*10;
+  const oilKwh = (oil/oilS)*10.3;
+  delta -= (gas/gasS)*gasFactor + (oil/oilS)*2.66; // remove gas/oil CO2
+  delta += (gasKwh + oilKwh) / 4 * 0.111;          // add WP electricity (SCOP 4)
+  // diesel daily -> EV (only if km entered)
   const dkm = state.daily['dt_auto_solo']||0;
   const dsh = state.dailyShared['dt_auto_solo']||1;
-  delta -= (192/dsh) * dkm/1000;
-  delta += (13/dsh) * dkm/1000;
-  return base.total + delta;
+  if (dkm > 0) {
+    delta -= (192/dsh) * dkm/1000;
+    delta += (13/dsh) * dkm/1000;
+  }
+  // Clamp: result cannot be negative
+  return Math.max(0, base.total + delta);
 }
 
 function calcVegan(base) {
@@ -1144,13 +1253,33 @@ function calcGreenIndustry(base) {
   PRODUCTS.forEach(p => {
     const s=state.products[p.id];
     if(!s.on) return;
-    redProd += p.isStreaming||p.isGaming ? getProductCO2pj(p)*0.1 : (p.embodied_pj*0.4 + Math.abs(p.use_pj)*0.1*(p.use_pj<0?-1:1))*s.qty/s.shared;
+    if (p.isStreaming||p.isGaming||p.isAI) {
+      redProd += getProductCO2pj(p)*0.1; // digital: 90% reduction
+    } else if (p.isPV) {
+      // PV embodied -60% in green industry scenario
+      const kWp = s.qty;
+      redProd += kWp * 16 * 0.4 / (s.shared||1);
+    } else {
+      // Standard products: embodied -60%, operational -98% (near-zero grid)
+      const greenEmbodied = p.embodied_pj * 0.4;
+      const greenUse = p.use_pj * 0.02; // near-zero grid → 98% reduction
+      redProd += (greenEmbodied + greenUse) * s.qty / (s.shared||1);
+    }
   });
   const curProd = base.cats['Producten'];
+  // Energy: gas/oil unchanged (still fossil), electricity near-zero grid
   let greenEnergy=0;
   ENERGY_SOURCES.forEach(e=>{
     const val=state.energy[e.id]||0, sh=state.energyShared[e.id]||1;
-    greenEnergy += e.isGas||e.isOil ? (val/sh)*e.factor : (val/sh)*e.factor*0.02;
+    const isAlt=e.altUnit&&state.gasUnit[e.id]==='alt';
+    const f=isAlt?(e.altFactor||e.factor):e.factor;
+    if (e.isGas||e.isOil) {
+      greenEnergy += (val/sh)*f; // fossiel: onveranderd in groene industrie
+    } else if (e.isWood) {
+      greenEnergy += (val/sh)*f; // hout/pellets: biogeen, blijft gelijk
+    } else {
+      greenEnergy += (val/sh)*f*0.02; // elektriciteit/water: near-zero grid
+    }
   });
   return base.total + (redProd - curProd) + (greenEnergy - base.cats['Energie & water']);
 }
@@ -1289,6 +1418,115 @@ function buildScenCats(scenNum, base, scE, scV, scG, scA) {
 }
 
 function updateResultTab(base, scE, scV, scG, scA) {
+  // Show/hide wood warning
+  const woodVal = (state.energy['hout']||0);
+  const woodCard = document.getElementById('wood-warning-card');
+  if (woodCard) {
+    woodCard.style.display = woodVal > 0 ? 'block' : 'none';
+    if (woodVal > 0) {
+      const sh = state.energyShared['hout']||1;
+      const isAlt = state.gasUnit&&state.gasUnit['hout']==='alt';
+      const factor = isAlt ? 0.025 : 0.02;
+      const co2 = (woodVal/sh)*factor;
+      const disp = co2>=1000 ? (co2/1000).toFixed(1)+' t' : Math.round(co2)+' kg';
+      const noteEl = document.getElementById('wood-co2-note');
+      if (noteEl) noteEl.innerHTML = `Jouw gebruik van <strong style="color:var(--text)">${(woodVal/sh).toFixed(0)} ${isAlt?'kg pellets':'kg hout'}/jaar</strong> stoot <strong style="color:var(--amber)">${disp} CO&#8322;</strong> uit via winning, transport en verwerking &mdash; boven op de biogene CO&#8322; van de verbranding zelf (${(woodVal/sh*1.9).toFixed(0)} kg CO&#8322; biogeen, niet meegerekend maar wél tijdelijk in de atmosfeer).`;
+    }
+  }
+
+  // ── Maatschappelijke kost ──
+  const scCard = document.getElementById('social-cost-content');
+  if (scCard && base.total > 0) {
+    const ton = base.total / 1000;
+    const costLow  = ton * 120;   // €120/t (conservatief, 2.5% discontovoet)
+    const costMid  = ton * 250;   // €250/t (centraal, 2% / 30j)
+    const costHigh = ton * 370;   // €370/t (EPA 2023 hoog scenario)
+    const fmt = v => '€' + Math.round(v).toLocaleString('nl-BE');
+    scCard.innerHTML = `
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+        <div style="flex:1;min-width:80px;background:rgba(0,0,0,.15);border-radius:8px;padding:8px 10px;text-align:center">
+          <div style="font-size:.68rem;color:var(--dim)">Conservatief</div>
+          <div style="font-size:1rem;font-weight:900;color:var(--purple)">${fmt(costLow)}</div>
+          <div style="font-size:.65rem;color:var(--dim)">€120/ton</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:rgba(167,139,250,.12);border-radius:8px;padding:8px 10px;text-align:center;border:1px solid rgba(167,139,250,.3)">
+          <div style="font-size:.68rem;color:var(--muted)">Centraal (€250/t)</div>
+          <div style="font-size:1.15rem;font-weight:900;color:var(--purple)">${fmt(costMid)}</div>
+          <div style="font-size:.65rem;color:var(--dim)">EPA / Rennert 2022</div>
+        </div>
+        <div style="flex:1;min-width:80px;background:rgba(0,0,0,.15);border-radius:8px;padding:8px 10px;text-align:center">
+          <div style="font-size:.68rem;color:var(--dim)">Hoog</div>
+          <div style="font-size:1rem;font-weight:900;color:var(--purple)">${fmt(costHigh)}</div>
+          <div style="font-size:.65rem;color:var(--dim)">€370/ton (EPA 2023)</div>
+        </div>
+      </div>
+      <div style="font-size:.74rem;color:var(--muted);line-height:1.65">
+        Dit is wat jouw uitstoot de samenleving <em>nu en in de toekomst</em> kost: zeespiegelstijging, droogte, gezondheidszorg, oogstfalen, migratie, biodiversiteitsverlies&hellip; Geen van deze schattingen omvat tipping points of catastrofale risico&rsquo;s &mdash; de werkelijke kost kan aanzienlijk hoger liggen.
+      </div>`;
+  } else if (scCard) {
+    scCard.innerHTML = 'Vul je gegevens in om de maatschappelijke kostprijs te zien.';
+  }
+
+  // ── Boscompensatie ──
+  const fCard = document.getElementById('forest-content');
+  if (fCard && base.total > 0) {
+    const ton = base.total / 1000;
+    // CO2 opname: 7 t CO2/ha/jaar (conservatief, Europees temperate bos)
+    const haNeeded     = ton / 7;               // ha voor 1 jaar opname
+    const treesNeeded  = haNeeded * 1800;       // bomen bij aanplant
+    // Kosten (Polen-loon): aanplant €2.500/ha + zaailingen €600/ha + onderhoud 5j €400/ha/j
+    const costPerHa    = 2500 + 600 + 5 * 400; // €5.100/ha over 5 jaar actief beheer
+    const totalCost    = haNeeded * costPerHa;
+    // Belgisch grondgebied: 3.052.800 ha
+    const belgiumHa    = 3052800;
+    const pctBelgium   = (haNeeded / belgiumHa * 100);
+    // Wereldschaal: als alle 8,1 mrd mensen dit willen compenseren
+    const worldHa      = haNeeded * 8100000000;
+    // Totale bruikbare landmassa wereld: ~14.900 Mha = 14.9 mrd ha
+    const worldLandHa  = 14900000000;
+    const pctWorld     = (worldHa / worldLandHa * 100);
+    
+    const fmtHa = v => v < 0.01 ? (v*10000).toFixed(0)+' m²' : v < 1 ? (v*10000).toFixed(0)+' m²' : v.toFixed(2)+' ha';
+    const fmtBig = v => v >= 1e9 ? (v/1e9).toFixed(1)+' mrd ha' : v >= 1e6 ? (v/1e6).toFixed(1)+' mln ha' : v >= 1000 ? Math.round(v/1000)+'k ha' : Math.round(v)+' ha';
+    // Smart percentage formatter for Belgium: show enough significant digits
+    const fmtPctBelgium = pct => {
+      if (pct >= 0.01) return pct.toFixed(4)+'%';
+      if (pct >= 0.001) return pct.toFixed(5)+'%';
+      if (pct >= 0.0001) return pct.toFixed(6)+'%';
+      return pct.toExponential(2)+'%';
+    };
+
+    fCard.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div style="background:rgba(0,0,0,.15);border-radius:8px;padding:8px 10px">
+          <div style="font-size:.67rem;color:var(--dim)">Zaailingen (jaar 1)</div>
+          <div style="font-size:.95rem;font-weight:900;color:var(--green)">${Math.round(treesNeeded).toLocaleString('nl-BE')}</div>
+          <div style="font-size:.65rem;color:var(--dim)">volwassen bos: ~400–600 bomen/ha</div>
+        </div>
+        <div style="background:rgba(0,0,0,.15);border-radius:8px;padding:8px 10px">
+          <div style="font-size:.67rem;color:var(--dim)">Bos nodig (per jaar)</div>
+          <div style="font-size:.95rem;font-weight:900;color:var(--green)">${fmtHa(haNeeded)}</div>
+          <div style="font-size:.65rem;color:var(--dim)">${fmtPctBelgium(pctBelgium)} van België</div>
+        </div>
+        <div style="background:rgba(0,0,0,.15);border-radius:8px;padding:8px 10px">
+          <div style="font-size:.67rem;color:var(--dim)">Geschatte kostprijs</div>
+          <div style="font-size:.95rem;font-weight:900;color:var(--green)">€${Math.round(totalCost).toLocaleString('nl-BE')}</div>
+          <div style="font-size:.65rem;color:var(--dim)">aanplant + 5j beheer (Pools uurtarief)</div>
+        </div>
+        <div style="background:rgba(0,0,0,.15);border-radius:8px;padding:8px 10px">
+          <div style="font-size:.67rem;color:var(--dim)">Als iedereen dit doet (per jaar)</div>
+          <div style="font-size:.95rem;font-weight:900;color:var(--amber)">${fmtBig(worldHa)}</div>
+          <div style="font-size:.65rem;color:var(--dim)">${pctWorld.toFixed(1)}% van alle bewoonbare grond/jaar</div>
+        </div>
+      </div>
+      <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:8px;padding:9px 11px;font-size:.74rem;color:var(--muted);line-height:1.7">
+        <strong style="color:#f87171">⚠️ Cruciale beperking:</strong>
+        Een boom groeit tientallen jaren, maar jouw CO₂ zit <em>nu al</em> in de atmosfeer. Fossieel CO₂ was miljoenen jaar opgeslagen &mdash; een boom slaat het slechts enkele tientallen tot honderden jaar vast. Bosaanplanting is een waardevolle aanvulling, geen equivalente compensatie. BOS+ noemt het zelf een <em>&ldquo;klimaatbijdrage&rdquo;</em>, niet een neutralisatie.
+      </div>`;
+  } else if (fCard) {
+    fCard.innerHTML = 'Vul je gegevens in om de boscompensatie te berekenen.';
+  }
+
   // Update diet land card
   const fdDiet = FOOD.find(f=>f.id===state.food)||FOOD[0];
   const dietLandEl = document.getElementById('diet-land-result');
@@ -1389,7 +1627,7 @@ function updateResultTab(base, scE, scV, scG, scA) {
       const pct = Math.min(100, Math.abs(val)/maxC*100);
       const disp = formatCO2(val);
       const c = val < 0 ? 'var(--green)' : val > 1500 ? 'var(--red)' : val > 500 ? 'var(--amber)' : 'var(--blue)';
-      const icons = {Producten:'📦','Dagelijks transport':'🚗',Reizen:'✈️','Energie & water':'🔥',Voeding:'🥩'};
+      const icons = {Producten:'📦','Dagelijks transport':'🚗',Reizen:'✈️','Energie & water':'🔥',Voeding:'🍽️'};
       return `<div class="bk-row">
         <span class="bk-icon">${icons[name]||'📌'}</span>
         <span class="bk-name">${name}</span>
@@ -1410,7 +1648,7 @@ function updateResultTab(base, scE, scV, scG, scA) {
      desc:'Verwarming via warmtepomp i.p.v. gas/stookolie. Dieselwagen vervangen door EV. Stroomnet ongewijzigd.',
      val:scE, col:'var(--blue)', bg:'rgba(96,165,250,.07)',
      water:base.water/1000},
-    {n:'3',title:'Vegan dieet',
+    {n:'3',title:'Veganistisch dieet',
      desc:'Volledig plantaardig dieet. Geen andere wijzigingen. Landgebruik t.o.v. EAT-Lancet referentie: 0,7× (minder dan referentie).',
      val:scV, col:'var(--green)', bg:'rgba(52,211,153,.07)',
      water:(base.water - fd.water*1000 + 750000)/1000},
@@ -1517,57 +1755,274 @@ function buildResultText() {
   const scA = calcAll(base);
   const fd = FOOD.find(f=>f.id===state.food)||FOOD[0];
   const now = new Date().toLocaleDateString('nl-BE');
+  const sep = '='.repeat(55);
+  const sep2 = '-'.repeat(55);
 
-  let lines = [];
-  lines.push('=== MIJN CO2-VOETAFDRUK (' + now + ') ===');
+  const lines = [];
+
+  // ── HOOFDRESULTATEN ──
+  lines.push(sep);
+  lines.push('  MIJN KLIMAAT-VOETAFDRUK  —  ' + now);
+  lines.push(sep);
   lines.push('');
-  lines.push('TOTAAL: ' + (base.total/1000).toFixed(2) + ' t CO2e/jaar');
-  lines.push('Waterverbruik: ' + fmtWater(base.water/1000) + '/jaar');
-  lines.push('Landgebruik (voeding): ' + (base.land/10000).toFixed(2) + ' ha/jaar');
+  lines.push('TOTAAL CO2-UITSTOOT:  ' + (base.total/1000).toFixed(2) + ' t CO2e/jaar');
+  lines.push('Waterverbruik:        ' + (base.water/1000).toFixed(0) + ' m3/jaar (productieketen)');
+  lines.push('Landgebruik dieet:    ' + fd.landFactor.toFixed(1) + 'x het EAT-Lancet referentiedieet');
   lines.push('');
-  lines.push('--- UITSTOOT PER CATEGORIE ---');
-  Object.entries(base.cats).filter(([,v])=>Math.abs(v)>0.5).sort((a,b)=>b[1]-a[1]).forEach(([n,v]) => {
-    const pct = base.total > 0 ? Math.round(v/base.total*100) : 0;
-    lines.push('  ' + n + ': ' + formatCO2(v) + '/jaar (' + pct + '%)');
+  lines.push('KLIMAATBUDGETTEN:');
+  lines.push('  1,5 graden budget: 2,1 t/jaar  -> jij gebruikt ' + Math.round(base.total/2100*100) + '%');
+  lines.push('  2 graden budget:   2,9 t/jaar  -> jij gebruikt ' + Math.round(base.total/2900*100) + '%');
+  lines.push('  Gemiddelde Belg:   9,1 t/jaar  (territoriaal, EDGAR/JRC 2023)');
+  lines.push('  Belg incl. import: ~14 t/jaar  (consumptiegebaseerd incl. overheid)');
+  lines.push('');
+
+  // ── UITSTOOT PER CATEGORIE ──
+  lines.push(sep2);
+  lines.push('UITSTOOT PER CATEGORIE');
+  lines.push(sep2);
+  Object.entries(base.cats)
+    .filter(([,v]) => Math.abs(v) > 0.5)
+    .sort((a,b) => Math.abs(b[1])-Math.abs(a[1]))
+    .forEach(([n,v]) => {
+      const pct = base.total > 0 ? Math.round(v/base.total*100) : 0;
+      const disp = Math.abs(v)>=1000 ? (v/1000).toFixed(2)+' t' : Math.round(v)+' kg';
+      lines.push('  ' + n.padEnd(25) + disp.padStart(10) + '/jaar  (' + pct + '%)');
+    });
+  lines.push('');
+
+  // ── SCENARIO VERGELIJKING ──
+  lines.push(sep2);
+  lines.push('SCENARIO VERGELIJKING');
+  lines.push(sep2);
+  const scens = [
+    {n:'1', t:'Huidige situatie', v:base.total},
+    {n:'2', t:'Alles elektrisch (WP + EV)', v:scE},
+    {n:'3', t:'Veganistisch dieet', v:scV},
+    {n:'4', t:'Groene industrie (embodied + net-zero grid)', v:scG},
+    {n:'5', t:'Elektrisch + Groene industrie (2+4)', v:scA},
+  ];
+  scens.forEach(s => {
+    const t = (s.v/1000).toFixed(2);
+    const diff = s.n!=='1' && base.total>0 ? '  (-' + Math.round((base.total-s.v)/base.total*100) + '%)' : '';
+    lines.push('  ' + s.n + '. ' + s.t.padEnd(42) + t + ' t/jaar' + diff);
   });
   lines.push('');
-  lines.push('--- SCENARIO VERGELIJKING ---');
-  lines.push('1. Huidig:                  ' + (base.total/1000).toFixed(2) + ' t/jaar');
-  lines.push('2. Alles elektrisch (WP+EV): ' + (scE/1000).toFixed(2) + ' t/jaar (-' + Math.round((base.total-scE)/base.total*100) + '%)');
-  lines.push('3. Vegan dieet:             ' + (scV/1000).toFixed(2) + ' t/jaar (-' + Math.round((base.total-scV)/base.total*100) + '%)');
-  lines.push('4. Groene industrie:        ' + (scG/1000).toFixed(2) + ' t/jaar (-' + Math.round((base.total-scG)/base.total*100) + '%)');
-  lines.push('5. Elektrisch + Groen (2+4):' + (scA/1000).toFixed(2) + ' t/jaar (-' + Math.round((base.total-scA)/base.total*100) + '%)');
+
+  // ── WAT INGEVULD: PRODUCTEN ──
+  lines.push(sep2);
+  lines.push('INGEVULDE PRODUCTEN');
+  lines.push(sep2);
+  const activeProds = PRODUCTS.filter(p => state.products[p.id].on);
+  if (activeProds.length === 0) {
+    lines.push('  (geen producten aangevinkt)');
+  } else {
+    activeProds.forEach(p => {
+      const s = state.products[p.id];
+      const pj = getProductCO2pj(p);
+      const disp = Math.abs(pj)>=1000 ? (pj/1000).toFixed(2)+' t' : Math.round(pj)+' kg';
+      const shStr = s.shared > 1 ? ' (gedeeld door ' + s.shared + ')' : '';
+      const shStr2 = s.secondhand ? ' [TWEEDEHANDS]' : '';
+      const qtyStr = p.isPV ? s.qty.toFixed(1)+' kWp' : p.isStreaming||p.isGaming||p.isAI ? s.qty+' uur of queries/dag' : 'x'+s.qty;
+      lines.push('  ' + p.icon + ' ' + p.name.padEnd(35) + qtyStr + shStr + shStr2 + '  -> ' + disp + '/j');
+    });
+  }
   lines.push('');
-  lines.push('--- KLIMAATBUDGETTEN ---');
-  lines.push('1,5 graden budget: 2,1 t/jaar | Jij gebruikt: ' + Math.round(base.total/2100*100) + '% hiervan');
-  lines.push('2 graden budget:   2,9 t/jaar | Jij gebruikt: ' + Math.round(base.total/2900*100) + '% hiervan');
-  lines.push('Gemiddelde Belg:   9,1 t/jaar (territoriaal, EDGAR/JRC 2023)');
+
+  // ── WAT INGEVULD: DAGELIJKS TRANSPORT ──
+  lines.push(sep2);
+  lines.push('DAGELIJKS TRANSPORT (km/jaar)');
+  lines.push(sep2);
+  const activeDailyTr = DAILY_TRANSPORT.filter(t => (state.daily[t.id]||0) > 0);
+  if (activeDailyTr.length === 0) {
+    lines.push('  (niets ingevuld)');
+  } else {
+    activeDailyTr.forEach(t => {
+      const km = state.daily[t.id];
+      const sh = state.dailyShared[t.id]||1;
+      const co2 = (t.isSoloCar ? t.gco2/sh : t.gco2) * km / 1000;
+      const disp = co2>=1 ? (co2/1000).toFixed(2)+' t' : Math.round(co2)+' kg';
+      const shStr = t.isSoloCar && sh>1 ? ' (+' + (sh-1) + ' mederijder(s))' : '';
+      lines.push('  ' + t.icon + ' ' + t.name.padEnd(32) + (km+'km').padStart(8) + shStr + '  -> ' + disp + '/j');
+    });
+  }
   lines.push('');
-  lines.push('Berekend met: CO2-Calculator op basis van EEA, ICCT (2025), Poore & Nemecek (Science 2018), NREL, IEA NZE');
-  lines.push('Alle cijfers zijn gemiddelden. Marges van +/-30-50% zijn normaal in LCA-studies.');
+
+  // ── WAT INGEVULD: REIZEN ──
+  lines.push(sep2);
+  lines.push('REIZEN (km/jaar)');
+  lines.push(sep2);
+  const activeTravelTr = TRAVEL_MODES.filter(t => (state.travel[t.id]||0) > 0);
+  if (activeTravelTr.length === 0) {
+    lines.push('  (niets ingevuld)');
+  } else {
+    activeTravelTr.forEach(t => {
+      const km = state.travel[t.id];
+      const sh = state.travelShared[t.id]||1;
+      const co2 = (t.isSoloCar ? t.gco2/sh : t.gco2) * km / 1000;
+      const disp = co2>=1 ? (co2/1000).toFixed(2)+' t' : Math.round(co2)+' kg';
+      lines.push('  ' + t.icon + ' ' + t.name.padEnd(32) + (km+'km').padStart(8) + '  -> ' + disp + '/j');
+    });
+  }
+  lines.push('');
+
+  // ── WAT INGEVULD: ENERGIE ──
+  lines.push(sep2);
+  lines.push('ENERGIE & WATER');
+  lines.push(sep2);
+  ENERGY_SOURCES.forEach(e => {
+    const val = state.energy[e.id]||0;
+    if (val === 0) return;
+    const sh = state.energyShared[e.id]||1;
+    const isAlt = e.altUnit && state.gasUnit[e.id]==='alt';
+    const unit = isAlt ? e.altUnit : e.unit_label;
+    const factor = isAlt ? (e.altFactor||e.factor) : e.factor;
+    const co2 = (val/sh)*factor;
+    const disp = co2>=1000 ? (co2/1000).toFixed(2)+' t' : Math.round(co2)+' kg';
+    const shStr = sh > 1 ? ' (jouw aandeel: '+(val/sh).toFixed(0)+' '+unit+')' : '';
+    lines.push('  ' + e.icon + ' ' + e.name.padEnd(30) + val + ' ' + unit + '/jaar' + shStr + '  -> ' + disp + '/j');
+  });
+  lines.push('');
+
+  // ── WAT INGEVULD: VOEDING ──
+  lines.push(sep2);
+  lines.push('VOEDING');
+  lines.push(sep2);
+  lines.push('  Dieetprofiel: ' + fd.name);
+  lines.push('  CO2-impact:   ' + (fd.co2/1000).toFixed(2) + ' t CO2e/jaar');
+  lines.push('  Landgebruik:  ' + fd.landFactor.toFixed(1) + 'x EAT-Lancet referentie');
+  if (Object.values(state.diet).some(v=>v>0)) {
+    lines.push('  Ingevuld:');
+    const dl = DIET_LIMITS;
+    if (state.diet.redmeat>0)  lines.push('    Rood vlees:   '+state.diet.redmeat+' maaltijden/week (EAT-Lancet max: 0,5/week)');
+    if (state.diet.poultry>0)  lines.push('    Gevogelte:    '+state.diet.poultry+' maaltijden/week (EAT-Lancet max: 1,5/week)');
+    if (state.diet.fish>0)     lines.push('    Vis:          '+state.diet.fish+' maaltijden/week (EAT-Lancet max: 1,5/week)');
+    if (state.diet.dairy>0)    lines.push('    Zuivel:       '+state.diet.dairy+' porties/week (EAT-Lancet max: ~10/week)');
+    if (state.diet.eggs>0)     lines.push('    Eieren:       '+state.diet.eggs+' per week (EAT-Lancet max: 1,5/week)');
+  }
+  lines.push('');
+
+  // ── UITLEG ──
+  lines.push(sep2);
+  lines.push('OVER DEZE BEREKENING');
+  lines.push(sep2);
+  lines.push('Alle cijfers zijn gemiddelden uit wetenschappelijke LCA-studies.');
+  lines.push('Marges van +/-30-50% zijn normaal. Gebruik dit als oriëntatie,');
+  lines.push('niet als exacte meting.');
+  lines.push('Marges zijn realistisch: LCA-studies vertonen typisch 30-50% spreiding.');
+  lines.push('');
+  lines.push('Niet opgenomen in deze calculator (verhoogt werkelijke impact):');
+  lines.push('  - Bouw en renovatie van woning');
+  lines.push('  - Overproductie en voedselverspilling in de keten');
+  lines.push('  - Gezondheidszorg en medicijnen');
+  lines.push('  - Bank- en pensioenbeleggingen (1-5 t/jaar mogelijk)');
+  lines.push('  - Evenementen, publieke ruimtes, infrastructuur');
+  lines.push('');
+  // Vliegreizen RFI note
+  const hasFlights = (state.travel['tr_vlieg_kort']||0)+(state.travel['tr_vlieg_lang']||0) > 0;
+  if (hasFlights) {
+    lines.push('');
+    lines.push('NOOT VLIEGREIZEN:');
+    lines.push('  Emissies berekend met RFI (Radiative Forcing Index) x3.0');
+    lines.push('  (30-jaar tijdshorizon, relevant voor 2050-klimaatdoelen).');
+    lines.push('  Niet-CO2 effecten (contrails, NOx, roet) = 2/3 van totale');
+    lines.push('  luchtvaartimpact (Lee et al. 2021, myclimate 2023).');
+  }
+
+  // Fiets in producten
+  const hasBike = state.products['fiets']&&state.products['fiets'].on;
+  const hasEbike = state.products['efiets']&&state.products['efiets'].on;
+  if (hasBike || hasEbike) {
+    lines.push('');
+    lines.push('NOOT FIETS/E-BIKE:');
+    lines.push('  Alleen embodied emissies (productie + EOL).');
+    lines.push('  Elektriciteitsverbruik e-bike (~8-12 kWh/jaar) is verwaarloosbaar.');
+    lines.push('  Bron: Bonou et al. (2016) J.Cleaner Production; Chester & Horvath (2010).');
+  }
+
+  // Hout/pellets
+  const woodVal = state.energy['hout']||0;
+  if (woodVal > 0) {
+    const sh = state.energyShared['hout']||1;
+    const isAlt = state.gasUnit&&state.gasUnit['hout']==='alt';
+    lines.push('');
+    lines.push('NOOT HOUT/PELLETS:');
+    lines.push('  Fossiele CO2 (winning+transport): ' + Math.round((woodVal/sh)*(isAlt?0.025:0.02)) + ' kg/jaar (meegerekend).');
+    lines.push('  Biogene CO2 (verbranding): ~' + Math.round((woodVal/sh)*1.9) + ' kg/jaar (niet meegerekend,');
+    lines.push('  maar tijdelijk in atmosfeer - boom heeft 50-100j nodig om dit te herbevatten).');
+    lines.push('  Fijn stof (PM2.5) en roet: gezondheidsrisico, niet meegerekend in CO2.');
+  }
+
+  lines.push('');
+  // ── MAATSCHAPPELIJKE KOST ──
+  lines.push(sep2);
+  lines.push('MAATSCHAPPELIJKE KOSTPRIJS VAN JOUW UITSTOOT');
+  lines.push(sep2);
+  const ton2 = base.total / 1000;
+  lines.push('  Centrale schatting (€250/ton, 2% discontovoet, 30j horizon):');
+  lines.push('  €' + Math.round(ton2 * 250).toLocaleString('nl-BE') + ' economische schade voor de samenleving');
+  lines.push('  Conservatief (€120/ton): €' + Math.round(ton2 * 120).toLocaleString('nl-BE'));
+  lines.push('  Hoog (€370/ton, EPA 2023): €' + Math.round(ton2 * 370).toLocaleString('nl-BE'));
+  lines.push('  Niet inbegrepen: tipping points, biodiversiteitsverlies, migratie, conflicten.');
+  lines.push('  Bron: Rennert et al. (2022) Nature; EPA (2023); PNAS synthese (2024).');
+  lines.push('');
+
+  // ── BOSCOMPENSATIE ──
+  lines.push(sep2);
+  lines.push('INDICATIEVE BOSCOMPENSATIE');
+  lines.push(sep2);
+  const haNeededR = ton2 / 7;
+  const treesR = Math.round(haNeededR * 1800);
+  const costR = Math.round(haNeededR * (2500 + 600 + 5 * 400));
+  const belgiumHaR = 3052800;
+  const pctBelgR = (haNeededR / belgiumHaR * 100);
+  const worldHaR = haNeededR * 8100000000;
+  const pctWorldR = (worldHaR / 14900000000 * 100).toFixed(1);
+  const fmtPctR = p => p >= 0.01 ? p.toFixed(4)+'%' : p >= 0.001 ? p.toFixed(5)+'%' : p.toFixed(6)+'%';
+  const fmtHaR = v => v < 1 ? (v*10000).toFixed(0)+' m2' : v.toFixed(2)+' ha';
+  const fmtBigR = v => v >= 1e9 ? (v/1e9).toFixed(1)+' mrd ha' : v >= 1e6 ? (v/1e6).toFixed(1)+' mln ha' : Math.round(v)+' ha';
+  lines.push('  (aanname: 7 t CO2/ha/jaar opname, Europees gemengd bos; aanplant 1.800 zaailingen/ha)');
+  lines.push('  Zaailingen jaar 1:      ' + treesR.toLocaleString('nl-BE') + ' bomen');
+  lines.push('  Oppervlakte (per jaar): ' + fmtHaR(haNeededR) + ' bos (' + fmtPctR(pctBelgR) + ' van Belgie)');
+  lines.push('  Kostprijs:              €' + costR.toLocaleString('nl-BE') + ' (aanplant + 5j beheer, Pools uurtarief)');
+  lines.push('  Als iedereen dit doet:  ' + fmtBigR(worldHaR) + '/jaar (' + pctWorldR + '% van alle bewoonbare grond/jaar)');
+  lines.push('');
+  lines.push('  WAARSCHUWING: Boscompensatie is geen equivalente neutralisatie.');
+  lines.push('  Fossieel CO2 was miljoenen jaar opgeslagen; bos slaat het slechts');
+  lines.push('  tientallen tot honderden jaar vast. Het is een aanvulling, geen compensatie.');
+  lines.push('  Bron: Austin et al. (2020) Nature Comm.; WWF Trillion Trees (2022).');
+  lines.push('');
+
+  lines.push('Bronnen: EDGAR/JRC v8.0 (2023) | EEA | ICCT (2025)');
+  lines.push('         Poore & Nemecek, Science (2018)');
+  lines.push('         EAT-Lancet Commission, The Lancet (2019; update 2025)');
+  lines.push('         NREL Solar LCA | IEA NZE | Okin (2017) huisdieren');
+  lines.push(sep);
+
   return lines.join('\n');
 }
 
-function downloadResults() {
-  const text = buildResultText();
-  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'mijn-co2-voetafdruk.txt';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
 
-function mailResults() {
-  const email = document.getElementById('email-input').value.trim();
-  const text = buildResultText();
-  const subject = encodeURIComponent('Mijn CO2-voetafdruk — ' + new Date().toLocaleDateString('nl-BE'));
-  const body = encodeURIComponent(text);
-  const to = email ? encodeURIComponent(email) : '';
-  window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+function downloadResults() {
+  try {
+    const text = buildResultText();
+    const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mijn-co2-voetafdruk.txt';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
+  } catch(e) {
+    // Fallback: data URL
+    const text = buildResultText();
+    const a = document.createElement('a');
+    a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+    a.download = 'mijn-co2-voetafdruk.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 }
 
 function showSrc(id) {
