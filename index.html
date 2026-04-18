@@ -680,7 +680,7 @@ const state = {
   travel: {}, travelShared: {},
   energy: {}, energyShared: {},
   gasUnit: {}, // 'default' or 'alt' per energy source id
-  food: 'omnivoor',
+  food: 'veganist',  // wordt bij boot overschreven door classifyAndRenderDiet()
 };
 
 function initState() {
@@ -1088,6 +1088,24 @@ function classifyAndRenderDiet() {
   }
 }
 
+function selectFoodProfile(profileId) {
+  const defaults = {
+    omnivoor:    {redmeat:3, poultry:2, fish:1, dairy:7, eggs:3},
+    flexitarier: {redmeat:0, poultry:0, fish:2, dairy:5, eggs:3},
+    vegetarier:  {redmeat:0, poultry:0, fish:0, dairy:7, eggs:4},
+    veganist:    {redmeat:0, poultry:0, fish:0, dairy:0, eggs:0},
+  };
+  const vals = defaults[profileId];
+  if (!vals) return;
+  Object.assign(state.diet, vals);
+  ['redmeat','poultry','fish','dairy','eggs'].forEach(k => {
+    const el = document.getElementById('dv-' + k);
+    if (el) el.textContent = state.diet[k];
+  });
+  classifyAndRenderDiet();
+  recalc();
+}
+
 function renderFood() {
   const activeLandFactor = (FOOD.find(f=>f.id===state.food)||FOOD[0]).landFactor;
   document.getElementById('food-grid').innerHTML = FOOD.map(f => {
@@ -1095,7 +1113,7 @@ function renderFood() {
       ? (f.landFactor < 1.0 ? `&#127807; ${(f.landFactor).toFixed(1)}&times; land (minder dan gezond referentiedieet)` : '&#127807; = referentie (EAT-Lancet)')
       : `&#127807; ${f.landFactor.toFixed(1)}&times; méér land dan gezond referentiedieet`;
     const landColor = f.landFactor <= 1.0 ? 'var(--green)' : f.landFactor <= 1.5 ? 'var(--amber)' : 'var(--red)';
-    return `<div class="food-card${state.food===f.id?' active':''}" onclick="state.food='${f.id}';renderFood();updateDietLandCard();recalc()">
+    return `<div class="food-card${state.food===f.id?' active':''}" onclick="selectFoodProfile('${f.id}')">
       <div class="ficon">${f.icon}</div>
       <div class="fname">${f.name}</div>
       <div class="fco2" style="color:${f.color}">${(f.co2/1000).toFixed(2)} t CO&#8322;e/j</div>
