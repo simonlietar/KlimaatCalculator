@@ -163,76 +163,590 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
 <body>
 
 <div class="app-header">
-  <h1>Mijn klimaat-<span>voetafdruk</span></h1>
-  <p style="font-size:.68rem;color:var(--dim);font-weight:600">CO&#8322; &middot; water &middot; landgebruik</p>
-  <p>Vul in wat op jou van toepassing is — de rest laat je op 0.</p>
+  <h1 style="font-size:1.55rem;font-weight:900;letter-spacing:-.03em;line-height:1.1">&#127757; Jouw <span>klimaatimpact</span><br><span style="color:var(--green);font-size:1.1rem">— en wat jij kan veranderen</span></h1>
+  <p style="font-size:.72rem;color:var(--dim);font-weight:600;margin-top:5px">CO&#8322; &middot; water &middot; landgebruik &middot; biodiversiteit</p>
 </div>
 
-<div style="background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px">
-  <div style="font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Persoonlijk CO&#8322;-budget per jaar (60% kans)</div>
-  <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px">
-    <div class="bpill"><span class="val" style="color:var(--b15)">2,1 t</span>
-      <span class="lbl">Onder 1,5&#176;C</span>
-      <span class="src-btn" style="margin-top:2px" onclick="showSrc('_budget15')">i</span>
-    </div>
-    <div class="bpill"><span class="val" style="color:var(--b20)">2,9 t</span>
-      <span class="lbl">Onder 2&#176;C</span>
-      <span class="src-btn" style="margin-top:2px" onclick="showSrc('_budget20')">i</span>
-    </div>
-    <div class="bpill" title="EDGAR Community GHG Database v8.0 — JRC/IEA (2023). Territoriale emissies: wat fysiek in Belgie uitgestoten wordt, inclusief industrie en overheid."><span class="val" style="color:var(--muted)">9,1 t</span>
-      <span class="lbl">Gem. Belg</span>
-      <span class="src-btn" style="margin-top:2px" onclick="showSrc('_belg91')">i</span></div>
-    <div class="bpill"><span class="val" style="color:var(--purple)">~14 t</span>
-      <span class="lbl">Incl. import+overheid</span>
-      <span class="src-btn" style="margin-top:2px" onclick="showSrc('_belg14')">i</span>
-    </div>
-  </div>
-  <div style="font-size:.72rem;color:var(--dim);line-height:1.65">
-    Het <strong style="color:var(--b15)">1,5&#176;C-budget</strong> is de max. jaarlijkse uitstoot per persoon om 60% kans te hebben de opwarming te beperken tot 1,5&#176;C (IPCC SR1.5, 2018).
-    De gemiddelde Belg stoot <strong style="color:var(--text)">4&times; meer</strong> uit dan dit budget.
-    De <strong style="color:var(--purple)">~14 t</strong> is de consumptie-gebaseerde voetafdruk: inclusief goederen gemaakt in het buitenland en de Belgische overheid (~1&#8211;1,5 t/pers.).
-  </div>
-</div>
+
 
 
 
 <div class="tabs">
-  <button class="tab active" data-tab="producten">&#128230; Producten</button>
-  <button class="tab" data-tab="dagelijks">&#128663; Dagelijks</button>
+  <button class="tab active" data-tab="intro">&#127758; Introductie</button>
+  <button class="tab" data-tab="producten">&#128230; Producten</button>
+  <button class="tab" data-tab="dagelijks">&#128663; Transport</button>
   <button class="tab" data-tab="reizen">&#9992;&#65039; Reizen</button>
   <button class="tab" data-tab="energie">&#128293; Energie</button>
   <button class="tab" data-tab="voeding">🍽️ Voeding</button>
   <button class="tab" data-tab="resultaat">&#128202; Resultaat</button>
 </div>
 
-<div class="section active" id="tab-producten">
-  <div class="info-box" style="margin-bottom:8px">
-    <strong>&#9851; Tweedehands kopen</strong> vermindert je persoonlijke embodied impact met ~50%: de productie-emissies worden gedeeld met de vorige eigenaar. Maar het heeft grenzen:
-    <ul style="margin-top:6px;margin-left:16px;font-size:.74rem;line-height:1.8;color:var(--muted)">
-      <li>Tweedehands <em>stimuleert</em> ook het verlangen naar producten bij anderen (&ldquo;ik wil dat ook&rdquo;)</li>
-      <li>Eens versleten, koop je opnieuw &mdash; al dan niet tweedehands</li>
-      <li>De <em>gebruik</em>-emissies (stroom, onderhoud) blijven gelijk</li>
-      <li>Het is beter dan nieuw kopen, maar minder dan <em>niet kopen</em></li>
+<div class="section active" id="tab-intro">
+
+  <!-- WELKOM -->
+  <div class="info-box" style="margin-bottom:14px;padding:14px">
+    <p style="font-weight:800;font-size:.88rem;margin-bottom:8px">&#128075; Welkom op de KlimaatWatt klimaatcalculator!</p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      Je bent hier omdat je benieuwd bent naar de impact van jouw levensstijl op het klimaat en het milieu — en wat de belangrijkste zaken zijn die jij kan veranderen om deze impact betekenisvol te verminderen.
+    </p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:6px">
+      Om de berekening zo correct mogelijk te maken heb je bij voorkeur deze gegevens bij de hand:
+    </p>
+    <ul style="font-size:.8rem;color:var(--muted);line-height:1.85;margin:0 0 10px 16px">
+      <li><strong style="color:var(--text)">Kilometers per jaar</strong> — met auto, trein en vliegtuig</li>
+      <li><strong style="color:var(--text)">Energieverbruik thuis</strong> — elektriciteit (kWh), aardgas (m³), mazout, pellets of hout</li>
+      <li><strong style="color:var(--text)">Drinkwaterverbruik</strong> — m³ per jaar (staat op je waterfactuur)</li>
     </ul>
-    Zet de schakelaar &#9851; aan bij een product als je het tweedehands hebt.
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:10px">
+      Dit zijn zaken die mensen niet meteen uit het hoofd weten — maar alleen al het opzoeken maakt je bewuster. Hopelijk heb je de moed om dit te doen.
+    </p>
+    <div style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);border-radius:7px;padding:10px 12px">
+      <p style="font-size:.8rem;color:var(--green);font-weight:800;margin-bottom:2px">Zonder deze zaken zal de calculator ook al interessant zijn.</p>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.75">Dus haak a.u.b. niet meteen af.</p>
+    </div>
   </div>
-  <div class="info-box"><strong>Zet producten aan die je bezit.</strong> Stel in hoeveel je er hebt en met hoeveel mensen je ze deelt. De CO&#8322;-impact is de jaarlijkse bijdrage (levenscyclus &#247; levensduur).</div>
+
+  <!-- BUDGETTEN -->
+  <p class="sec-head">&#127979; Jaarlijks CO&#8322;-budget per persoon (60% kans)</p>
+  <p style="font-size:.82rem;color:var(--muted);line-height:1.75;margin-bottom:12px">
+    Hieronder zie je de jaarlijkse budgetten die we nog hebben indien we onder de 1,5&#176;C of 2&#176;C opwarming willen blijven — en hoeveel de gemiddelde Belg uitstoot. De budgetten zijn berekend met een <strong style="color:var(--text)">60% kans</strong> om onder de opwarmingsdrempel te blijven (IPCC SR1.5, 2018).
+  </p>
+  <div style="display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px;flex-wrap:wrap">
+    <div class="bpill"><span class="val" style="color:var(--b15)">2,1 t</span><span class="lbl">Onder 1,5&#176;C</span></div>
+    <div class="bpill"><span class="val" style="color:var(--b20)">2,9 t</span><span class="lbl">Onder 2&#176;C</span></div>
+    <div class="bpill"><span class="val" style="color:var(--muted)">9,1 t</span><span class="lbl">Gem. Belg</span></div>
+    <div class="bpill"><span class="val" style="color:var(--purple)">~14 t</span><span class="lbl">Incl. import+overheid</span></div>
+  </div>
+  <div style="font-size:.72rem;color:var(--dim);line-height:1.65;margin-bottom:16px;background:rgba(0,0,0,.15);border-radius:8px;padding:10px 12px">
+    Het <strong style="color:var(--b15)">1,5&#176;C-budget</strong> is de max. jaarlijkse uitstoot per persoon om 60% kans te hebben de opwarming te beperken tot 1,5&#176;C (IPCC SR1.5, 2018).
+    De gemiddelde Belg stoot <strong style="color:var(--text)">4&times; meer</strong> uit dan dit budget.
+    De <strong style="color:var(--purple)">~14 t</strong> is de consumptie-gebaseerde voetafdruk: inclusief goederen gemaakt in het buitenland en de Belgische overheid (~1&#8211;1,5 t/pers.).
+  </div>
+
+
+  <!-- UITKLAPBAAR IPCC IMPACTS KADER -->
+  <div style="background:var(--card);border:1px solid rgba(248,113,113,.3);border-radius:12px;margin-bottom:14px;overflow:hidden">
+    <button onclick="this.parentElement.classList.toggle('impacts-open')"
+      style="width:100%;padding:14px 16px;background:transparent;border:none;color:var(--text);font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left">
+      <span>
+        <span style="font-size:1.1rem;margin-right:8px">&#127777;&#65039;</span>
+        Welke ongewenste effecten mogen we verwachten bij 1,5°C en bij 2°C opwarming?
+      </span>
+      <span class="impacts-chevron" style="font-size:1.1rem;transition:transform .25s;flex-shrink:0">&#9660;</span>
+    </button>
+    <div class="impacts-body" style="display:none;padding:0 14px 16px">
+
+      <!-- BASELINE UITLEG -->
+      <div style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:8px;padding:11px 13px;margin-bottom:14px">
+        <div style="font-size:.78rem;font-weight:900;color:var(--accent);margin-bottom:4px">&#128218; Hoe lees je dit?</div>
+        <div style="font-size:.75rem;color:var(--muted);line-height:1.7">
+          Alle vergelijkingen hieronder tonen het verschil tussen <strong style="color:var(--b15)">1,5°C opwarming</strong> en <strong style="color:var(--b20)">2°C opwarming</strong> — beide gemeten ten opzichte van de gemiddelde temperatuur <strong style="color:var(--text)">vóór de industriële revolutie (~1850)</strong>, toen de mens nog nauwelijks CO₂ uitstookte. We zitten nu al op ±1,2°C. Het gaat dus over wat er nog <em>extra</em> bovenop die huidige opwarming zal gebeuren. Bronnen: IPCC SR1.5 (2018) en IPCC AR6 WG1+WG2 (2021–2022).
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:9px">
+
+        <!-- 1. Extreme hitte -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--red);margin-bottom:5px">&#9728;&#65039; Extreme hittegolven</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">1 op 7 mensen</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">wordt minstens één keer in de 5 jaar getroffen door een levensgevaarlijke hittegolf</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">1 op 3 mensen</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— meer dan 2,5× zoveel mensen. Dàt is de prijs van die halve graad extra.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Een levensgevaarlijke hittegolf = temperaturen zo extreem dat gezonde mensen kunnen overlijden aan hittestress, en dat ziekenhuizen overbelast raken. Steden zijn extra kwetsbaar omdat beton en asfalt de hitte vasthouden. Nu is dat voor de meeste mensen een zeldzame gebeurtenis — bij 2°C wordt het voor 1 op 3 mensen een regelmatig terugkerend gevaar.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC SR1.5 (2018), Table 3.2 — very high confidence</span>
+          </div>
+        </div>
+
+        <!-- 2. Noordpool ijsvrij -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--blue);margin-bottom:5px">&#10052; Ijsvrije Noordpool in de zomer</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.25);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">1× per 100 jaar</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">de Arctische Oceaan volledig ijsvrij in de zomer — een uitzonderlijke ramp</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">1× per 10 jaar</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— 10× vaker. Wat nu een uitzonderlijk drama is, wordt bijna normaal.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            De Arctische Oceaan had altijd een laag zomerijs. Dat ijs werkt als een spiegel: het kaatst zonlicht terug de ruimte in en houdt de aarde koel. Als dat ijs verdwijnt, absorbeert de donkere oceaan de warmte — wat de opwarming verder versnelt. Bovendien verliezen ijsberen, walrussen en andere poolsoorten hun leefgebied volledig.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC SR1.5 (2018), §B.4.1 — high confidence</span>
+          </div>
+        </div>
+
+        <!-- 3. Koraalriffen -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--amber);margin-bottom:5px">&#127840; Koraalrif sterfte</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">70–90% verdwijnt</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">van alle koraalriffen wereldwijd — al een ramp voor de oceaan</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">99–100% verdwijnt</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— praktisch alle koraalriffen ter wereld zijn weg. Permanent en onomkeerbaar.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Koraalriffen zijn het "regenwoud van de oceaan": ze beslaan minder dan 1% van de zeebodem maar herbergen 25% van alle zeesoorten. Ze beschermen ook kustlijnen tegen golven en stormen. Meer dan 500 miljoen mensen wereldwijd zijn afhankelijk van koraalriffen voor voedsel en inkomsten uit visserij en toerisme.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC SR1.5 (2018), §B.4.2 — high confidence</span>
+          </div>
+        </div>
+
+        <!-- 4. Permafrost -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--purple);margin-bottom:5px">&#129482; Permafrost ontdooiing</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">4,8 mln km²</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">eeuwig bevroren grond ontdooit — groter dan heel de EU</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">6,6 mln km²</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— 1,8 mln km² extra. Vergelijkbaar met ¾ van Australië extra dat ontdooit.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Permafrost is grond die al duizenden jaren bevroren is en enorme hoeveelheden CO₂ en methaan opgeslagen houdt — méér dan de mensheid ooit heeft uitgestoten. Als die grond ontdooit, komt dat gas vrij en versnelt de opwarming nog verder. Dit is een van de meest gevreesde klimaat-"tipping points": als het eenmaal begint, is het haast niet meer te stoppen.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC AR6 WG1 (2021), §9.5.2 — high confidence</span>
+          </div>
+        </div>
+
+        <!-- 5. Soortenverlies insecten -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--green);margin-bottom:5px">&#128027; Soortenverlies: insecten</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">6% van soorten</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">verliest meer dan de helft van zijn leefgebied — een groot deel overleeft dat niet</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">18% van soorten</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— 3× meer insectensoorten in de problemen door slechts 0,5°C extra.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Insecten zijn de onzichtbare motor van onze natuur. Ze bestuiven de bloemen en gewassen waarvan wij eten (1 op 3 happen voedsel hangt ervan af), ze zijn voedsel voor vogels en vissen, en ze breken dood organisch materiaal af. Zonder insecten storten voedselketens in. Een verlies van leefgebied met meer dan de helft betekent in de praktijk dat die soort uitsterft of extreem zeldzaam wordt.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC SR1.5 (2018), §3.4.3 — Warren et al. 2018 via IPCC</span>
+          </div>
+        </div>
+
+        <!-- 6. Soortenverlies planten -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--green);margin-bottom:5px">&#127807; Soortenverlies: planten</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">8% van soorten</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">verliest meer dan de helft van de grond waarop ze kunnen groeien</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">16% van soorten</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— dubbel zoveel plantensoorten bedreigd door 0,5°C extra opwarming.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Planten kunnen het klimaat niet achternarennen: een boom kan niet zelf naar het noorden wandelen als het te warm wordt. Bergsoorten hebben het hardst te verduren — boven de top is er geen koelere grond meer. Plantensoorten zijn de basis van elk ecosysteem en direct verbonden met de voedselzekerheid van de mensheid.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC SR1.5 (2018), §3.4.3 — Warren et al. 2018 via IPCC</span>
+          </div>
+        </div>
+
+        <!-- 7. Ecosystemen -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--accent);margin-bottom:5px">&#127758; Ecosystemen: complete landschappen veranderen</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">7% van het land</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">transformeert naar een compleet ander type natuur dan vandaag</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">13% van het land</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— bijna 2× zoveel. Denk: Spaanse dennenbossen worden droge struikwoestijn.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Een "bioomverschuiving" klinkt technisch, maar het betekent concreet: een weelderig woud verandert in droge savanne, een savanne in woestijn, een toendra in kaal stenen landschap. Dit zijn veranderingen die duizenden jaren hebben geduurd om te vormen, maar die nu in enkele decennia kunnen omslaan. Ze zijn praktisch onomkeerbaar op menselijke tijdschaal.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC SR1.5 (2018), §3.4.3</span>
+          </div>
+        </div>
+
+        <!-- 8. Bosbranden -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--amber);margin-bottom:5px">&#128293; Bosbranden</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">Merkbaar meer</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">bosbranden in Europa, Noord-Amerika en Australazië — langer brandseizoenen</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">Brandbestrijding faalt</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— branden zijn zo groot en frequent dat geen enkel huidig systeem ze nog aankan.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Je zag de beelden van de bosbranden in Australië (2020), Canada (2023) en Griekenland (2023). Bij 2°C worden zomers zo droog en heet dat die situaties structureel worden — geen uitzonderingen meer maar elk jaar. De rook vergiftigt de lucht van hele regio's, ook van steden ver van het vuur. Ook in België en Nederland neemt het droogterisico voor bossen sterk toe.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC AR6 WG2 (2022), §2.4.4 · Nature (2025) wildfire projections</span>
+          </div>
+        </div>
+
+        <!-- 9. Klimaatvluchtelingen -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--red);margin-bottom:5px">&#128689; Klimaatvluchtelingen</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Nu al (±1,2°C)</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">&gt;20 mln/jaar</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">mensen per jaar ontheemd door overstromingen, stormen en droogte</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">Sterk stijgend</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— kustgebieden en rivierdelta's wereldwijd worden permanent onleefbaar.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Dit is geen ver-van-mijn-bed-show. Al vandaag worden meer dan 20 miljoen mensen per jaar gedwongen hun huis te verlaten door klimaatrampen — dat zijn er 55.000 per dag. Bij 2°C worden kustzones zoals Bangladesh, het Nijldelta, de Mekong-delta en tientallen kleine eilandstaten geleidelijk onbewoonbaar door zeespiegelstijging en extremer weer. Die mensen moeten ergens naartoe.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC AR6 WG2 (2022), Fig. 7.7 · IDMC Global Report 2023</span>
+          </div>
+        </div>
+
+        <!-- 10. Vectorziekten -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--amber);margin-bottom:5px">&#129408; Ziekten via muggen en teken: dengue, malaria, lyme</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">Uitbreiding noordwaarts</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">tropische muggen en teken overleven winters in Centraal- en Noord-Europa</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">+2,25 miljard mensen</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">extra in risicozone voor dengue alleen al — een ziekte die nu nog zeldzaam is in Europa.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Muggen en teken houden van warmte. Nu sterven ze in koude Europese winters — maar bij 1,5–2°C overleven ze het hele jaar. <strong style="color:var(--text)">Lyme-ziekte</strong> (via teken) breidt zich al uit in België en Nederland. <strong style="color:var(--text)">Dengue</strong> (via tropische mug) veroorzaakte al lokale uitbraken in Zuid-Europa. <strong style="color:var(--text)">Malaria</strong> verschuift naar hoger gelegen en noordelijkere gebieden in Afrika en Azië. Ziekten die we als "tropisch" beschouwen, kloppen aan onze deur.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC AR6 WG2 (2022), §7.3.2 — high confidence · PubMed (2024)</span>
+          </div>
+        </div>
+
+        <!-- 11. Voedselzekerheid -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--green);margin-bottom:5px">&#127956; Voedsel: oogsten die mislukken</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">Dalende oogsten</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">tarwe, mais en rijst brengen minder op in tropische en subtropische gebieden</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">Structureel tekort</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— honderden miljoenen extra mensen in voedseltekort in Afrika, Zuid-Azië en Latijns-Amerika.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            Droogte heeft al 75% van het wereldwijde oogstareaal getroffen (IPCC AR6). Mais, soja en tarwe — de drie gewassen die het meeste mensen voeden — groeien slechter bij extreme hitte en droogte. In gebieden die nu al kwetsbaar zijn voor honger, wordt het bij 2°C structureel onmogelijk om genoeg voedsel te telen. Dat leidt niet alleen tot hongersnood, maar ook tot conflicten en massale migratie.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC AR6 WG2 (2022), §5.4 · FAO/UNDP (2022)</span>
+          </div>
+        </div>
+
+        <!-- 12. Zeespiegelstijging -->
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-size:.82rem;font-weight:900;color:var(--blue);margin-bottom:5px">&#127754; Zeespiegelstijging</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <div style="background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.25);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b15);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 1,5°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">±0,4 meter</div>
+              <div style="font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4">stijging tegen 2100 — Antwerpen en Rotterdam moeten hun dijken fors verhogen</div>
+            </div>
+            <div style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:7px;padding:9px;text-align:center">
+              <div style="font-size:.62rem;font-weight:800;color:var(--b20);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Bij 2°C</div>
+              <div style="font-size:1.05rem;font-weight:900;color:var(--text)">±0,5 m én hoger risico</div>
+              <div style="font-size:.67rem;color:var(--red);margin-top:3px;line-height:1.4">— plus verhoogde kans dat ijskappen onomkeerbaar smelten, wat meters stijging dreigt na 2100.</div>
+            </div>
+          </div>
+          <div style="font-size:.72rem;color:var(--dim);line-height:1.6;background:rgba(0,0,0,.12);border-radius:6px;padding:7px 9px">
+            40 cm klinkt niet veel, maar elke centimeter extra maakt stormen gevaarlijker — een stormvloed die vroeger 1 op 100 jaar voorkwam, kan door de hogere zeespiegel plotseling 1 op 10 jaar worden. Bij 2°C vergroot ook de kans dat de West-Antarctische ijskap een "kantelpunt" passeert — met meters zeespiegelstijging op langere termijn als gevolg. Dat treft ook de Belgische en Nederlandse kust rechtstreeks.
+            <br><span style="color:var(--accent);font-weight:700">Bron: IPCC AR6 WG1 (2021), §9.6.3 — high confidence</span>
+          </div>
+        </div>
+
+      </div><!-- end grid -->
+
+      <div style="font-size:.69rem;color:var(--dim);margin-top:12px;line-height:1.65;border-top:1px solid var(--border);padding-top:10px">
+        Bronnen: IPCC SR1.5 (2018) · IPCC AR6 WG1 (2021) · IPCC AR6 WG2 (2022) · IPCC AR6 Synthesis Report (2023) · Nature (2025) wildfires · IPCC AR6 WG2 H7 (2022) vectorziekten · FAO/UNDP (2022) voedselzekerheid
+      </div>
+    </div><!-- end impacts-body -->
+  </div>
+
+  <style>
+    .impacts-open .impacts-chevron { transform: rotate(180deg); }
+    .impacts-open .impacts-body { display: block !important; }
+  </style>
+
+  <!-- WAAROM CO2 — kopie van het blok uit Resultaat -->
+  <p class="sec-head">&#127811; Waarom de klemtoon op CO&#8322;?</p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px">
+    <p style="font-size:.78rem;color:var(--dim);background:rgba(0,0,0,.15);border-radius:6px;padding:8px 10px;margin-bottom:10px;line-height:1.6">
+      <strong style="color:var(--muted)">CO&#8322; vs. CO&#8322;e:</strong> in deze tool gebruiken we CO&#8322;-equivalent (CO&#8322;e) — dat omvat alle broeikasgassen omgerekend naar hun opwarmingseffect: CO&#8322; (73%), methaan CH&#8324; (19%), lachgas N&#8322;O (5%) en F-gassen (3%). Methaan is over 20 jaar gezien ~80&#215; krachtiger dan CO&#8322;, maar verdwijnt ook sneller. CO&#8322; zelf blijft eeuwenlang in de atmosfeer.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-bottom:10px">
+      <strong style="color:var(--text)">CO&#8322; is een broeikasgas dat tientallen tot honderden jaren in de atmosfeer blijft.</strong> Het zorgt ervoor dat warmte minder gemakkelijk van de aarde naar de ruimte kan ontsnappen, wat leidt tot een geleidelijke maar aanhoudende opwarming van de planeet.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-bottom:10px">
+      Die opwarming is een van de grootste drijvers van <strong style="color:var(--text)">biodiversiteitsverlies</strong>: ecosystemen die zich over millennia hebben gevormd, kunnen het tempo van de verandering niet bijhouden. Hogere CO&#8322;-concentraties veroorzaken ook de <strong style="color:var(--text)">verzuring van de oceanen</strong>, die samen met de opwarming een catastrofaal effect heeft op het zeeleven: van koraalriffen tot vispopulaties.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-bottom:10px">
+      Naast CO&#8322; speelt <strong style="color:var(--text)">landgebruik</strong> een cruciale rol. Het omzetten van natuurlijke landschappen &mdash; ontbossen, droogleggen van moerassen &mdash; voor menselijke activiteiten is eveneens een van de grootste oorzaken van biodiversiteitsverlies. Verreweg het grootste deel van dat landgebruik dient voor de productie van <strong style="color:var(--text)">vlees en zuivel</strong>. Daarom is een verschuiving naar een meer plantaardig dieet een van de meest impactvolle individuele keuzes die je kunt maken, zowel voor het klimaat als voor de biodiversiteit.
+    </p>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.8;margin-bottom:10px">
+      Dit staat naast de vele andere effecten van onze consumptie: watervervuiling, plastic, stikstof, geluidsoverlast, verlies van halfnatuurlijke habitats&hellip;
+    </p>
+    <div style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);border-radius:8px;padding:12px;margin-top:4px">
+      <p style="font-size:.84rem;color:var(--green);font-weight:800;margin-bottom:4px">Het kan anders.</p>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.75">
+        Het is perfect mogelijk om een <strong style="color:var(--text)">goed en comfortabel leven</strong> te hebben zonder dat daarvoor te veel land vernietigd moet worden of te veel broeikasgassen vrijkomen. De technologie en kennis bestaan. Wat nog ontbreekt, is de collectieve wil om het ook te doen. <strong style="color:var(--text)">Samen</strong>.
+      </p>
+    </div>
+  </div>
+
+  <!-- WAARDEN AFFIRMATIEMODULE -->
+  <p class="sec-head">&#10024; Wat drijft jou? — Vink aan wat bij jou past</p>
+
+  <div style="background:var(--card);border:1px solid rgba(99,102,241,.3);border-radius:12px;padding:16px;margin-bottom:14px">
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.75;margin-bottom:14px">
+      Voordat je begint: neem even een moment voor jezelf. Niet om schuld te voelen, maar om te herinneren <em>waarom dit voor jou belangrijk is</em>. Kies wat bij jou resoneert.
+    </p>
+
+    <div id="values-grid" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+
+      <!-- Waarde 1 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#127807; Een gezonde leefomgeving</div>
+          <div class="value-desc">Schone lucht, zuiver water en levende natuur zijn geen luxe — ze zijn de basis van een goed leven, voor mij en voor iedereen om mij heen.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 2 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#9878;&#65039; Eerlijke verdeling</div>
+          <div class="value-desc">De mensen die het minst bijdragen aan de klimaatcrisis, lijden er het meest onder. Dat voelt onrechtvaardig. Ik wil daar eerlijk tegenover staan.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 3 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#128106; Toekomst voor kinderen en kleinkinderen</div>
+          <div class="value-desc">Ik wil dat de volgende generaties opgroeien op een planeet die leefbaar is — met seizoenen, biodiversiteit en veilige kustlijnen.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 4 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#128689; Minder vluchtelingen en ontheemding</div>
+          <div class="value-desc">Droogte, overstromingen en hitte drijven nu al miljoenen mensen van huis. Ik wil geen wereld waarin steeds meer mensen gedwongen worden te vluchten voor het klimaat.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 5 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#10024; Trots op mijn keuzes</div>
+          <div class="value-desc">Ik wil kunnen zeggen dat ik het geprobeerd heb — dat ik bewust heb geleefd en niet zomaar meegedaan heb met wat makkelijk was.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 6 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#129532; Respect voor andere soorten</div>
+          <div class="value-desc">Mensen zijn niet de enige bewoners van deze planeet. Insecten, vogels, zoogdieren en planten hebben ook een recht op bestaan — en ik ben mede verantwoordelijk voor hun overleving.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 7 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#128170; Doen wat ik kan, met wat ik heb</div>
+          <div class="value-desc">Ik kan de wereld niet alleen redden. Maar ik kan wel mijn eigen keuzes maken — en weten dat elke verandering telt, hoe klein ook.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 8 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#128200; Economische slimheid</div>
+          <div class="value-desc">Minder verbruiken, beter isoleren, minder vliegen — dat is ook gewoon goed voor mijn portemonnee. Duurzaamheid en financiële gezondheid gaan hand in hand.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 9 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#127968; Een gezond huis en lichaam</div>
+          <div class="value-desc">Luchtkwaliteit, hittestress en voedselveiligheid raken mijn gezondheid direct. Wat goed is voor het klimaat, is ook goed voor mij.</div>
+        </div>
+      </label>
+
+      <!-- Waarde 10 -->
+      <label class="value-card" onclick="toggleValue(this)">
+        <div class="value-check">&#10003;</div>
+        <div class="value-content">
+          <div class="value-title">&#128161; Vooruitgang en innovatie omarmen</div>
+          <div class="value-desc">Warmtepompen, zonnepanelen, plantaardig eten — dit zijn niet de oplossingen van gisteren, maar van morgen. Ik wil deel uitmaken van die verandering, niet er achter aanlopen.</div>
+        </div>
+      </label>
+
+    </div>
+
+    <!-- PREVIEW van de motivatiebrief -->
+    <div id="values-letter-preview" style="display:none;background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.2);border-radius:10px;padding:14px;margin-bottom:12px">
+      <div style="font-size:.72rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">&#128140; Jouw motivatie — verschijnt ook op je rapport</div>
+      <div id="values-letter-text" style="font-size:.8rem;color:var(--muted);line-height:1.8;font-style:italic"></div>
+    </div>
+
+    <p style="font-size:.72rem;color:var(--dim);line-height:1.6">
+      &#128274; Je antwoorden blijven lokaal op dit apparaat. Ze worden enkel gebruikt om je rapport persoonlijker te maken.
+    </p>
+  </div>
+
+  <style>
+    .value-card {
+      display:flex;align-items:flex-start;gap:12px;
+      background:var(--card2);border:1px solid var(--border);border-radius:10px;
+      padding:11px 13px;cursor:pointer;transition:all .2s;
+      user-select:none;-webkit-user-select:none;
+    }
+    .value-card.selected {
+      background:rgba(99,102,241,.1);border-color:var(--accent);
+    }
+    .value-check {
+      width:24px;height:24px;border-radius:6px;border:2px solid var(--border);
+      background:var(--card);color:transparent;font-size:.9rem;font-weight:900;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+      margin-top:1px;transition:all .2s;
+    }
+    .value-card.selected .value-check {
+      background:var(--accent);border-color:var(--accent);color:white;
+    }
+    .value-title {
+      font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:3px;line-height:1.3;
+    }
+    .value-desc {
+      font-size:.73rem;color:var(--muted);line-height:1.65;
+    }
+    .value-card.selected .value-title { color:var(--accent); }
+  </style>
+
+  <!-- START KNOP -->
+  <button onclick="document.querySelector('[data-tab=producten]').click()" style="width:100%;padding:15px;background:var(--accent);border:none;border-radius:12px;color:white;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:900;cursor:pointer;letter-spacing:.02em;margin-bottom:8px">
+    &#128202; Start de calculator &#8594;
+  </button>
+
+</div>
+
+<div class="section" id="tab-producten">
+  <div class="info-box" style="margin-bottom:10px">
+    <p style="font-weight:800;font-size:.88rem;margin-bottom:6px">&#128230; Wat bezit jij eigenlijk allemaal?</p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      Zet de producten aan die je bezit en stel in hoeveel je er hebt. De CO&#8322;-impact die je ziet is de <strong style="color:var(--text)">jaarlijkse bijdrage</strong> van dat product — de totale productie-uitstoot gedeeld door de levensduur.
+    </p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      Kijk eens goed naar de <strong style="color:var(--text)">kg per jaar</strong>. Je zal merken dat een smartphone, een broek of een koffiemachine veel minder weegt dan je misschien denkt — zeker vergeleken met één vliegvakantie of het verwarmen van je huis. <strong style="color:var(--text)">Producten bezitten is niet de grootste hefboom.</strong> Maar het helpt om het in perspectief te zetten.
+    </p>
+    <p style="font-size:.78rem;color:var(--muted);line-height:1.75">
+      <strong style="color:var(--text)">&#9851; Tweedehands?</strong> Stel in welk percentage van dit type product je tweedehands hebt gekocht. Standaard staat dit op 0% (alles nieuw). Bij 100% wordt de productie-uitstoot gehalveerd — die wordt dan gedeeld met de vorige eigenaar.
+    </p>
+  </div>
   <div id="products-list"></div>
+
+  <!-- REFLECTIEVRAAG -->
+  <div id="products-reflection" style="display:none;background:linear-gradient(135deg,rgba(99,102,241,.1) 0%,rgba(52,211,153,.06) 100%);border:1px solid rgba(99,102,241,.25);border-radius:12px;padding:15px;margin-top:14px">
+    <p style="font-size:.82rem;font-weight:900;color:var(--accent);margin-bottom:8px">&#129300; Wat valt je op?</p>
+    <p style="font-size:.78rem;color:var(--muted);line-height:1.75;margin-bottom:10px">
+      Je hebt een aantal producten ingevuld. Vergelijk nu de kg per jaar eens met wat je intuïtief verwachtte. Verrast over bepaalde zaken?
+    </p>
+    <div style="display:flex;flex-direction:column;gap:7px">
+      <div id="prod-reflection-hint" style="font-size:.75rem;color:var(--dim);line-height:1.65;background:rgba(0,0,0,.15);border-radius:7px;padding:9px 11px"></div>
+    </div>
+    <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:10px 12px;margin-top:10px">
+      <p style="font-size:.76rem;font-weight:800;color:var(--green);margin-bottom:4px">&#128295; Gebruiksduur bepaalt alles</p>
+      <p style="font-size:.74rem;color:var(--muted);line-height:1.7">
+        Let op de levensduur die bij elk product staat. Die bepaalt rechtstreeks de jaarlijkse impact: een laptop die 10 jaar meegaat stoot per jaar <em>de helft</em> uit van eentje die na 5 jaar vervangen wordt. <strong style="color:var(--text)">Zorg, onderhoud en herstel</strong> hebben een sterke invloed op de jaarlijkse impact die een product heeft.
+      </p>
+    </div>
+    <p style="font-size:.75rem;color:var(--muted);line-height:1.75;margin-top:10px">
+      &#128073; Ga verder naar <strong>Dagelijks transport</strong> — dáár beginnen de echte grote getallen.
+    </p>
+  </div>
 </div>
 
 <div class="section" id="tab-dagelijks">
-  <div class="info-box"><strong>Dagelijkse verplaatsingen</strong> (woon-werk, boodschappen, school, sociale activiteiten...). Vul het totaal aantal kilometer per jaar in. Wat op 0 blijft telt niet mee. Voor solo auto/EV kan je het aantal mederijders instellen.<br><strong style="color:var(--amber)">&#9888; Vakantie- en reiskilometers tellen hier NIET mee</strong> &mdash; die vul je in bij het tabblad <em>Reizen</em>.</div>
+  <div class="info-box" style="margin-bottom:10px">
+    <p style="font-weight:800;font-size:.88rem;margin-bottom:6px">&#128663; Hoeveel kilometer leg jij af?</p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      Vul het <strong style="color:var(--text)">totaal aantal kilometer per jaar</strong> in voor elk vervoermiddel dat je gebruikt — voor woon-werk, boodschappen, school en sociale activiteiten. Wat op 0 blijft telt niet mee.
+    </p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      Bij <strong style="color:var(--text)">auto en EV</strong> kan je het aantal inzittenden instellen (inclusief bestuurder) — zo wordt de uitstoot correct verdeeld per persoon, net zoals bij gedeelde huishoudtoestellen.
+    </p>
+    <p style="font-size:.78rem;color:var(--amber);font-weight:700">&#9888; Vakantie- en reiskilometers tellen hier NIET mee — die vul je in bij het tabblad <em>Reizen</em>.</p>
+  </div>
   <div id="daily-transport-list"></div>
 </div>
 
 <div class="section" id="tab-reizen">
-  <div class="info-box">
-    <strong>Vakanties en uitstappen.</strong> Geef de <strong>totale afstand in inclusief retour</strong> in. Bv. Brussel&#8211;Praag retour = ~2.000 km. Kilometers op 0 = niet van toepassing.
-    <br><br>
-    <strong>&#9992;&#65039; Vliegafstand berekenen?</strong>
-    Hoe de Treecological calculator gebruiken
-    <span class="src-btn" onclick="document.getElementById('treecological-info').classList.toggle('open-info')" style="vertical-align:middle;cursor:pointer">i</span>
-    <div id="treecological-info" style="display:none;margin-top:10px;background:rgba(0,0,0,.2);border-radius:8px;padding:10px 12px;font-size:.76rem;color:var(--muted);line-height:1.7">
+  <div class="info-box" style="margin-bottom:10px">
+    <p style="font-weight:800;font-size:.88rem;margin-bottom:6px">&#9992;&#65039; Vakanties en uitstappen</p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      Geef de <strong style="color:var(--text)">totale afstand inclusief retour</strong> in. Bv. Brussel–Praag retour = ~2.000 km. Kilometers op 0 = niet van toepassing.
+    </p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      <strong style="color:var(--text)">&#9992;&#65039; Vliegafstand berekenen?</strong>
+      Hoe de Treecological calculator gebruiken
+      <span class="src-btn" onclick="document.getElementById('treecological-info').classList.toggle('open-info')" style="vertical-align:middle;cursor:pointer">i</span>
+    </p>
+    <div id="treecological-info" style="display:none;margin-bottom:8px;background:rgba(0,0,0,.2);border-radius:8px;padding:10px 12px;font-size:.76rem;color:var(--muted);line-height:1.7">
       <strong style="color:var(--text)">Hoe gebruik je de Treecological calculator?</strong><br>
       1. Klik op de tegel hieronder om naar <strong style="color:var(--text)">www.treecological.be</strong> te gaan<br>
       2. Klik bovenaan op <strong style="color:var(--text)">&#8220;Calculator&#8221;</strong><br>
@@ -243,7 +757,6 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
       <br><br>
       <span style="color:var(--dim);font-size:.7rem">Opmerking: de CO&#8322;-waarde van Treecological kan afwijken van wat deze calculator berekent, omdat elke tool andere factoren en methodes hanteert (bv. wel of geen Radiative Forcing Index (RFI), wel of geen productie-emissies vliegtuig). De km-afstand is wel objectief.</span>
     </div>
-    <br>
     <a class="link-btn" href="https://www.treecological.be" target="_blank">&#9992;&#65039; Treecological &mdash; bereken vliegafstand</a>
     <div style="margin-top:10px;font-size:.74rem;color:var(--dim);line-height:1.65;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:7px;padding:9px 11px">
       <strong style="color:var(--amber)">Waarom verschilt onze berekening van Treecological?</strong><br>
@@ -254,15 +767,25 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
 </div>
 
 <div class="section" id="tab-energie">
-  <div class="info-box"><strong>Verwarming en elektriciteit thuis.</strong> Vul het <em>totale verbruik van het huishouden</em> in zoals op de factuur. Geef het aantal bewoners in om jouw persoonlijk aandeel te berekenen.</div>
+  <div class="info-box" style="margin-bottom:10px">
+    <p style="font-weight:800;font-size:.88rem;margin-bottom:6px">&#128293; Verwarming en elektriciteit thuis</p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      Vul het <strong style="color:var(--text)">totale verbruik van het huishouden</strong> in zoals op de factuur. Geef het aantal bewoners in om jouw persoonlijk aandeel te berekenen.
+    </p>
+  </div>
   <div id="energy-list"></div>
 </div>
 
 <div class="section" id="tab-voeding">
-  <div class="info-box">
-    <strong>Hoe eet jij?</strong> Vul in hoeveel maaltijden per week je de volgende producten eet. Op basis daarvan bepalen we je di&#235;etprofiel en de bijhorende CO&#8322;- en landimpact.
-    De referentie is het <strong>EAT-Lancet planetary health diet</strong> &#8212; wetenschappelijk onderbouwd als gezond &#233;n binnen de planetaire grenzen.
-    <span class="src-btn" onclick="showSrc('_eatlancet')" style="vertical-align:middle">i</span>
+  <div class="info-box" style="margin-bottom:10px">
+    <p style="font-weight:800;font-size:.88rem;margin-bottom:6px">&#127956; Hoe eet jij?</p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
+      Vul in hoeveel maaltijden per week je de volgende producten eet. Op basis daarvan bepalen we je di&#235;etprofiel en de bijhorende CO&#8322;- en landimpact.
+    </p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75">
+      De referentie is het <strong style="color:var(--text)">EAT-Lancet planetary health diet</strong> &#8212; wetenschappelijk onderbouwd als gezond &#233;n binnen de planetaire grenzen.
+      <span class="src-btn" onclick="showSrc('_eatlancet')" style="vertical-align:middle">i</span>
+    </p>
   </div>
 
   <div class="sec-head" style="margin-top:0;border-top:none;padding-top:0">&#127830; Rood vlees (rund, varken, lam, wild)</div>
@@ -398,7 +921,7 @@ Marges zijn realistisch: LCA-studies vertonen typisch 30-50% spreiding.
           Houtverbranding stoot aanzienlijke hoeveelheden <strong style="color:var(--text)">fijn stof (PM2,5 en PM10)</strong> uit, evenals <strong style="color:var(--text)">roet (black carbon)</strong>, polycyclische aromatische koolwaterstoffen (PAK) en vluchtige organische stoffen (VOS). Zelfs moderne gecertificeerde pelletkachels produceren significant meer fijn stof dan aardgas of een warmtepomp.
         </div>
         <div style="font-size:.76rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
-          <strong style="color:var(--text)">Gezondheidseffecten:</strong> PM2,5 dringt diep in de longen en het bloed door. Langdurige blootstelling verhoogt het risico op hart- en vaatziekten, longkanker, COPD en astma. Recent onderzoek (BMJ 2023, The Lancet Psychiatry) verbindt chronische blootstelling aan fijn stof ook met een verhoogd risico op <strong style="color:var(--text)">depressie en angststoornissen</strong>. De WHO beoordeelt binnenluchtvervuiling door houtverbranding als een van de grootste vermijdbare gezondheidsrisico&#8217;s in Europa. Kinderen, ouderen en mensen met longaandoeningen zijn het kwetsbaarst.
+          <strong style="color:var(--text)">Gezondheidseffecten:</strong> PM2,5 dringt diep in de longen en het bloed door. Langdurige blootstelling verhoogt het risico op hart- en vaatziekten, longkanker, COPD en astma. De WHO beoordeelt binnenluchtvervuiling door houtverbranding als een van de grootste vermijdbare gezondheidsrisico&#8217;s in Europa. Kinderen, ouderen en mensen met longaandoeningen zijn het kwetsbaarst.
         </div>
         <div style="font-size:.76rem;color:var(--muted);line-height:1.75;margin-bottom:8px">
           <strong style="color:var(--text)">Impact op omliggende natuur:</strong> Neergeslagen roet en PAK&#8217;s verminderen de fotosynthese van omliggende planten. Stikstofverbindingen uit rookgassen dragen bij aan verzuring en vermesting van nabijgelegen ecosystemen. In dichtbevolkte gebieden telt de cumulatieve impact van huishoudelijke houtverbranding zwaar door.
@@ -515,10 +1038,53 @@ Marges zijn realistisch: LCA-studies vertonen typisch 30-50% spreiding.
     <div style="font-size:.68rem;color:var(--muted);font-weight:700" id="sticky-pct">&#8212;% van 1,5&#176;C-budget</div>
     <div class="budget-prog"><div class="budget-fill" id="budget-fill" style="width:0%;background:var(--green)"></div></div>
   </div>
-  <button class="sticky-btn" id="nav-btn" onclick="nextTab()">Dagelijks &#8594;</button>
+  <button class="sticky-btn" id="nav-btn" onclick="nextTab()">Producten &#8594;</button>
 </div>
 
 <script>
+// ═══ WAARDEN AFFIRMATIEMODULE ═══════════════════════════════
+const selectedValues = new Set();
+
+function toggleValue(el) {
+  el.classList.toggle('selected');
+  const title = el.querySelector('.value-title').textContent.trim();
+  if (el.classList.contains('selected')) {
+    selectedValues.add(title);
+  } else {
+    selectedValues.delete(title);
+  }
+  updateValuesLetter();
+}
+
+function updateValuesLetter() {
+  const preview = document.getElementById('values-letter-preview');
+  const letterEl = document.getElementById('values-letter-text');
+  if (selectedValues.size === 0) {
+    preview.style.display = 'none';
+    return;
+  }
+  preview.style.display = 'block';
+  const valueList = [...selectedValues]
+    .map(v => v.replace(/^[\p{Emoji}\s]+/u, '').trim())
+    .join(', ');
+  letterEl.innerHTML = `
+    Ik doe dit omdat ik ${valueList} belangrijk vind.<br><br>
+    Niet omdat iemand me verplicht, maar omdat ik wil handelen in lijn met wie ik ben.
+    De cijfers in dit rapport zijn niet bedoeld om me schuldig te laten voelen —
+    maar om me te helpen zien waar ik het verschil kan maken,
+    op een manier die past bij mijn waarden en mijn leven.<br><br>
+    Elke stap telt. Ook de kleine.
+  `;
+}
+
+function getValuesForReport() {
+  if (selectedValues.size === 0) return null;
+  const valueList = [...selectedValues]
+    .map(v => v.replace(/^[\p{Emoji}\s]+/u, '').trim())
+    .join('\n    — ');
+  return valueList;
+}
+
 // ═══ SOURCE INFO PER PRODUCT ════════════════════════════════
 const SOURCE_INFO = {
   fiets:     {title:'Fiets (conventioneel)', formula:'Embodied: ~165 kg CO₂e (prod + EOL) ÷ 15j = 11 kg/j\nMaterialen: staalframe (~60%), rubber banden, aluminium velgen\nGebruik: 0 (geen motor, geen accu)\n\nOpmerking: de productie-impact per km is uiterst laag bij intensief gebruik.\nBij 5.000 km/jaar: 11 kg/5.000 km = 2,2 g CO₂/km (vergelijk: auto 192 g/km)', ref:'Cycleplan / Shimano LCA (2019): ~120–180 kg CO₂e voor een gemiddelde stadsfiets (staal). Chester & Horvath (2010), Environ. Res. Lett.: fiets = laagste klimaatimpact van alle transportmodi incl. productie.'},
@@ -637,17 +1203,17 @@ const DAILY_TRANSPORT = [
   {id:'dt_te',icon:'🚶',name:'Te voet',gco2:0,color:'#34d399',note:'Geen emissies'},
   {id:'dt_trein',icon:'🚂',name:'Trein',gco2:6,color:'#60a5fa',note:'EEA EU-gem. 6 g/pkm'},
   {id:'dt_bus',icon:'🚌',name:'Stadsbus / tram',gco2:60,color:'#a3e635',note:'EEA: ~60 g/pkm stedelijk'},
-  {id:'dt_auto_solo',icon:'🚗',name:'Auto (diesel/benzine) solo',gco2:192,color:'#f87171',note:'EEA: 192 g/pkm — stel mederijders in',isSoloCar:true},
-  {id:'dt_ecar1',icon:'🔋',name:'Elektrische wagen solo',gco2:13,color:'#34d399',note:'ICCT 2025: 13 g/km elektriciteitsgebruik. Productie/sloop staat apart bij Producten → Transport.',isSoloCar:true},
+  {id:'dt_auto_solo',icon:'🚗',name:'Auto (diesel/benzine)',gco2:192,color:'#f87171',note:'EEA: 192 g/pkm — stel mederijders in',isSoloCar:true},
+  {id:'dt_ecar1',icon:'🔋',name:'Elektrische wagen',gco2:13,color:'#34d399',note:'ICCT 2025: 13 g/km elektriciteitsgebruik. Productie/sloop staat apart bij Producten → Transport.',isSoloCar:true},
   {id:'dt_moto',icon:'🏍️',name:'Motorfiets',gco2:80,color:'#f87171',note:'~80 g/pkm (EEA)'},
 ];
 
 const TRAVEL_MODES = [
   {id:'tr_trein',icon:'🚂',name:'Trein',gco2:6,color:'#34d399',note:'EEA EU-gem. 6 g/pkm'},
-  {id:'tr_slaaptrein',icon:'🛌',name:'Slaaptrein',gco2:11,color:'#6ee7b7',note:'CE Delft (2020) / ADEME (2022): ~11 g/pkm — groter ruimtebeslag per passagier dan gewone trein (~1,8×)'},
+  {id:'tr_slaaptrein',icon:'🛌',name:'Slaaptrein',gco2:6,color:'#34d399',note:'CE Delft: ~6 g/pkm'},
   {id:'tr_bus',icon:'🚌',name:'Reisbus (~60 pers.)',gco2:27,color:'#a3e635',note:'EEA: 27 g/pkm'},
-  {id:'tr_auto1',icon:'🚗',name:'Auto solo',gco2:192,color:'#f87171',note:'192 g/pkm brandstofgebruik (EEA). Productie/sloop apart bij Producten.',isSoloCar:true},
-  {id:'tr_ecar1',icon:'🔋',name:'EV solo',gco2:13,color:'#34d399',note:'13 g/pkm elektriciteitsgebruik (ICCT 2025). Productie/sloop apart bij Producten.',isSoloCar:true},
+  {id:'tr_auto1',icon:'🚗',name:'Auto',gco2:192,color:'#f87171',note:'192 g/pkm brandstofgebruik (EEA). Productie/sloop apart bij Producten.',isSoloCar:true},
+  {id:'tr_ecar1',icon:'🔋',name:'EV',gco2:13,color:'#34d399',note:'13 g/pkm elektriciteitsgebruik (ICCT 2025). Productie/sloop apart bij Producten.',isSoloCar:true},
   {id:'tr_vlieg_kort',icon:'✈️',name:'Vliegtuig kort (<1.500 km)',gco2:530,color:'#f43f5e',note:'530 g/pkm: directe CO₂ ~160 g × RFI 3,0 (Radiative Forcing Index) + 10% well-to-tank (30j tijdshorizon, relevant voor 2050-doelen). Bron: myclimate (2023), Lee et al. (2021), SCNAT (2021).'},
   {id:'tr_vlieg_lang',icon:'✈️',name:'Vliegtuig lang (>1.500 km)',gco2:265,color:'#f87171',note:'265 g/pkm: directe CO₂ ~80 g × RFI 3,0 (Radiative Forcing Index) + 10% WTT (30j tijdshorizon). Niet-CO₂ effecten = 2/3 van totale luchtvaartimpact (Lee et al. 2021). RFI 3 correct voor 2050-reductiedoelen.'},
 ];
@@ -680,11 +1246,11 @@ const state = {
   travel: {}, travelShared: {},
   energy: {}, energyShared: {},
   gasUnit: {}, // 'default' or 'alt' per energy source id
-  food: 'veganist',  // wordt bij boot overschreven door classifyAndRenderDiet()
+  food: 'omnivoor',
 };
 
 function initState() {
-  PRODUCTS.forEach(p => { state.products[p.id] = {on:false,qty:p.isPV?4.5:1,shared:1,secondhand:false}; });
+  PRODUCTS.forEach(p => { state.products[p.id] = {on:false,qty:p.isPV?4.5:1,shared:1,secondhand:false,shPct:0}; });
   DAILY_TRANSPORT.forEach(t => { state.daily[t.id]=0; state.dailyShared[t.id]=1; });
   TRAVEL_MODES.forEach(t => { state.travel[t.id]=0; state.travelShared[t.id]=1; });
   ENERGY_SOURCES.forEach(e => { state.energy[e.id]=0; state.energyShared[e.id]=1; });
@@ -694,7 +1260,7 @@ function initState() {
 // ═══ DYNAMIC CO2 FOR STREAMING/GAMING ═══════════════════════════
 function getProductCO2pj(p) {
   const s = state.products[p.id];
-  const shFactor = s.secondhand ? 0.5 : 1.0; // secondhand: embodied halved
+  const shFactor = 1.0 - ((s.shPct||0) / 100) * 0.5; // shPct% tweedehands: embodied proportioneel verminderd
   if (p.isStreaming) {
     // IEA 2023: ~36g CO2/hour streaming (datacenter + network)
     return s.qty * 365 * 0.036;
@@ -766,10 +1332,13 @@ function renderProducts() {
           </div>` : ''}
           ${!p.isStreaming && !p.isGaming && !p.isAI && p.cat !== 'Digitaal & Huisdieren' ? `<div class="ctrl-row">
             <span class="ctrl-lbl" style="font-size:.74rem">
-              &#9851; Tweedehands
-              <span style="font-size:.67rem;color:var(--dim)"> (embodied ÷ 2)</span>
+              &#9851; % tweedehands
+              <span style="font-size:.67rem;color:var(--dim)"> (0% = alles nieuw)</span>
             </span>
-            <div class="prod-toggle${s.secondhand?' on':''}" style="width:38px;height:22px" onclick="toggleSecondhand('${p.id}')">
+            <div class="stepper">
+              <button class="step-btn" onclick="stepSecondhand('${p.id}',-10)">&#8722;</button>
+              <span class="step-val" id="sh-pct-val-${p.id}" style="min-width:38px">${Math.round(s.shPct||0)}%</span>
+              <button class="step-btn" onclick="stepSecondhand('${p.id}',10)">+</button>
             </div>
           </div>` : ''}
         </div>
@@ -806,10 +1375,10 @@ function renderTransport(modes, isDaily) {
           oninput="onKmInput(this,'${t.id}',${isDaily})">
       </div>
       ${t.isSoloCar ? `<div class="tr-input-row" style="margin-top:8px">
-        <label>Mederijders (naast jou)</label>
+        <label>Aantal inzittenden (incl. bestuurder)</label>
         <div class="stepper">
           <button class="step-btn" onclick="stepShared('${t.id}',${isDaily},-1)">&#8722;</button>
-          <span class="step-val" id="sh-${t.id}">${shared - 1}</span>
+          <span class="step-val" id="sh-${t.id}">${shared}</span>
           <button class="step-btn" onclick="stepShared('${t.id}',${isDaily},1)">+</button>
         </div>
       </div>` : ''}
@@ -845,7 +1414,7 @@ function stepShared(id, isDaily, delta) {
   const shObj = isDaily ? state.dailyShared : state.travelShared;
   // shared = total occupants (you + mederijders), min = 1
   shObj[id] = Math.max(1, (shObj[id]||1) + delta);
-  const display = shObj[id] - 1; // show mederijders (excl. yourself)
+  const display = shObj[id]; // toon totaal inzittenden (incl. bestuurder)
   const el = document.getElementById('sh-'+id);
   if (el) el.textContent = display;
   // update badge
@@ -1088,24 +1657,6 @@ function classifyAndRenderDiet() {
   }
 }
 
-function selectFoodProfile(profileId) {
-  const defaults = {
-    omnivoor:    {redmeat:3, poultry:2, fish:1, dairy:7, eggs:3},
-    flexitarier: {redmeat:0, poultry:0, fish:2, dairy:5, eggs:3},
-    vegetarier:  {redmeat:0, poultry:0, fish:0, dairy:7, eggs:4},
-    veganist:    {redmeat:0, poultry:0, fish:0, dairy:0, eggs:0},
-  };
-  const vals = defaults[profileId];
-  if (!vals) return;
-  Object.assign(state.diet, vals);
-  ['redmeat','poultry','fish','dairy','eggs'].forEach(k => {
-    const el = document.getElementById('dv-' + k);
-    if (el) el.textContent = state.diet[k];
-  });
-  classifyAndRenderDiet();
-  recalc();
-}
-
 function renderFood() {
   const activeLandFactor = (FOOD.find(f=>f.id===state.food)||FOOD[0]).landFactor;
   document.getElementById('food-grid').innerHTML = FOOD.map(f => {
@@ -1113,7 +1664,7 @@ function renderFood() {
       ? (f.landFactor < 1.0 ? `&#127807; ${(f.landFactor).toFixed(1)}&times; land (minder dan gezond referentiedieet)` : '&#127807; = referentie (EAT-Lancet)')
       : `&#127807; ${f.landFactor.toFixed(1)}&times; méér land dan gezond referentiedieet`;
     const landColor = f.landFactor <= 1.0 ? 'var(--green)' : f.landFactor <= 1.5 ? 'var(--amber)' : 'var(--red)';
-    return `<div class="food-card${state.food===f.id?' active':''}" onclick="selectFoodProfile('${f.id}')">
+    return `<div class="food-card${state.food===f.id?' active':''}" onclick="state.food='${f.id}';renderFood();updateDietLandCard();recalc()">
       <div class="ficon">${f.icon}</div>
       <div class="fname">${f.name}</div>
       <div class="fco2" style="color:${f.color}">${(f.co2/1000).toFixed(2)} t CO&#8322;e/j</div>
@@ -1124,15 +1675,40 @@ function renderFood() {
 }
 
 // ═══ PRODUCT INTERACTIONS ════════════════════════════════════
-function toggleSecondhand(id) {
-  state.products[id].secondhand = !state.products[id].secondhand;
-  // update the toggle visual
-  const card = document.getElementById('pc-'+id);
-  if (!card) return;
-  // find the secondhand toggle (second .prod-toggle in card)
-  const toggles = card.querySelectorAll('.prod-toggle');
-  const shToggle = toggles[toggles.length-1];
-  if (shToggle) shToggle.classList.toggle('on', state.products[id].secondhand);
+function stepSecondhand(id, delta) {
+  const s = state.products[id];
+  s.shPct = Math.max(0, Math.min(100, (s.shPct||0) + delta));
+  s.secondhand = s.shPct > 0;
+  const el = document.getElementById('sh-pct-val-'+id);
+  if (el) el.textContent = Math.round(s.shPct) + '%';
+  const p = PRODUCTS.find(x => x.id === id);
+  if (p) {
+    const pj = getProductCO2pj(p);
+    const isNeg = pj < 0;
+    const co2el = document.querySelector('#pc-'+id+' .prod-co2');
+    if (co2el) {
+      co2el.textContent = (isNeg?'−':'') + formatCO2(Math.abs(pj)) + '/j';
+      co2el.style.color = isNeg ? 'var(--green)' : 'var(--amber)';
+    }
+  }
+  recalc();
+}
+
+function inputSecondhand(id, val) {
+  const s = state.products[id];
+  const pct = Math.max(0, Math.min(100, parseInt(val)||0));
+  s.shPct = pct;
+  s.secondhand = pct > 0;
+  const p = PRODUCTS.find(x => x.id === id);
+  if (p) {
+    const pj = getProductCO2pj(p);
+    const isNeg = pj < 0;
+    const co2el = document.querySelector('#pc-'+id+' .prod-co2');
+    if (co2el) {
+      co2el.textContent = (isNeg?'−':'') + formatCO2(Math.abs(pj)) + '/j';
+      co2el.style.color = isNeg ? 'var(--green)' : 'var(--amber)';
+    }
+  }
   recalc();
 }
 
@@ -1235,7 +1811,7 @@ function calcBase() {
   water += fd.water * 1000;
   cats['Voeding'] = fd.co2;
 
-  return {total, water, cats, land: fd.land};
+  return {total, water, cats, land: fd.land, products: prodCO2, daily: dailyCO2, travel: travelCO2};
 }
 
 function calcElectric(base) {
@@ -1329,6 +1905,34 @@ function recalc() {
   const scG = calcGreenIndustry(base);
   const scA = calcAll(base);
   const totalT = base.total / 1000;
+
+  // ── Producten reflectie ──
+  const prodTotal = base.products || 0;
+  const transportTotal = (base.daily||0) + (base.travel||0);
+  const energyTotal = base.energy || 0;
+  const reflCard = document.getElementById('products-reflection');
+  const reflHint = document.getElementById('prod-reflection-hint');
+  const anyProdOn = Object.values(state.products).some(s => s.on);
+  if (reflCard && anyProdOn) {
+    reflCard.style.display = 'block';
+    reflCard.style.setProperty('display', 'block', 'important');
+    if (reflHint) {
+      const prodKg = Math.round(prodTotal);
+      let hint = `Jouw producten samen: <strong style="color:var(--amber)">${prodKg} kg CO₂/jaar</strong>.`;
+      if (transportTotal > 0) {
+        const ratio = Math.round(transportTotal / Math.max(prodTotal, 1));
+        hint += ` Je dagelijks transport stoot ${ratio}× meer uit.`;
+      } else {
+        hint += ' Vul ook je transport en energie in om te vergelijken.';
+      }
+      if (prodKg < 200) {
+        hint += ' Producten bezitten is zelden de grootste hefboom — maar niet kopen of tweedehands kopen helpt altijd.';
+      }
+      reflHint.innerHTML = hint;
+    }
+  } else if (reflCard) {
+    reflCard.style.display = 'none';
+  }
 
   // Ring
   const CIRC = 352;
@@ -1448,7 +2052,7 @@ function updateResultTab(base, scE, scV, scG, scA) {
       const co2 = (woodVal/sh)*factor;
       const disp = co2>=1000 ? (co2/1000).toFixed(1)+' t' : Math.round(co2)+' kg';
       const noteEl = document.getElementById('wood-co2-note');
-      if (noteEl) noteEl.innerHTML = `Jouw gebruik van <strong style="color:var(--text)">${(woodVal/sh).toFixed(0)} ${isAlt?'kg pellets':'kg hout'}/jaar</strong> stoot <strong style="color:var(--amber)">${disp} CO&#8322;</strong> uit via winning, transport en verwerking &mdash; boven op de biogene CO&#8322; van de verbranding zelf (<strong style="color:var(--amber)">${(woodVal/sh*1.9).toFixed(0)} kg CO&#8322; biogeen</strong>, niet meegerekend in je score maar wél tijdelijk in de atmosfeer).`;
+      if (noteEl) noteEl.innerHTML = `Jouw gebruik van <strong style="color:var(--text)">${(woodVal/sh).toFixed(0)} ${isAlt?'kg pellets':'kg hout'}/jaar</strong> stoot <strong style="color:var(--amber)">${disp} CO&#8322;</strong> uit via winning, transport en verwerking &mdash; boven op de biogene CO&#8322; van de verbranding zelf (${(woodVal/sh*1.9).toFixed(0)} kg CO&#8322; biogeen, niet meegerekend maar wél tijdelijk in de atmosfeer).`;
     }
   }
 
@@ -1726,8 +2330,9 @@ function updateResultTab(base, scE, scV, scG, scA) {
 }
 
 // ═══ NAVIGATION ══════════════════════════════════════════════
-const TAB_ORDER = ['producten','dagelijks','reizen','energie','voeding','resultaat'];
+const TAB_ORDER = ['intro','producten','dagelijks','reizen','energie','voeding','resultaat'];
 const TAB_LABELS = {
+  intro:'Producten \u2192',
   producten:'Dagelijks transport \u2192',
   dagelijks:'Reizen \u2192',
   reizen:'Energie \u2192',
@@ -1777,6 +2382,21 @@ function buildResultText() {
   const sep2 = '-'.repeat(55);
 
   const lines = [];
+
+  // ── WAARDEN & MOTIVATIE ──
+  const vals = getValuesForReport();
+  if (vals) {
+    lines.push(sep);
+    lines.push('  MIJN MOTIVATIE');
+    lines.push(sep);
+    lines.push('');
+    lines.push('Dit doe ik omdat het volgende voor mij belangrijk is:');
+    lines.push('    — ' + vals);
+    lines.push('');
+    lines.push('Niet omdat iemand me verplicht, maar omdat ik wil handelen');
+    lines.push('in lijn met wie ik ben. Elke stap telt. Ook de kleine.');
+    lines.push('');
+  }
 
   // ── HOOFDRESULTATEN ──
   lines.push(sep);
@@ -1839,7 +2459,7 @@ function buildResultText() {
       const pj = getProductCO2pj(p);
       const disp = Math.abs(pj)>=1000 ? (pj/1000).toFixed(2)+' t' : Math.round(pj)+' kg';
       const shStr = s.shared > 1 ? ' (gedeeld door ' + s.shared + ')' : '';
-      const shStr2 = s.secondhand ? ' [TWEEDEHANDS]' : '';
+      const shStr2 = (s.shPct||0) > 0 ? ` [${Math.round(s.shPct)}% tweedehands]` : '';
       const qtyStr = p.isPV ? s.qty.toFixed(1)+' kWp' : p.isStreaming||p.isGaming||p.isAI ? s.qty+' uur of queries/dag' : 'x'+s.qty;
       lines.push('  ' + p.icon + ' ' + p.name.padEnd(35) + qtyStr + shStr + shStr2 + '  -> ' + disp + '/j');
     });
@@ -1859,7 +2479,7 @@ function buildResultText() {
       const sh = state.dailyShared[t.id]||1;
       const co2 = (t.isSoloCar ? t.gco2/sh : t.gco2) * km / 1000;
       const disp = co2>=1 ? (co2/1000).toFixed(2)+' t' : Math.round(co2)+' kg';
-      const shStr = t.isSoloCar && sh>1 ? ' (+' + (sh-1) + ' mederijder(s))' : '';
+      const shStr = t.isSoloCar && sh>1 ? ' (' + sh + ' inzittende(n))' : '';
       lines.push('  ' + t.icon + ' ' + t.name.padEnd(32) + (km+'km').padStart(8) + shStr + '  -> ' + disp + '/j');
     });
   }
