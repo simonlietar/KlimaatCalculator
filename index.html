@@ -179,6 +179,7 @@ body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-
   <button class="tab" data-tab="energie">&#128293; Energie</button>
   <button class="tab" data-tab="voeding">🍽️ Voeding</button>
   <button class="tab" data-tab="resultaat">&#128202; Resultaat</button>
+  <button class="tab" data-tab="motivatie">&#129309; Motivatie</button>
 </div>
 
 <div class="section active" id="tab-intro">
@@ -2308,7 +2309,7 @@ function updateResultTab(base, scE, scV, scG, scA) {
 }
 
 // ═══ NAVIGATION ══════════════════════════════════════════════
-const TAB_ORDER = ['intro','producten','dagelijks','reizen','energie','voeding','resultaat'];
+const TAB_ORDER = ['intro','producten','dagelijks','reizen','energie','voeding','resultaat','motivatie'];
 const TAB_LABELS = {
   intro:'Producten \u2192',
   producten:'Dagelijks transport \u2192',
@@ -2316,7 +2317,8 @@ const TAB_LABELS = {
   reizen:'Energie \u2192',
   energie:'Voeding \u2192',
   voeding:'Bekijk resultaat \u2192',
-  resultaat:'Resultaat',
+  resultaat:'Motivatie \u2192',
+  motivatie:'Rapport',
 };
 
 function switchTab(tabId) {
@@ -2628,6 +2630,13 @@ function buildResultText() {
   lines.push('         NREL Solar LCA | IEA NZE | Okin (2017) huisdieren');
   lines.push(sep);
 
+  // ── MOTIVATIE (gevoelens, bereidheid, acties, blokkades, plan) ──
+  const motivatieData = getMotivatiForReport();
+  if (motivatieData) {
+    lines.push('');
+    lines.push(motivatieData);
+  }
+
   return lines.join('\n');
 }
 
@@ -2692,5 +2701,505 @@ recalc();
     <div class="src-ref" id="src-ref"></div>
   </div>
 </div>
+<div class="section" id="tab-motivatie">
+
+  <!-- INTRO -->
+  <div class="info-box" style="margin-bottom:10px">
+    <p style="font-weight:800;font-size:.88rem;margin-bottom:6px">&#129309; Van inzicht naar actie</p>
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75">
+      Je hebt je klimaatimpact berekend. Nu is de vraag: wat doe je ermee? Dit tabblad helpt je om eerlijk naar jezelf te kijken — zonder vinger te wijzen. Het gaat over jouw gevoelens, jouw drempels en jouw keuzes.
+    </p>
+  </div>
+
+  <!-- STAP 1: GEVOELENS -->
+  <p class="sec-head">&#128172; Stap 1 — Hoe voel je je bij dit resultaat?</p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:12px">Selecteer wat van toepassing is. Meerdere antwoorden mogelijk.</p>
+    <div id="feelings-grid" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px">
+    </div>
+    <div style="margin-top:10px">
+      <label style="font-size:.76rem;font-weight:800;color:var(--muted);display:block;margin-bottom:5px">Iets anders? Vul hier aan:</label>
+      <textarea id="feelings-extra" rows="2" placeholder="bv. Ik voel me..."
+        style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.84rem;padding:9px 12px;resize:vertical"></textarea>
+    </div>
+  </div>
+
+  <!-- STAP 2: BEREIDHEID -->
+  <p class="sec-head">&#127919; Stap 2 — Ben je bereid tot betekenisvolle verandering?</p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:10px">
+      Op een schaal van 1 tot 5, hoe bereid ben je om je gewoontes aan te passen om dichter bij je eigen waarden te leven?
+    </p>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="readiness-btn" data-val="1" onclick="setReadiness(1)">1<br><span style="font-size:.65rem">Nog niet klaar</span></button>
+      <button class="readiness-btn" data-val="2" onclick="setReadiness(2)">2<br><span style="font-size:.65rem">Misschien</span></button>
+      <button class="readiness-btn" data-val="3" onclick="setReadiness(3)">3<br><span style="font-size:.65rem">Bereid</span></button>
+      <button class="readiness-btn" data-val="4" onclick="setReadiness(4)">4<br><span style="font-size:.65rem">Sterk gemotiveerd</span></button>
+      <button class="readiness-btn" data-val="5" onclick="setReadiness(5)">5<br><span style="font-size:.65rem">Ik begin morgen</span></button>
+    </div>
+    <label style="font-size:.76rem;font-weight:800;color:var(--muted);display:block;margin-bottom:5px">Wat wil je hierover kwijt?</label>
+    <textarea id="readiness-text" rows="3" placeholder="bv. Ik wil graag veranderen maar weet niet waar te beginnen..."
+      style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.84rem;padding:9px 12px;resize:vertical"></textarea>
+  </div>
+
+  <!-- STAP 3: CONCRETE ACTIES -->
+  <p class="sec-head">&#9889; Stap 3 — Wat zou jij kunnen doen?</p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:12px">Vink aan wat voor jou haalbaar of interessant is. De getallen zijn gemiddelde jaarlijkse CO₂-reducties.</p>
+    <div id="actions-list" style="display:flex;flex-direction:column;gap:7px"></div>
+  </div>
+
+  <!-- STAP 4: BLOKKADES -->
+  <p class="sec-head">&#129504; Stap 4 — Wat houdt je tegen?</p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:6px">
+      Herken je één van deze gedachten? Wees eerlijk — ze zijn heel menselijk. Iedereen heeft ze. Kies wat bij jou opkomt.
+    </p>
+    <div id="blocks-list" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px"></div>
+    <label style="font-size:.76rem;font-weight:800;color:var(--muted);display:block;margin-bottom:5px">Andere gedachten?</label>
+    <textarea id="blocks-extra" rows="2" placeholder="bv. Ik weet gewoon niet hoe ik moet beginnen..."
+      style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.84rem;padding:9px 12px;resize:vertical"></textarea>
+  </div>
+
+  <!-- STAP 5: MENSBEELDEN -->
+  <p class="sec-head">&#129504; Stap 5 — Wat geloof jij over de mens?</p>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+    <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:6px">
+      Achter elk standpunt over klimaatverandering schuilt een dieper geloof over wat de mens <em>is</em> en waartoe ze <em>in staat</em> is. Welk mensbeeld herken jij in jezelf? Meerdere antwoorden zijn mogelijk — mensen zijn zelden eenduidig.
+    </p>
+    <div id="humanview-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px"></div>
+    <label style="font-size:.76rem;font-weight:800;color:var(--muted);display:block;margin-bottom:5px">Jouw eigen woorden?</label>
+    <textarea id="humanview-extra" rows="2" placeholder="bv. Ik geloof dat mensen goed willen doen maar traag bewegen..."
+      style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.84rem;padding:9px 12px;resize:vertical"></textarea>
+  </div>
+
+  <!-- STAP 6: OVERWINNEN -->
+  <div id="overcome-section" style="display:none">
+    <p class="sec-head">&#128170; Stap 6 — Hoe ga je die drempels overwinnen?</p>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.75;margin-bottom:12px">
+        Voor elke blokkade die je herkende: hier is wat de gedragswetenschap zegt, en hoe anderen ermee omgaan. Schrijf daarna zelf hoe jij dit wil aanpakken.
+      </p>
+      <div id="overcome-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px"></div>
+      <label style="font-size:.76rem;font-weight:800;color:var(--muted);display:block;margin-bottom:5px">Mijn persoonlijk plan — wat ga ik concreet doen?</label>
+      <textarea id="overcome-plan" rows="4" placeholder="bv. Ik ga deze week uitzoeken hoe ik minder vlees kan eten. Ik ga mijn auto voor ritten onder 5 km vervangen door de fiets..."
+        style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.84rem;padding:9px 12px;resize:vertical"></textarea>
+    </div>
+  </div>
+
+  <!-- NAAR RAPPORT -->
+  <button onclick="document.querySelector('[data-tab=resultaat]').click()" style="width:100%;padding:15px;background:var(--accent);border:none;border-radius:12px;color:white;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:900;cursor:pointer;letter-spacing:.02em;margin-bottom:8px">
+    &#128233; Ga naar rapport &amp; download &#8594;
+  </button>
+
+</div>
+
+<style>
+.readiness-btn {
+  flex:1;min-width:50px;padding:10px 6px;background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;color:var(--muted);font-family:'Nunito',sans-serif;font-size:.88rem;
+  font-weight:800;cursor:pointer;text-align:center;line-height:1.4;transition:all .2s;
+}
+.readiness-btn.selected {
+  background:var(--accent);border-color:var(--accent);color:white;
+}
+.feeling-chip {
+  padding:7px 12px;background:var(--card2);border:1px solid var(--border);border-radius:20px;
+  font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;
+  user-select:none;
+}
+.feeling-chip.selected {
+  background:rgba(99,102,241,.15);border-color:var(--accent);color:var(--accent);
+}
+.action-card {
+  display:flex;align-items:flex-start;gap:10px;background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .2s;user-select:none;
+}
+.action-card.selected {
+  background:rgba(52,211,153,.08);border-color:var(--green);
+}
+.action-check {
+  width:22px;height:22px;border-radius:5px;border:2px solid var(--border);background:var(--card);
+  color:transparent;font-size:.85rem;font-weight:900;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px;transition:all .2s;
+}
+.action-card.selected .action-check { background:var(--green);border-color:var(--green);color:white; }
+.block-card {
+  display:flex;align-items:flex-start;gap:10px;background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:10px 12px;cursor:pointer;transition:all .2s;user-select:none;
+}
+.block-card.selected {
+  background:rgba(244,63,94,.07);border-color:rgba(244,63,94,.4);
+}
+.block-check {
+  width:22px;height:22px;border-radius:5px;border:2px solid var(--border);background:var(--card);
+  color:transparent;font-size:.85rem;font-weight:900;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:1px;transition:all .2s;
+}
+.block-card.selected .block-check { background:rgba(244,63,94,.7);border-color:rgba(244,63,94,.7);color:white; }
+.overcome-item {
+  background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;
+}
+.humanview-card {
+  display:flex;align-items:flex-start;gap:10px;background:var(--card2);border:1px solid var(--border);
+  border-radius:10px;padding:11px 13px;cursor:pointer;transition:all .2s;user-select:none;
+}
+.humanview-card.selected {
+  background:rgba(99,102,241,.09);border-color:var(--accent);
+}
+.humanview-card.selected .action-check { background:var(--accent);border-color:var(--accent);color:white; }
+</style>
+
+<script>
+// ═══ MOTIVATIE TAB DATA ═══════════════════════════════════
+
+const FEELINGS = [
+  {id:'verrast',    label:'😮 Verrast'},
+  {id:'bezorgd',   label:'😟 Bezorgd'},
+  {id:'schuldig',  label:'😔 Schuldig'},
+  {id:'gemotiveerd',label:'💪 Gemotiveerd'},
+  {id:'overweldigd',label:'😰 Overweldigd'},
+  {id:'machteloos', label:'😶 Machteloos'},
+  {id:'geinspireerd',label:'✨ Geïnspireerd'},
+  {id:'opgelucht',  label:'😌 Opgelucht'},
+  {id:'trots',      label:'😊 Trots'},
+  {id:'onverschillig',label:'😐 Onverschillig'},
+  {id:'boos',       label:'😠 Boos'},
+  {id:'hoopvol',    label:'🌱 Hoopvol'},
+];
+
+const ACTIONS = [
+  {id:'a1', label:'Eén of meer vluchten per jaar schrappen', co2:'400–2.500 kg/vlucht', icon:'✈️'},
+  {id:'a2', label:'Overstappen op een plantaardig of vegetarisch dieet', co2:'500–1.500 kg/jaar', icon:'🥦'},
+  {id:'a3', label:'Auto vervangen door fiets/OV voor ritten < 10 km', co2:'200–800 kg/jaar', icon:'🚲'},
+  {id:'a4', label:'Overstappen op een elektrische wagen (bij vervanging)', co2:'1.000–2.000 kg/jaar', icon:'⚡'},
+  {id:'a5', label:'Warmtepomp installeren (bij vervanging gasketel)', co2:'1.000–2.500 kg/jaar', icon:'🌡️'},
+  {id:'a6', label:'Zonnepanelen plaatsen', co2:'400–800 kg/jaar', icon:'☀️'},
+  {id:'a7', label:'Woning beter isoleren (dak, muren, ramen)', co2:'500–1.500 kg/jaar', icon:'🏠'},
+  {id:'a8', label:'Minder nieuwe kleding kopen, meer tweedehands', co2:'50–200 kg/jaar', icon:'👕'},
+  {id:'a9', label:'Producten langer gebruiken, herstellen i.p.v. vervangen', co2:'100–400 kg/jaar', icon:'🔧'},
+  {id:'a10',label:'Bewuster omgaan met water en voedselverspilling', co2:'50–150 kg/jaar', icon:'💧'},
+  {id:'a11',label:'Anderen inspireren en politieke keuzes steunen voor klimaat', co2:'Maatschappelijke hefboom', icon:'🗳️'},
+];
+
+const BLOCKS = [
+  {id:'b1',
+   label:'"Het is de schuld van de anderen — grote bedrijven, politici, rijke landen."',
+   icon:'🏭',
+   science:'Dit klopt deels: systemen en bedrijven dragen een enorme verantwoordelijkheid. Maar onderzoek (Cialdini, 2003) toont dat individueel gedrag ook systeemverandering triggert: consumentenkeuzes sturen markten, en voorbeeldgedrag beïnvloedt sociale normen.',
+   tip:'Kies één persoonlijke actie én één politieke actie (stem, petitie, gesprek). Beide tellen.'},
+  {id:'b2',
+   label:'"Het maakt toch niet uit wat ík doe — ik ben maar één persoon."',
+   icon:'🌊',
+   science:'Het "drop in the ocean" gevoel is een cognitieve vervorming. Elke ton CO₂ die niet uitgestoten wordt, telt letterlijk mee in de koolstofbalans. Bovendien: als iedereen zo denkt, verandert er niets. Als jij het doet, vergroot je de sociale norm.',
+   tip:'Stel jezelf voor: wat als iedereen in mijn straat, mijn gemeente dit deed? Dat is de echte schaal.'},
+  {id:'b3',
+   label:'"Zolang mijn vrienden/familie dit niet doen, zie ik het nut niet."',
+   icon:'👥',
+   science:'Sociale conformiteit (Asch, 1951) is een krachtige rem. Maar het werkt ook omgekeerd: jij kan de eerste zijn die de norm verschuift in jouw omgeving. Onderzoek toont dat één persoon in een groep die verandert, tot 25% van zijn netwerk beïnvloedt.',
+   tip:'Deel je resultaten. Nodig iemand uit om deze calculator samen in te vullen. Maak het sociaal.'},
+  {id:'b4',
+   label:'"Zolang de rijken en bedrijven niet stoppen, heeft mijn bijdrage geen zin."',
+   icon:'💰',
+   science:'Morele rechtvaardiging via "anderen doen het erger" (moral licensing) is een veelvoorkomende valkuil. Het geeft psychologische ontlasting zonder reële impact. De uitstoot van de rijksten is inderdaad groter, maar vermindert jouw uitstoot niet.',
+   tip:'Jouw keuzes zijn onafhankelijk van die van anderen. Richt je energie op wat jij kan controleren.'},
+  {id:'b5',
+   label:'"Zolang de politiek niets doet, heeft individuele actie geen zin."',
+   icon:'🏛️',
+   science:'Individuele actie en systeemverandering versterken elkaar. Politici volgen maatschappelijke verschuivingen — niet andersom. Landen waar burgers hun gedrag aanpasten, zagen sneller beleidsverandering (IPCC AR6, WG3).',
+   tip:'Stem, praat met lokale politici, teken petities, steun organisaties. En pas tegelijk je eigen gedrag aan.'},
+  {id:'b6',
+   label:'"Ik heb geen invloed — het systeem dwingt me om zo te leven."',
+   icon:'⛓️',
+   science:'Structurele factoren zijn reëel (geen fietspad, geen OV, hoge prijs van gezond voedsel). Maar agency — het gevoel dat je keuzes hebt — is psychologisch cruciaal. Zelfs kleine keuzes versterken je gevoel van controle en motivatie.',
+   tip:'Identificeer één ding dat je wél kan veranderen, zonder structurele barrières. Begin daar.'},
+  {id:'b7',
+   label:'"Ik doe al zoveel — andere mensen doen veel minder."',
+   icon:'🏅',
+   science:'Moral licensing: als we ons goed gedragen op één vlak, geven we onszelf toestemming om minder goed te doen op een ander. Studies tonen dat mensen die een "groene" aankoop doen, daarna meer vervuilend gedrag vertonen.',
+   tip:'Zie duurzaamheid niet als een saldo, maar als een richting. Elke verbetering telt, ook als je al veel doet.'},
+  {id:'b8',
+   label:'"Het is te duur — duurzaamheid is voor mensen met geld."',
+   icon:'💸',
+   science:'Sommige keuzes kosten meer (EV, warmtepomp, bio-voeding). Maar veel impactvolle acties besparen geld: minder vlees, minder nieuwe kleding, minder rijden, beter isoleren. De grootste CO₂-reducties zijn niet altijd de duurste.',
+   tip:'Begin met acties die geld besparen: minder vlees, minder auto, producten langer gebruiken.'},
+  {id:'b9',
+   label:'"Ik ben te moe en te druk — ik heb geen energie voor dit."',
+   icon:'😴',
+   science:'Beslissingsmoeheid (decision fatigue) is reëel. Gedragsverandering kost cognitieve energie. Onderzoek toont dat kleine, concrete "if-then" plannen ("Als ik naar de bakker ga, neem ik de fiets") veel effectiever zijn dan vage goede bedoelingen.',
+   tip:'Kies één concrete gewoonte om deze week aan te passen. Niet alles tegelijk.'},
+  {id:'b10',
+   label:'"Het klimaat gaat sowieso kapot — het is al te laat."',
+   icon:'🌑',
+   science:'Klimaatdoomism is een groeiend fenomeen. Maar de wetenschap is duidelijk: elke tiende graad minder opwarming spaart miljoenen mensen van ernstige schade. Het is nooit "alles of niets" — elke verbetering telt.',
+   tip:'Herformuleer "het is te laat" naar "hoe erg het wordt, hangt af van wat we nu doen".'},
+];
+
+const selectedFeelings = new Set();
+const selectedActions = new Set();
+const selectedHumanViews = new Set();
+
+const HUMAN_VIEWS = [
+  {
+    id:'hv1',
+    icon:'🌱',
+    title:'De mens is intrinsiek goed',
+    desc:'Mensen willen van nature het goede doen voor zichzelf, anderen en de wereld. Slecht gedrag is het gevolg van slechte omstandigheden, niet van een slechte natuur. Gegeven de juiste context en informatie, kiezen mensen voor het goede.',
+    implication:'Als je dit gelooft, is educatie en bewustwording — zoals deze calculator — een zinvolle strategie. Mensen hebben informatie nodig, geen dwang.',
+  },
+  {
+    id:'hv2',
+    icon:'😈',
+    title:'De mens is intrinsiek zelfzuchtig',
+    desc:'Mensen handelen primair vanuit eigenbelang. Altruïsme is een verhaal dat we onszelf vertellen. Zonder structurele prikkels (belastingen, regels, beloningen) kiest de mens altijd voor zijn eigen voordeel op korte termijn.',
+    implication:'Als je dit gelooft, zijn systeem-ingrepen cruciaal: koolstoftaks, verboden, verplichtingen. Niet bewustwording, maar gedwongen verandering.',
+  },
+  {
+    id:'hv3',
+    icon:'🧠',
+    title:'De mens is creatief en aanpasbaar',
+    desc:'Mensen zijn het meest aanpasbare wezen op aarde. We hebben ijstijden, woestijnen en oceanen overwonnen. Technologie, innovatie en sociale organisatie zijn onze superkracht. We lossen problemen op als we ze écht als problemen herkennen.',
+    implication:'Optimisme is hier rationeel. De vraag is niet of we het kunnen — maar of we het tijdig als probleem erkennen en of we de wil mobiliseren.',
+  },
+  {
+    id:'hv4',
+    icon:'🦠',
+    title:'De mens is als een blind virus',
+    desc:'Net als een virus dat zijn gastheer vernietigt en daarmee zichzelf, groeit de mensheid exponentieel en put zijn leefomgeving uit — niet uit kwaadwil, maar uit structurele blindheid voor langetermijngevolgen. De planeet is de gastheer; wij zijn het pathogeen.',
+    implication:'Dit beeld roept de vraag op of het systeem zelf — groei-economie, consumentisme — fundamenteel hervormd moet worden. Kleine aanpassingen volstaan niet.',
+  },
+  {
+    id:'hv5',
+    icon:'🐑',
+    title:'De mens volgt de kudde',
+    desc:'Mensen zijn sociale dieren die zich conformeren aan de norm. Ze doen wat hun omgeving doet — niet wat wetenschappers of moraal hen voorschrijft. Sociale normen zijn machtiger dan kennis of overtuiging.',
+    implication:'Gedragsverandering begint bij het verschuiven van normen: als genoeg mensen iets doen, volgen anderen. Voorbeeldgedrag en sociale zichtbaarheid zijn cruciale hefbomen.',
+  },
+  {
+    id:'hv6',
+    icon:'⚡',
+    title:'De mens handelt vanuit emotie, niet ratio',
+    desc:'Mensen nemen zelden rationele beslissingen op basis van feiten. Angst, schaamte, trots, hoop en identiteit bepalen gedrag. Feiten en grafieken veranderen niemand — verhalen en emoties wel.',
+    implication:'Klimaatcommunicatie moet emotioneel resoneren, niet alleen informatief zijn. Persoonlijke verhalen, lokale gevolgen en gedeelde identiteit werken beter dan cijfers.',
+  },
+  {
+    id:'hv7',
+    icon:'🔄',
+    title:'De mens kan leren en evolueren',
+    desc:'In historisch perspectief hebben mensen fundamenteel van waarden veranderd: slavernij werd afgeschaft, vrouwenrechten kwamen er, rookverboden werden geaccepteerd. Morele evolutie is reëel, al gaat ze traag en met weerstand.',
+    implication:'Verandering is mogelijk, maar vraagt tijd en generaties. De klimaatcrisis heeft die tijd misschien niet — wat urgentie creëert voor versnelde culturele verschuiving.',
+  },
+  {
+    id:'hv8',
+    icon:'🎭',
+    title:'De mens is tegenstrijdig — en dat is OK',
+    desc:'Mensen kunnen tegelijk weten wat goed is en het tegenovergestelde doen. Ze houden van de natuur én rijden SUV. Ze willen duurzaamheid én goedkope vluchten. Tegenstrijdigheid is niet een fout — het is de menselijke conditie.',
+    implication:'Perfectie is geen voorwaarde voor actie. Elk mens kan bijdragen vanuit zijn eigen tegenstrijdige realiteit. De vraag is niet "alles of niets", maar "meer of minder".',
+  },
+];
+
+function renderHumanViews() {
+  const list = document.getElementById('humanview-list');
+  if (!list) return;
+  list.innerHTML = HUMAN_VIEWS.map(h => `
+    <div class="humanview-card ${selectedHumanViews.has(h.id)?'selected':''}" onclick="toggleHumanView('${h.id}',this)">
+      <div class="action-check" style="margin-top:3px">&#10003;</div>
+      <div style="flex:1">
+        <div style="font-size:.83rem;font-weight:900;color:var(--text);margin-bottom:4px">${h.icon} ${h.title}</div>
+        <div style="font-size:.75rem;color:var(--muted);line-height:1.65;margin-bottom:5px">${h.desc}</div>
+        <div style="font-size:.72rem;color:var(--accent);line-height:1.6;background:rgba(99,102,241,.07);border-radius:6px;padding:6px 8px">
+          <strong>&#128161; Implicatie voor actie:</strong> ${h.implication}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleHumanView(id, el) {
+  if (selectedHumanViews.has(id)) selectedHumanViews.delete(id);
+  else selectedHumanViews.add(id);
+  el.classList.toggle('selected', selectedHumanViews.has(id));
+}
+
+const selectedBlocks = new Set();
+let readinessScore = 0;
+
+// ─── Render feelings ───
+function renderFeelings() {
+  const grid = document.getElementById('feelings-grid');
+  if (!grid) return;
+  grid.innerHTML = FEELINGS.map(f => `
+    <div class="feeling-chip ${selectedFeelings.has(f.id)?'selected':''}" onclick="toggleFeeling('${f.id}',this)">
+      ${f.label}
+    </div>`).join('');
+}
+
+function toggleFeeling(id, el) {
+  if (selectedFeelings.has(id)) selectedFeelings.delete(id);
+  else selectedFeelings.add(id);
+  el.classList.toggle('selected', selectedFeelings.has(id));
+}
+
+// ─── Render actions ───
+function renderActions() {
+  const list = document.getElementById('actions-list');
+  if (!list) return;
+  list.innerHTML = ACTIONS.map(a => `
+    <div class="action-card ${selectedActions.has(a.id)?'selected':''}" onclick="toggleAction('${a.id}',this)">
+      <div class="action-check">&#10003;</div>
+      <div style="flex:1">
+        <div style="font-size:.82rem;font-weight:800;color:var(--text);margin-bottom:2px">${a.icon} ${a.label}</div>
+        <div style="font-size:.71rem;color:var(--green);font-weight:700">&#8595; ${a.co2} CO&#8322;</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleAction(id, el) {
+  if (selectedActions.has(id)) selectedActions.delete(id);
+  else selectedActions.add(id);
+  el.classList.toggle('selected', selectedActions.has(id));
+}
+
+// ─── Render blocks ───
+function renderBlocks() {
+  const list = document.getElementById('blocks-list');
+  if (!list) return;
+  list.innerHTML = BLOCKS.map(b => `
+    <div class="block-card ${selectedBlocks.has(b.id)?'selected':''}" onclick="toggleBlock('${b.id}',this)">
+      <div class="block-check">&#10003;</div>
+      <div style="flex:1">
+        <div style="font-size:.81rem;font-weight:800;color:var(--text);line-height:1.4">${b.icon} ${b.label}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleBlock(id, el) {
+  if (selectedBlocks.has(id)) selectedBlocks.delete(id);
+  else selectedBlocks.add(id);
+  el.classList.toggle('selected', selectedBlocks.has(id));
+  updateOvercomeSection();
+}
+
+function updateOvercomeSection() {
+  const sec = document.getElementById('overcome-section');
+  const list = document.getElementById('overcome-list');
+  if (!sec || !list) return;
+  if (selectedBlocks.size === 0) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+  list.innerHTML = [...selectedBlocks].map(id => {
+    const b = BLOCKS.find(x => x.id === id);
+    if (!b) return '';
+    return `
+    <div class="overcome-item">
+      <div style="font-size:.78rem;font-weight:900;color:var(--red);margin-bottom:6px">${b.icon} ${b.label}</div>
+      <div style="font-size:.74rem;color:var(--muted);line-height:1.65;margin-bottom:6px;background:rgba(99,102,241,.07);border-radius:6px;padding:7px 9px">
+        <strong style="color:var(--accent)">Wat de wetenschap zegt:</strong> ${b.science}
+      </div>
+      <div style="font-size:.74rem;color:var(--green);line-height:1.65;background:rgba(52,211,153,.07);border-radius:6px;padding:7px 9px">
+        <strong>&#128161; Tip:</strong> ${b.tip}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setReadiness(val) {
+  readinessScore = val;
+  document.querySelectorAll('.readiness-btn').forEach(btn => {
+    btn.classList.toggle('selected', parseInt(btn.dataset.val) === val);
+  });
+}
+
+// ─── Init motivatie tab ───
+document.addEventListener('DOMContentLoaded', () => {
+  renderFeelings();
+  renderActions();
+  renderBlocks();
+  renderHumanViews();
+});
+
+// ─── Motivatie voor rapport ───
+function getMotivatiForReport() {
+  const lines = [];
+  const sep2 = '-'.repeat(55);
+
+  // Gevoelens
+  if (selectedFeelings.size > 0 || document.getElementById('feelings-extra')?.value?.trim()) {
+    lines.push(sep2);
+    lines.push('MIJN GEVOELENS BIJ DIT RESULTAAT');
+    lines.push(sep2);
+    if (selectedFeelings.size > 0) {
+      const labels = [...selectedFeelings].map(id => FEELINGS.find(f=>f.id===id)?.label.replace(/^[^\w]+/,'').trim()||id);
+      lines.push('  ' + labels.join(', '));
+    }
+    const extra = document.getElementById('feelings-extra')?.value?.trim();
+    if (extra) lines.push('  ' + extra);
+    lines.push('');
+  }
+
+  // Bereidheid
+  if (readinessScore > 0 || document.getElementById('readiness-text')?.value?.trim()) {
+    lines.push(sep2);
+    lines.push('BEREIDHEID TOT VERANDERING');
+    lines.push(sep2);
+    const labels = ['','Nog niet klaar','Misschien','Bereid','Sterk gemotiveerd','Ik begin morgen'];
+    if (readinessScore > 0) lines.push('  Score: ' + readinessScore + '/5 — ' + labels[readinessScore]);
+    const txt = document.getElementById('readiness-text')?.value?.trim();
+    if (txt) lines.push('  ' + txt);
+    lines.push('');
+  }
+
+  // Acties
+  if (selectedActions.size > 0) {
+    lines.push(sep2);
+    lines.push('ACTIES DIE IK OVERWEEG');
+    lines.push(sep2);
+    [...selectedActions].forEach(id => {
+      const a = ACTIONS.find(x=>x.id===id);
+      if (a) lines.push('  ✓ ' + a.label + ' (' + a.co2 + ' CO₂)');
+    });
+    lines.push('');
+  }
+
+  // Mensbeelden
+  if (selectedHumanViews.size > 0 || document.getElementById('humanview-extra')?.value?.trim()) {
+    lines.push(sep2);
+    lines.push('MIJN MENSBEELD');
+    lines.push(sep2);
+    [...selectedHumanViews].forEach(id => {
+      const h = HUMAN_VIEWS.find(x=>x.id===id);
+      if (h) lines.push('  \u25cf ' + h.icon + ' ' + h.title);
+    });
+    const hvExtra = document.getElementById('humanview-extra')?.value?.trim();
+    if (hvExtra) lines.push('  \u25cf ' + hvExtra);
+    lines.push('');
+  }
+
+  // Blokkades
+  if (selectedBlocks.size > 0) {
+    lines.push(sep2);
+    lines.push('DREMPELS DIE IK HERKEN');
+    lines.push(sep2);
+    [...selectedBlocks].forEach(id => {
+      const b = BLOCKS.find(x=>x.id===id);
+      if (b) lines.push('  ! ' + b.label);
+    });
+    const bExtra = document.getElementById('blocks-extra')?.value?.trim();
+    if (bExtra) lines.push('  ! ' + bExtra);
+    lines.push('');
+  }
+
+  // Plan
+  const plan = document.getElementById('overcome-plan')?.value?.trim();
+  if (plan) {
+    lines.push(sep2);
+    lines.push('MIJN PERSOONLIJK PLAN');
+    lines.push(sep2);
+    lines.push(plan);
+    lines.push('');
+  }
+
+  return lines.length > 0 ? lines.join('\n') : null;
+}
+</script>
+
 </body>
 </html>
